@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EventCard } from "@/components/ui/EventCard";
 import { activeCities, upcomingCities, City } from "@/content/cities";
-import { eventsData } from "@/content/events";
+
 
 export default function CityDetailPageWrapper({ params }: { params: Promise<{ id: string }> }) {
   return <CityDetailClient params={params} />;
@@ -28,8 +28,31 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
-  // Find active events for this city
-  const cityEvents = eventsData.filter(e => e.location.toLowerCase().includes(city.name.toLowerCase()));
+  // Fetch active events for this city from Supabase
+  const [cityEvents, setCityEvents] = React.useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const [loadingEvents, setLoadingEvents] = React.useState(true);
+
+  React.useEffect(() => {
+    async function fetchCityEvents() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('events')
+        .select('*')
+        .ilike('location', `%${city?.name}%`);
+        
+      if (data) {
+        // Sort chronologically
+        const sorted = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        setCityEvents(sorted);
+      }
+      setLoadingEvents(false);
+    }
+    
+    if (city) {
+      fetchCityEvents();
+    }
+  }, [city]);
+
   const hasEvents = cityEvents.length > 0;
 
   // Inline Waitlist Form State
@@ -92,7 +115,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 text-sm md:text-base font-semibold text-foreground tracking-wide uppercase mt-6 p-4 md:p-6 bg-surface/30 backdrop-blur-md rounded-2xl border border-white/10 w-full md:w-fit">
               <div className="flex items-center gap-2">
                 <span className={`w-2.5 h-2.5 rounded-full ${hasEvents ? 'bg-accent animate-pulse' : 'bg-foreground-secondary'}`} />
-                {hasEvents ? `${cityEvents.length} Active Events` : 'Coming Soon'}
+                {loadingEvents ? 'Loading Events...' : (hasEvents ? `${cityEvents.length} Active Events` : 'Coming Soon')}
               </div>
               <div className="flex items-center gap-2 text-foreground-secondary">
                 <svg className="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -191,7 +214,9 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
             <div className="w-full lg:w-2/5">
               <div className="lg:sticky lg:top-32 flex flex-col gap-6">
                 
-                {hasEvents ? (
+                {loadingEvents ? (
+                  <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div></div>
+                ) : hasEvents ? (
                   <div>
                     <SectionHeading title="Active Events" align="left" className="mb-6" />
                     <div className="flex lg:grid overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none gap-4 lg:gap-6 pb-6 lg:pb-0 -mx-4 lg:mx-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -206,7 +231,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                             detail1Text={event.price || event.time}
                             detail2Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
                             detail2Text={event.location}
-                            previewDesc={event.previewDesc}
+                            previewDesc={event.preview_desc}
                             actionText="Reserve"
                           />
                         </div>
@@ -223,9 +248,9 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                         <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-foreground-secondary text-xs font-semibold tracking-widest uppercase mb-4">
                           Coming Soon
                         </div>
-                        <h3 className="text-2xl md:text-3xl font-bold font-heading mb-2 text-foreground">We're expanding.</h3>
+                        <h3 className="text-2xl md:text-3xl font-bold font-heading mb-2 text-foreground">We&apos;re expanding.</h3>
                         <p className="text-sm md:text-base text-foreground-secondary leading-relaxed">
-                          Tickets aren't live yet for {city.name}. Drop your email below to get early access when we launch.
+                          Tickets aren&apos;t live yet for {city.name}. Drop your email below to get early access when we launch.
                         </p>
                       </div>
 
@@ -236,7 +261,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
-                          <h4 className="text-xl font-bold text-foreground mb-2">You're on the list!</h4>
+                          <h4 className="text-xl font-bold text-foreground mb-2">You&apos;re on the list!</h4>
                           <p className="text-sm text-foreground-secondary">Keep an eye on your inbox.</p>
                         </div>
                       ) : (
