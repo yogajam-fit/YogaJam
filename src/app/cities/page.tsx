@@ -1,0 +1,82 @@
+import { Metadata } from "next";
+import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { activeCities, upcomingCities } from "@/content/cities";
+import { eventsData } from "@/content/events";
+import { WaitlistModal } from "@/components/ui/WaitlistModal";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { EventCard } from "@/components/ui/EventCard";
+
+export const metadata: Metadata = {
+  title: "Cities | YogaJam",
+  description: "Find YogaJam events in your city.",
+};
+
+export default function CitiesPage() {
+  return (
+    <main className="flex min-h-screen flex-col pt-32 pb-24 bg-background">
+      <Container className="flex flex-col gap-16 md:gap-20">
+        
+        {/* Active Cities */}
+        <section className="flex flex-col gap-6 md:gap-10">
+          <div className="flex items-center justify-between">
+            <SectionHeading title="Current Cities" align="left" />
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-6">
+            {activeCities.map((city, index) => {
+              const activeCount = eventsData.filter(e => e.location.toLowerCase().includes(city.name.toLowerCase())).length;
+
+              return (
+                <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}>
+                  <EventCard
+                    href={`/cities/${city.id}`}
+                    imageSrc={city.image}
+                    title={city.name}
+                    previewDesc={city.description}
+                    actionText="Explore City"
+                    badgeText={activeCount > 0 ? (
+                      <>
+                        <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                        {activeCount} Active Event{activeCount !== 1 ? 's' : ''}
+                      </>
+                    ) : undefined}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Upcoming Cities */}
+        <section className="flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col gap-2">
+            <SectionHeading 
+              title="Coming Soon" 
+              subtitle="We're expanding. Join the waitlist to be the first to know when we launch in your city."
+              align="left"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-6">
+            {upcomingCities.map((city, index) => (
+              <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${(activeCities.length + index) * 150}ms`, animationFillMode: 'both' }}>
+                <EventCard
+                  href={`/cities/${city.id}`}
+                  imageSrc={city.image}
+                  title={city.name}
+                  previewDesc={city.description}
+                  actionText="Explore City"
+                  badgeText="Coming Soon"
+                  containerClassName="border-dashed hover:border-white/20 grayscale hover:grayscale-0 !bg-[#050505]/50"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </Container>
+    </main>
+  );
+}

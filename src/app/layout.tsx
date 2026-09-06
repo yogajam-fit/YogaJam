@@ -1,0 +1,48 @@
+import type { Metadata } from "next";
+import { Inter, Manrope } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "YogaJam",
+  description: "A cinematic dark wellness experience.",
+};
+
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+import { ClientLayoutWrapper } from "@/components/layout/ClientLayoutWrapper";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${manrope.variable} antialiased`}
+    >
+      <body className="min-h-screen flex flex-col overscroll-none">
+        <ClientLayoutWrapper>
+          {children}
+        </ClientLayoutWrapper>
+      </body>
+    </html>
+  );
+}
