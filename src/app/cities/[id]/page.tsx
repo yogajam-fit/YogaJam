@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EventCard } from "@/components/ui/EventCard";
 import { activeCities, upcomingCities, City } from "@/content/cities";
+import { formatPrice } from "@/lib/utils";
 
 
 export default function CityDetailPageWrapper({ params }: { params: Promise<{ id: string }> }) {
@@ -38,7 +39,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
       const { data } = await supabase
         .from('events')
         .select('*')
-        .ilike('location', `%${city?.name}%`);
+        .ilike('city', `%${city?.name}%`);
         
       if (data) {
         // Sort chronologically
@@ -228,9 +229,9 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                             badgeText={event.date}
                             title={event.title}
                             detail1Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-                            detail1Text={event.price || event.time}
+                            detail1Text={formatPrice(event.price || event.time)}
                             detail2Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-                            detail2Text={event.location}
+                            detail2Text={event.city}
                             previewDesc={event.preview_desc}
                             actionText="Reserve"
                           />

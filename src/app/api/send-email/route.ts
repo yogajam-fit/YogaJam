@@ -8,19 +8,21 @@ const resend = new Resend(process.env.RESEND_API_KEY || 'missing_key')
 
 export async function POST(request: Request) {
   try {
-    // 1. Verify Authentication (Only admins can send these emails)
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // 2. Parse Request Body
+    // 1. Parse Request Body
     const { to, subject, type, name, eventTitle, eventDate, amount } = await request.json()
 
     if (!to || !subject || !type) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // 2. Verify Authentication (Only admins can send certain emails)
+    if (type !== 'newsletter_subscribe' && type !== 'review_thankyou' && type !== 'host_confirmation') {
+      const supabase = await createClient()
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      if (authError || !user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
     }
 
     // 3. Generate HTML Content based on type
@@ -29,7 +31,6 @@ export async function POST(request: Request) {
     if (type === 'booking_confirmation') {
       htmlContent = `
         <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
-          <h1 style="color: #60783A;">Booking Confirmed!</h1>
           <p>Hi ${name || 'there'},</p>
           <p>Great news! Your booking for <strong>${eventTitle || 'our event'}</strong> has been confirmed.</p>
           ${eventDate ? `<p><strong>Date:</strong> ${eventDate}</p>` : ''}
@@ -42,10 +43,39 @@ export async function POST(request: Request) {
     } else if (type === 'host_confirmation') {
       htmlContent = `
         <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
-          <h1 style="color: #60783A;">Request Received!</h1>
           <p>Hi ${name || 'there'},</p>
           <p>We've received your personalized host request and we're thrilled you want to collaborate with us!</p>
           <p>We are currently reviewing your details and will follow up shortly to discuss the next steps.</p>
+          <br/>
+          <p>Best regards,<br/>The YogaJam Team</p>
+        </div>
+      `
+    } else if (type === 'newsletter_subscribe') {
+      htmlContent = `
+        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
+          <p>Hi ${name || 'there'},</p>
+          <p>You're on the list! We'll be in touch with the latest updates and exclusive events from YogaJam.</p>
+          <br/>
+          <p>Best regards,<br/>The YogaJam Team</p>
+        </div>
+      `
+    } else if (type === 'booking_rejected') {
+      htmlContent = `
+        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
+          <p>Hi ${name || 'there'},</p>
+          <p>We received your booking request for <strong>${eventTitle || 'our event'}</strong>, but unfortunately, we were unable to verify your payment.</p>
+          <p>This could be due to an unclear screenshot, an incorrect UTR number, or the payment not being reflected in our system.</p>
+          <p>Please double-check your payment details and submit a new booking request, or reply directly to this email for assistance.</p>
+          <br/>
+          <p>Best regards,<br/>The YogaJam Team</p>
+        </div>
+      `
+    } else if (type === 'review_thankyou') {
+      htmlContent = `
+        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
+          <p>Hi ${name || 'there'},</p>
+          <p>Thank you so much for sharing your experience at YogaJam!</p>
+          <p>Your feedback means the world to us and helps our community grow. We're thrilled that you could join us and hope to see you at another event soon.</p>
           <br/>
           <p>Best regards,<br/>The YogaJam Team</p>
         </div>

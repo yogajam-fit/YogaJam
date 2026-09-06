@@ -84,6 +84,25 @@ export function BookingRequestsTable() {
           console.error('Failed to send confirmation email', e)
         }
       }
+    } else if (newStatus === 'rejected') {
+      const request = requests.find(req => req.id === id)
+      if (request) {
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: request.email,
+              subject: 'Action Required: Payment Verification Failed',
+              type: 'booking_rejected',
+              name: request.name,
+              eventTitle: request.events?.title,
+            })
+          })
+        } catch (e) {
+          console.error('Failed to send rejection email', e)
+        }
+      }
     }
   }
 

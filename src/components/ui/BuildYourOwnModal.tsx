@@ -158,6 +158,22 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
       setIsSubmitting(true);
       try {
         await submitBuildYourOwnEvent(formData);
+        
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: formData.email,
+              subject: 'Your Request is Received!',
+              type: 'host_confirmation',
+              name: formData.fullName,
+            })
+          })
+        } catch (err) {
+          console.error("Failed to send host confirmation email", err)
+        }
+        
         setStep("success");
       } catch (err) {
         console.error("Submission failed", err);

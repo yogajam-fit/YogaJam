@@ -26,6 +26,22 @@ export function NewsletterInlineForm() {
         setStatus('error')
       }
     } else {
+      // Send the thank you email
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: email.trim(),
+            subject: 'Welcome to YogaJam!',
+            type: 'newsletter_subscribe',
+            name: email.split('@')[0], // simple fallback for name
+          }),
+        })
+      } catch (err) {
+        console.error("Failed to send welcome email", err)
+      }
+      
       setStatus('success')
     }
   }

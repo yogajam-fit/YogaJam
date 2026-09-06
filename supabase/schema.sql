@@ -117,6 +117,7 @@ create table if not exists public.events (
   date text not null,
   time text not null,
   price text not null,
+  city text not null,
   location text not null,
   preview_desc text not null,
   preview_highlight text,

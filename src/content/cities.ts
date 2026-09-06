@@ -10,11 +10,11 @@ export interface City {
 
 export const activeCities: City[] = [
   {
-    id: "bengaluru",
-    name: "Bengaluru",
+    id: "bangalore",
+    name: "Bangalore",
     description: "The heart of YogaJam. Experience our flagship events across the city's most beautiful spaces.",
     image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&q=80&w=1200",
-    fullDesc: "<p>Bengaluru is where YogaJam was born. Known for its perfect weather and vibrant startup culture, we've curated a community of mindful movers who aren't afraid to sweat to heavy basslines.</p><br/><p>From secret rooftop sunsets in Indiranagar to expansive green spaces in the heart of the city, Bengaluru offers the perfect backdrop for our signature high-energy flows and deep house yin sessions.</p>",
+    fullDesc: "<p>Bangalore is where YogaJam was born. Known for its perfect weather and vibrant startup culture, we've curated a community of mindful movers who aren't afraid to sweat to heavy basslines.</p><br/><p>From secret rooftop sunsets in Indiranagar to expansive green spaces in the heart of the city, Bengaluru offers the perfect backdrop for our signature high-energy flows and deep house yin sessions.</p>",
     locations: ["Indiranagar", "Koramangala", "Cubbon Park", "Whitefield"],
     eventTypes: [
       { name: "Corporate Wellness", description: "Transform your team's energy with private corporate sessions. From desk-relief stretches to high-energy team building flows." },

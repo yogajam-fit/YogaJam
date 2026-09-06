@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Loader } from '@/components/ui/Loader'
+import { formatPrice } from '@/lib/utils'
 
 export type EventRecord = {
   id: string
@@ -11,6 +12,7 @@ export type EventRecord = {
   date: string
   time: string
   price: string
+  city: string
   location: string
   preview_desc: string
   preview_highlight?: string
@@ -84,6 +86,7 @@ export function EventsTable() {
                 <th className="px-6 py-4">Title</th>
                 <th className="px-6 py-4">Date & Time</th>
                 <th className="px-6 py-4">Location</th>
+                <th className="px-6 py-4">City</th>
                 <th className="px-6 py-4">Booking Type</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -93,13 +96,18 @@ export function EventsTable() {
                 <tr key={event.id} className="hover:bg-surface transition-colors group">
                   <td className="px-6 py-4">
                     <p className="font-bold text-foreground">{event.title}</p>
-                    <p className="text-xs text-gray-500">{event.price}</p>
+                    <p className="text-xs text-gray-500">{formatPrice(event.price)}</p>
                   </td>
                   <td className="px-6 py-4 text-gray-300">
                     <p>{event.date}</p>
                     <p className="text-xs text-gray-500">{event.time}</p>
                   </td>
-                  <td className="px-6 py-4 text-gray-300">{event.location}</td>
+                  <td className="px-6 py-4">
+                    <span className="text-gray-300">{event.location}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-gray-300">{event.city}</span>
+                  </td>
                   <td className="px-6 py-4 text-gray-300 capitalize">{event.booking_type}</td>
                   <td className="px-6 py-4 text-right">
                     <button onClick={() => handleEdit(event)} className="text-blue-400 hover:text-blue-300 mr-4">Edit</button>
@@ -246,6 +254,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       date: formatDateString(eventDate) || formData.get('date'), // fallback if empty
       time: `${startTime} - ${endTime}`,
       price: formData.get('price'),
+      city: formData.get('city'),
       location: formData.get('location'),
       image: imageUrl,
       video: videoUrl,
@@ -317,6 +326,10 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
               <div>
                 <label className="block text-foreground-secondary mb-1">Location</label>
                 <input name="location" defaultValue={event?.location} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+              </div>
+              <div>
+                <label className="block text-foreground-secondary mb-1">City</label>
+                <input name="city" defaultValue={event?.city} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">Price</label>

@@ -71,6 +71,20 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
         console.error("Supabase error:", error);
         setErrors(prev => ({ ...prev, review: "Failed to submit review. Please try again later." }));
       } else {
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: formData.email,
+              subject: 'Thank you for your review!',
+              type: 'review_thankyou',
+              name: formData.name,
+            })
+          })
+        } catch (err) {
+          console.error("Failed to send review thank you email", err)
+        }
         setIsSubmitted(true);
       }
     }

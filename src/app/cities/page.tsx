@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { activeCities, upcomingCities } from "@/content/cities";
-import { eventsData } from "@/content/events";
+import { createClient } from "@/utils/supabase/server";
 import { WaitlistModal } from "@/components/ui/WaitlistModal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EventCard } from "@/components/ui/EventCard";
@@ -13,7 +13,11 @@ export const metadata: Metadata = {
   description: "Find YogaJam events in your city.",
 };
 
-export default function CitiesPage() {
+export default async function CitiesPage() {
+  const supabase = await createClient();
+  const { data: dbEvents } = await supabase.from('events').select('city');
+  const events = dbEvents || [];
+
   return (
     <main className="flex min-h-screen flex-col pt-32 pb-24 bg-background">
       <Container className="flex flex-col gap-16 md:gap-20">
@@ -26,7 +30,7 @@ export default function CitiesPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-6">
             {activeCities.map((city, index) => {
-              const activeCount = eventsData.filter(e => e.location.toLowerCase().includes(city.name.toLowerCase())).length;
+              const activeCount = events.filter(e => e.city.toLowerCase() === city.name.toLowerCase()).length;
 
               return (
                 <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}>

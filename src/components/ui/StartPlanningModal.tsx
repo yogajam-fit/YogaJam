@@ -94,6 +94,20 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
       if (error) {
         setErrors({ date: "Something went wrong. Please try again." });
       } else {
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: formData.email,
+              subject: 'Your Request is Received!',
+              type: 'host_confirmation',
+              name: formData.name,
+            })
+          })
+        } catch (err) {
+          console.error("Failed to send host confirmation email", err)
+        }
         setIsSubmitted(true);
       }
     }

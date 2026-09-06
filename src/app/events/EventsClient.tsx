@@ -8,19 +8,20 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EventCard } from "@/components/ui/EventCard";
 import type { EventRecord } from "@/components/admin/EventsTable";
 import { NewsletterInlineForm } from "@/components/ui/NewsletterInlineForm";
+import { formatPrice } from "@/lib/utils";
 
 export function EventsClient({ events }: { events: EventRecord[] }) {
   const [activeCity, setActiveCity] = React.useState("All");
   
-  // Extract unique cities from the location strings (e.g. "Indiranagar, Bengaluru" -> "Bengaluru")
+  // Extract unique cities from the city column
   const cities = React.useMemo(() => {
-    const extracted = events.map(e => e.location.split(',').pop()?.trim() || "");
+    const extracted = events.map(e => e.city || e.location.split(',').pop()?.trim() || "");
     return ["All", ...Array.from(new Set(extracted)).filter(Boolean)];
   }, [events]);
 
   const filteredEvents = activeCity === "All"
     ? events
-    : events.filter(e => e.location.endsWith(activeCity));
+    : events.filter(e => (e.city || e.location).endsWith(activeCity));
 
   return (
     <main className="min-h-screen pt-32 pb-24 bg-background">
@@ -89,9 +90,9 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
                 badgeText={event.date}
                 title={event.title}
                 detail1Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-                detail1Text={event.price || event.time}
+                detail1Text={formatPrice(event.price || event.time)}
                 detail2Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-                detail2Text={event.location}
+                detail2Text={event.city}
                 previewDesc={event.preview_desc}
                 previewHighlight={event.preview_highlight}
                 actionText="Reserve"
