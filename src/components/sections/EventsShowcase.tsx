@@ -14,10 +14,13 @@ export async function EventsShowcase() {
   const { data: upcomingEvents } = await supabase
     .from('events')
     .select('*')
-    .order('created_at', { ascending: false })
-    .limit(4)
 
-  const hasEvents = upcomingEvents && upcomingEvents.length > 0;
+  // Sort by date ascending (earliest first)
+  const sortedEvents = (upcomingEvents || []).sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  }).slice(0, 4);
+
+  const hasEvents = sortedEvents && sortedEvents.length > 0;
 
   return (
     <section className="py-12 md:py-16 relative z-10">
@@ -42,7 +45,7 @@ export async function EventsShowcase() {
 
         {hasEvents ? (
           <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 pb-6 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 md:grid-cols-2 xl:grid-cols-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {upcomingEvents.map((event) => (
+            {sortedEvents?.map((event) => (
               <div key={event.id} className="w-[40vw] sm:w-[30vw] snap-center shrink-0 md:w-auto md:min-w-0">
                 <EventCard
                   href={`/events/${event.id}`}

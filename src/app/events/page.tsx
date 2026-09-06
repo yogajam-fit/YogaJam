@@ -10,7 +10,10 @@ export default async function EventsPage() {
   const { data: events } = await supabase
     .from('events')
     .select('*')
-    .order('created_at', { ascending: false })
 
-  return <EventsClient events={(events as EventRecord[]) || []} />;
+  const sortedEvents = (events || []).sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+  return <EventsClient events={(sortedEvents as EventRecord[]) || []} />;
 }
