@@ -73,7 +73,7 @@ export default async function CitiesPage() {
                   previewDesc={city.description}
                   actionText="Explore City"
                   badgeText="Coming Soon"
-                  containerClassName="border-dashed hover:border-white/20 grayscale hover:grayscale-0 !bg-[#050505]/50"
+                  containerClassName="border-dashed hover:border-border grayscale hover:grayscale-0 !bg-[#050505]/50"
                 />
               </div>
             ))}

@@ -33,7 +33,7 @@ export default function PersonalizedEventsPage() {
               className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
                 activeCategory === cat
                   ? "bg-accent text-background shadow-[0_0_15px_rgba(200,232,107,0.4)]"
-                  : "bg-surface/50 border border-white/5 text-foreground-secondary hover:text-foreground hover:bg-surface"
+                  : "bg-surface/50 border border-border text-foreground-secondary hover:text-foreground hover:bg-surface"
               }`}
             >
               {cat}

@@ -69,7 +69,7 @@ export function NewsletterInlineForm() {
           placeholder="Enter your email"
           required
           disabled={status === 'loading'}
-          className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all disabled:opacity-50"
+          className="w-full bg-background/50 border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all disabled:opacity-50"
         />
       </div>
       <Button 

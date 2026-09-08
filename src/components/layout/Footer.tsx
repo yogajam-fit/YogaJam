@@ -29,6 +29,22 @@ export function Footer() {
         setStatus('error');
       }
     } else {
+      // Send the thank you email
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: email.trim(),
+            subject: 'Welcome to YogaJam!',
+            type: 'newsletter_subscribe',
+            name: email.split('@')[0], // simple fallback for name
+          }),
+        })
+      } catch (err) {
+        console.error("Failed to send welcome email", err)
+      }
+
       setStatus('success');
     }
   };
@@ -41,7 +57,7 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2 lg:col-span-4 flex flex-col justify-between">
             <div>
-              <Link href="/" className="text-3xl font-bold font-heading tracking-tight text-white mb-4 block">
+              <Link href="/" className="text-3xl font-bold font-heading tracking-tight text-foreground mb-4 block">
                 YogaJam<span className="text-accent">.</span>
               </Link>
               <p className="text-foreground-secondary text-sm font-medium tracking-wide mb-8">
@@ -55,7 +71,7 @@ export function Footer() {
                     href={social.url} 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/40 hover:text-white transition-colors"
+                    className="text-foreground/40 hover:text-foreground transition-colors"
                     aria-label={social.name}
                   >
                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -74,10 +90,11 @@ export function Footer() {
                 { name: 'Upcoming events', href: '/events' },
                 { name: 'Host event', href: '/personalized-events' },
                 { name: 'Cities', href: '/cities' },
+                { name: 'Journal', href: '/journals' },
                 { name: 'About us', href: '/about' }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-foreground-secondary hover:text-white transition-colors text-sm whitespace-nowrap">
+                  <Link href={link.href} className="text-foreground-secondary hover:text-foreground transition-colors text-sm whitespace-nowrap">
                     {link.name}
                   </Link>
                 </li>
@@ -91,7 +108,7 @@ export function Footer() {
                 { name: 'Privacy policy', href: '/privacy' }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-foreground-secondary hover:text-white transition-colors text-sm whitespace-nowrap">
+                  <Link href={link.href} className="text-foreground-secondary hover:text-foreground transition-colors text-sm whitespace-nowrap">
                     {link.name}
                   </Link>
                 </li>
@@ -101,8 +118,8 @@ export function Footer() {
 
           {/* Minimal Newsletter */}
           <div className="md:col-span-1 lg:col-span-4 flex flex-col">
-            <h4 className="text-white font-medium text-base mb-2">Subscribe to newsletter</h4>
-            <p className="text-white/40 text-sm mb-6 leading-relaxed">
+            <h4 className="text-foreground font-medium text-base mb-2">Subscribe to newsletter</h4>
+            <p className="text-foreground/40 text-sm mb-6 leading-relaxed">
               Get exclusive access to underground events and early retreat drops.
             </p>
             {status === 'success' ? (
@@ -119,13 +136,13 @@ export function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email address" 
-                  className={`w-full bg-transparent border-b ${status === 'error' ? 'border-red-500' : 'border-white/20'} pb-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-accent transition-colors`}
+                  className={`w-full bg-transparent border-b ${status === 'error' ? 'border-red-500' : 'border-border'} pb-3 text-sm text-foreground placeholder-white/40 focus:outline-none focus:border-accent transition-colors`}
                   required
                 />
                 <button 
                   type="submit" 
                   disabled={status === 'loading'}
-                  className="absolute right-0 top-0 bottom-3 flex items-center justify-center text-white/40 group-hover:text-accent transition-colors disabled:opacity-50"
+                  className="absolute right-0 top-0 bottom-3 flex items-center justify-center text-foreground/40 group-hover:text-accent transition-colors disabled:opacity-50"
                   aria-label="Subscribe"
                 >
                   {status === 'loading' ? (
@@ -150,7 +167,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <p className="text-white/40 text-xs">
+          <p className="text-foreground/40 text-xs">
             © {new Date().getFullYear()} YogaJam. All rights reserved.
           </p>
         </div>

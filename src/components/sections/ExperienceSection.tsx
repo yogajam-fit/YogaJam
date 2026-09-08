@@ -149,7 +149,7 @@ export function ExperienceSection() {
                         e.stopPropagation();
                         toggleMute();
                       }}
-                      className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-white/30 transition-all duration-300 shadow-lg"
+                      className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-border flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-border transition-all duration-300 shadow-lg"
                       aria-label={isMuted ? "Unmute video" : "Mute video"}
                     >
                       {isMuted ? (
@@ -182,7 +182,7 @@ export function ExperienceSection() {
                     container.scrollTo({ left: idx * itemWidth, behavior: 'smooth' });
                   }
                 }}
-                className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-white/20 hover:bg-white/50"}`}
+                className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-foreground/20 hover:bg-foreground/40"}`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
@@ -205,7 +205,7 @@ export function ExperienceSection() {
             <div className="hidden lg:flex items-center gap-5 mt-8">
               <button
                 onClick={prevExperience}
-                className="w-12 h-12 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
+                className="w-12 h-12 rounded-full bg-[#111111] border border-border flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
                 aria-label="Previous experience"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,8 +219,7 @@ export function ExperienceSection() {
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-white/20 hover:bg-white/50"
-                      }`}
+                    className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-foreground/20 hover:bg-foreground/40"}`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
                 ))}
@@ -228,7 +227,7 @@ export function ExperienceSection() {
 
               <button
                 onClick={nextExperience}
-                className="w-12 h-12 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
+                className="w-12 h-12 rounded-full bg-[#111111] border border-border flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
                 aria-label="Next experience"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

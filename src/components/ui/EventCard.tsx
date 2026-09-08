@@ -44,7 +44,7 @@ export function EventCard({
           src={imageSrc}
           alt={title}
           fill
-          unoptimized={true}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-opacity duration-1000 opacity-80 md:opacity-60 group-hover:opacity-100 md:group-hover:opacity-30"
         />
         {/* Gradient only needed on desktop since mobile text is outside */}

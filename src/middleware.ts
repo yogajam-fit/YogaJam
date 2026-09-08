@@ -24,6 +24,12 @@ export async function middleware(request: NextRequest) {
           )
         },
       },
+      cookieOptions: {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+      },
     }
   )
 

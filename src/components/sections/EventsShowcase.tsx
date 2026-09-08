@@ -16,10 +16,15 @@ export async function EventsShowcase() {
     .from('events')
     .select('*')
 
-  // Sort by date ascending (earliest first)
-  const sortedEvents = (upcomingEvents || []).sort((a, b) => {
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
-  }).slice(0, 4);
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  // Filter out past events, then sort by date ascending (earliest first)
+  const sortedEvents = (upcomingEvents || [])
+    .filter(e => new Date(e.date) >= now)
+    .sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }).slice(0, 4);
 
   const hasEvents = sortedEvents && sortedEvents.length > 0;
 
@@ -65,13 +70,13 @@ export async function EventsShowcase() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-center py-16 px-6 border border-white/10 rounded-3xl bg-surface/30 backdrop-blur-sm w-full mx-auto shadow-2xl">
-            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 shadow-[0_0_30px_rgba(200,232,107,0.1)]">
+          <div className="flex flex-col items-center justify-center text-center py-16 px-6 border border-border rounded-3xl bg-surface/30 backdrop-blur-sm w-full mx-auto shadow-2xl">
+            <div className="w-16 h-16 bg-foreground/5 rounded-full flex items-center justify-center mb-6 border border-border shadow-[0_0_30px_rgba(200,232,107,0.1)]">
               <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold font-heading text-white mb-3 tracking-tight">We&apos;re brewing something special</h3>
+            <h3 className="text-2xl md:text-3xl font-bold font-heading text-foreground mb-3 tracking-tight">We&apos;re brewing something special</h3>
             <p className="text-foreground-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
               Our next set of immersive wellness experiences are currently being curated. Subscribe to our newsletter to be the first to know when tickets drop!
             </p>

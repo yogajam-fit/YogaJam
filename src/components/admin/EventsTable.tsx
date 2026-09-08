@@ -11,9 +11,10 @@ export type EventRecord = {
   title: string
   date: string
   time: string
-  price: string
+  price?: string
   city: string
   location: string
+  location_url?: string
   preview_desc: string
   preview_highlight?: string
   full_desc: string
@@ -32,6 +33,7 @@ export function EventsTable() {
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventRecord | null>(null)
+  const [sortAscending, setSortAscending] = useState<boolean | null>(null)
   const supabase = createClient()
   const router = useRouter()
 
@@ -46,8 +48,35 @@ export function EventsTable() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this event?')) return
-    await supabase.from('events').delete().eq('id', id)
+    // Check for existing bookings first
+    const { count } = await supabase
+      .from('booking_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('event_id', id)
+
+    const bookingsCount = count || 0
+    
+    let confirmMessage = 'Are you sure you want to delete this event?'
+    if (bookingsCount > 0) {
+      confirmMessage = `WARNING: This event currently has ${bookingsCount} booking(s) associated with it.\n\nDeleting this event will permanently delete all these bookings as well. Are you absolutely sure you want to proceed?`
+    }
+
+    if (!confirm(confirmMessage)) return
+    // Delete associated bookings first to satisfy foreign key constraint
+    await supabase.from('booking_requests').delete().eq('event_id', id)
+    
+    // Extract media paths to delete from storage
+    const eventToDelete = events.find(e => e.id === id)
+    // Note: We skip deleting media from ImageKit to preserve historical backups
+    // as it requires specific fileIds which we don't store in the database currently.
+    
+    const { error } = await supabase.from('events').delete().eq('id', id)
+    
+    if (error) {
+      alert('Failed to delete event: ' + error.message)
+      return
+    }
+    
     setEvents(events.filter(e => e.id !== id))
     router.refresh()
   }
@@ -83,27 +112,47 @@ export function EventsTable() {
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-black/20 text-foreground-secondary uppercase tracking-wider text-[11px] font-bold">
               <tr>
+                <th className="px-6 py-4">Created At</th>
                 <th className="px-6 py-4">Title</th>
-                <th className="px-6 py-4">Date & Time</th>
-                <th className="px-6 py-4">Location</th>
+                <th className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    Date & Time
+                    <button 
+                      onClick={() => setSortAscending(prev => prev === null ? true : prev === true ? false : null)}
+                      className="text-foreground-secondary hover:text-foreground transition-colors"
+                      title="Sort by Date"
+                    >
+                      <svg className={`w-4 h-4 ${sortAscending === true ? 'text-accent' : ''} ${sortAscending === false ? 'rotate-180 text-accent' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                      </svg>
+                    </button>
+                  </div>
+                </th>
                 <th className="px-6 py-4">City</th>
                 <th className="px-6 py-4">Booking Type</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {events.map((event) => (
+              {[...events].sort((a, b) => {
+                if (sortAscending === null) return 0;
+                // Try parsing the date, fallback to 0 if invalid
+                const dateA = new Date(a.date).getTime() || 0;
+                const dateB = new Date(b.date).getTime() || 0;
+                return sortAscending ? dateA - dateB : dateB - dateA;
+              }).map((event) => (
                 <tr key={event.id} className="hover:bg-surface transition-colors group">
+                  <td className="px-6 py-4 text-gray-300">
+                    <p>{event.created_at ? new Date(event.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</p>
+                    <p className="text-xs text-gray-500">{event.created_at ? new Date(event.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}</p>
+                  </td>
                   <td className="px-6 py-4">
                     <p className="font-bold text-foreground">{event.title}</p>
-                    <p className="text-xs text-gray-500">{formatPrice(event.price)}</p>
+                    <p className="text-xs text-gray-500">{event.price ? formatPrice(event.price) : 'Free / TBD'}</p>
                   </td>
                   <td className="px-6 py-4 text-gray-300">
                     <p>{event.date}</p>
                     <p className="text-xs text-gray-500">{event.time}</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-gray-300">{event.location}</span>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-gray-300">{event.city}</span>
@@ -172,8 +221,10 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [includes, setIncludes] = useState<string[]>(event?.includes?.length ? event.includes : [''])
   const [runOfShow, setRunOfShow] = useState<{time: string, title: string, desc: string}[]>(event?.run_of_show?.length ? event.run_of_show : [{ time: '', title: '', desc: '' }])
   const [bookingType, setBookingType] = useState(event?.booking_type || 'platform')
-  const [bookMyShowUrl, setBookMyShowUrl] = useState(event?.booking_links?.bookmyshow || '')
-  const [districtUrl, setDistrictUrl] = useState(event?.booking_links?.district || '')
+  const initialPlatforms = event?.booking_links 
+    ? Object.entries(event.booking_links).map(([name, url]) => ({ name, url }))
+    : [{ name: '', url: '' }]
+  const [platforms, setPlatforms] = useState<{name: string, url: string}[]>(initialPlatforms)
   const [eventDate, setEventDate] = useState(() => parseDateString(event?.date || ''))
   const [imageUrl, setImageUrl] = useState(event?.image || '')
   const [videoUrl, setVideoUrl] = useState(event?.video || '')
@@ -197,27 +248,30 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
     if (!file) return
     
     setIsUploading(true)
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`
-    const filePath = `${type}s/${fileName}`
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("folder", `/events/${type}s`)
 
-    const { error: uploadError } = await supabase.storage
-      .from('event-media')
-      .upload(filePath, file)
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      })
 
-    if (uploadError) {
-      alert(`Error uploading ${type}: ` + uploadError.message)
+      if (!response.ok) {
+        throw new Error("Upload failed")
+      }
+
+      const data = await response.json()
+      
+      if (type === 'image') setImageUrl(data.url)
+      if (type === 'video') setVideoUrl(data.url)
+      if (type === 'qr') setQrUrl(data.url)
+    } catch (error: any) {
+      alert(`Error uploading ${type}: ` + error.message)
+    } finally {
       setIsUploading(false)
-      return
     }
-
-    const { data } = supabase.storage.from('event-media').getPublicUrl(filePath)
-    
-    if (type === 'image') setImageUrl(data.publicUrl)
-    if (type === 'video') setVideoUrl(data.publicUrl)
-    if (type === 'qr') setQrUrl(data.publicUrl)
-    
-    setIsUploading(false)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -233,8 +287,8 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       return;
     }
     
-    if (bookingType === 'platform' && !bookMyShowUrl.trim() && !districtUrl.trim()) {
-      alert('Please provide at least one booking platform URL (BookMyShow or District).');
+    if (bookingType === 'platform' && !platforms.some(p => p.name.trim() && p.url.trim())) {
+      alert('Please provide at least one booking platform with a valid name and URL.');
       setIsSubmitting(false);
       return;
     }
@@ -246,8 +300,11 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
     }
     
     const booking_links: Record<string, string> = {}
-    if (bookMyShowUrl.trim()) booking_links.bookmyshow = bookMyShowUrl.trim()
-    if (districtUrl.trim()) booking_links.district = districtUrl.trim()
+    platforms.forEach(p => {
+      if (p.name.trim() && p.url.trim()) {
+        booking_links[p.name.trim()] = p.url.trim()
+      }
+    })
     
     const payload = {
       title: formData.get('title'),
@@ -256,6 +313,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       price: formData.get('price'),
       city: formData.get('city'),
       location: formData.get('location'),
+      location_url: formData.get('location_url'),
       image: imageUrl,
       video: videoUrl,
       qr_code: qrUrl,
@@ -294,15 +352,16 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-foreground-secondary mb-1">Title</label>
-                <input name="title" defaultValue={event?.title} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <input name="title" defaultValue={event?.title} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">Date</label>
                 <DatePicker 
                   value={eventDate} 
                   onChange={setEventDate} 
-                  className="bg-white/5 border-border"
-                  popDirection="down" 
+                  className="bg-foreground/ border-border"
+                  popDirection="down"
+                  allowPastDates={true}
                 />
               </div>
               <div>
@@ -311,29 +370,33 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                   <TimePicker 
                     value={startTime} 
                     onChange={setStartTime} 
-                    className="bg-white/5 border-border" 
+                    className="bg-foreground/ border-border" 
                     popDirection="down"
                   />
                   <span className="text-gray-500">-</span>
                   <TimePicker 
                     value={endTime} 
                     onChange={setEndTime} 
-                    className="bg-white/5 border-border" 
+                    className="bg-foreground/ border-border" 
                     popDirection="down"
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">Location</label>
-                <input name="location" defaultValue={event?.location} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <input name="location" defaultValue={event?.location} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">City</label>
-                <input name="city" defaultValue={event?.city} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <input name="city" defaultValue={event?.city} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Price</label>
-                <input name="price" defaultValue={event?.price} required className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <label className="block text-foreground-secondary mb-1">Price (Optional)</label>
+                <input name="price" defaultValue={event?.price} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
+              </div>
+              <div>
+                <label className="block text-foreground-secondary mb-1">Location URL (Optional)</label>
+                <input name="location_url" type="url" defaultValue={event?.location_url} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
             </div>
           </div>
@@ -350,9 +413,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     onChange={(e) => setImageUrl(e.target.value)} 
                     placeholder="https://..." 
                     required 
-                    className="flex-1 bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
+                    className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
-                  <label className="cursor-pointer bg-white/10 hover:bg-white/20 px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+                  <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     {isUploading ? '...' : 'Upload'}
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image')} disabled={isUploading} />
                   </label>
@@ -365,9 +428,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     value={videoUrl} 
                     onChange={(e) => setVideoUrl(e.target.value)} 
                     placeholder="https://..." 
-                    className="flex-1 bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
+                    className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
-                  <label className="cursor-pointer bg-white/10 hover:bg-white/20 px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+                  <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     {isUploading ? '...' : 'Upload'}
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video')} disabled={isUploading} />
                   </label>
@@ -382,15 +445,15 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <div className="space-y-4">
               <div>
                 <label className="block text-foreground-secondary mb-1">Preview Description</label>
-                <textarea name="preview_desc" defaultValue={event?.preview_desc} required rows={3} className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <textarea name="preview_desc" defaultValue={event?.preview_desc} required rows={3} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">Preview Highlight</label>
-                <input name="preview_highlight" defaultValue={event?.preview_highlight} className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" placeholder="e.g. Early Bird Discounts apply!" />
+                <input name="preview_highlight" defaultValue={event?.preview_highlight} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" placeholder="e.g. Early Bird Discounts apply!" />
               </div>
               <div>
                 <label className="block text-foreground-secondary mb-1">Full Description</label>
-                <textarea name="full_desc" defaultValue={event?.full_desc} required rows={6} className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" />
+                <textarea name="full_desc" defaultValue={event?.full_desc} required rows={6} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
             </div>
           </div>
@@ -413,25 +476,50 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
               </div>
               
               {bookingType === 'platform' && (
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <label className="block text-foreground-secondary mb-1">BookMyShow URL</label>
-                    <input 
-                      value={bookMyShowUrl} 
-                      onChange={(e) => setBookMyShowUrl(e.target.value)}
-                      placeholder="https://in.bookmyshow.com/..." 
-                      className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
-                    />
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-foreground-secondary mb-1">Booking Platforms</label>
+                    <button 
+                      type="button" 
+                      onClick={() => setPlatforms([...platforms, { name: '', url: '' }])}
+                      className="text-accent hover:text-accent-warm text-sm font-bold flex items-center gap-1"
+                    >
+                      + Add Platform
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-foreground-secondary mb-1">District App URL</label>
-                    <input 
-                      value={districtUrl} 
-                      onChange={(e) => setDistrictUrl(e.target.value)}
-                      placeholder="https://district.app/..." 
-                      className="w-full bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
-                    />
-                  </div>
+                  {platforms.map((platform, index) => (
+                    <div key={index} className="flex gap-4 items-start">
+                      <div className="flex-1">
+                        <input 
+                          value={platform.name} 
+                          onChange={(e) => {
+                            const newPlatforms = [...platforms]
+                            newPlatforms[index].name = e.target.value
+                            setPlatforms(newPlatforms)
+                          }}
+                          placeholder="Platform Name (e.g. BookMyShow)" 
+                          className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground mb-2" 
+                        />
+                      </div>
+                      <div className="flex-[2]">
+                        <input 
+                          value={platform.url} 
+                          onChange={(e) => {
+                            const newPlatforms = [...platforms]
+                            newPlatforms[index].url = e.target.value
+                            setPlatforms(newPlatforms)
+                          }}
+                          placeholder="Booking URL (https://...)" 
+                          className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
+                        />
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={() => setPlatforms(platforms.filter((_, i) => i !== index))}
+                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg mt-0.5"
+                      >✕</button>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -443,9 +531,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       value={qrUrl} 
                       onChange={(e) => setQrUrl(e.target.value)} 
                       placeholder="https://..." 
-                      className="flex-1 bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
+                      className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                     />
-                    <label className="cursor-pointer bg-white/10 hover:bg-white/20 px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+                    <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                       {isUploading ? '...' : 'Upload'}
                       {/* Using any cast on type parameter since handleFileUpload type is constrained to 'image' | 'video', but in JS it's fine or I will pass 'qr' as any */}
                       <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'qr' as any)} disabled={isUploading} />
@@ -470,7 +558,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       setIncludes(newInc)
                     }}
                     placeholder="e.g. Premium yoga mat & towel"
-                    className="flex-1 bg-white/5 border border-border rounded-lg p-2.5 text-foreground" 
+                    className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
                   <button 
                     type="button" 
@@ -494,7 +582,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Run of Show (Schedule)</h4>
             <div className="space-y-4">
               {runOfShow.map((step, index) => (
-                <div key={index} className="flex gap-3 items-start bg-white/5 p-4 rounded-xl border border-border">
+                <div key={index} className="flex gap-3 items-start bg-foreground/ p-4 rounded-xl border border-border">
                   <div className="flex-1 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
@@ -506,7 +594,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                             newSteps[index].time = val
                             setRunOfShow(newSteps)
                           }}
-                          className="bg-white/5 border-border p-2" 
+                          className="bg-foreground/ border-border p-2" 
                           popDirection="up"
                         />
                       </div>
@@ -520,7 +608,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                             setRunOfShow(newSteps)
                           }}
                           placeholder="e.g. Doors open"
-                          className="w-full bg-white/5 border border-border rounded-lg p-2 text-foreground text-sm" 
+                          className="w-full bg-foreground/ border border-border rounded-lg p-2 text-foreground text-sm" 
                         />
                       </div>
                     </div>
@@ -534,7 +622,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                           setRunOfShow(newSteps)
                         }}
                         placeholder="e.g. Settle into the darkness"
-                        className="w-full bg-white/5 border border-border rounded-lg p-2 text-foreground text-sm" 
+                        className="w-full bg-foreground/ border border-border rounded-lg p-2 text-foreground text-sm" 
                       />
                     </div>
                   </div>

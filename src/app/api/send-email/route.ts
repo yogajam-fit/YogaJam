@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY || 'missing_key')
 export async function POST(request: Request) {
   try {
     // 1. Parse Request Body
-    const { to, subject, type, name, eventTitle, eventDate, amount } = await request.json()
+    const { to, subject, type, name, eventTitle, eventDate, amount, tickets } = await request.json()
 
     if (!to || !subject || !type) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -34,7 +34,8 @@ export async function POST(request: Request) {
           <p>Hi ${name || 'there'},</p>
           <p>Great news! Your booking for <strong>${eventTitle || 'our event'}</strong> has been confirmed.</p>
           ${eventDate ? `<p><strong>Date:</strong> ${eventDate}</p>` : ''}
-          ${amount ? `<p><strong>Amount:</strong> ${amount}</p>` : ''}
+          ${tickets ? `<p><strong>Tickets:</strong> ${tickets}</p>` : ''}
+          ${amount ? `<p><strong>Total Amount:</strong> ${amount}</p>` : ''}
           <p>We are so excited to see you there. If you have any questions, just reply to this email!</p>
           <br/>
           <p>Best regards,<br/>The YogaJam Team</p>
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
       htmlContent = `
         <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
           <p>Hi ${name || 'there'},</p>
-          <p>We received your booking request for <strong>${eventTitle || 'our event'}</strong>, but unfortunately, we were unable to verify your payment.</p>
+          <p>We received your booking request for <strong>${eventTitle || 'our event'}</strong> (${tickets ? `${tickets} ticket(s)` : ''}${amount ? ` for ${amount}` : ''}), but unfortunately, we were unable to verify your payment.</p>
           <p>This could be due to an unclear screenshot, an incorrect UTR number, or the payment not being reflected in our system.</p>
           <p>Please double-check your payment details and submit a new booking request, or reply directly to this email for assistance.</p>
           <br/>
@@ -85,10 +86,8 @@ export async function POST(request: Request) {
     }
 
     // 4. Send Email via Resend
-    // By default, if the user hasn't verified a domain, Resend requires using 'onboarding@resend.dev'
-    // and will ONLY send to the email address used to sign up for Resend.
     const { data, error } = await resend.emails.send({
-      from: 'YogaJam <onboarding@resend.dev>',
+      from: 'YogaJam <contact@yogajam.fit>',
       to: [to],
       subject: subject,
       html: htmlContent,

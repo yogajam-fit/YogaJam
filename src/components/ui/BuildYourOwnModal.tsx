@@ -199,16 +199,16 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
       role="dialog"
     >
       <div 
-        className="w-full sm:max-w-2xl bg-surface sm:border border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom-8 sm:zoom-in-95 duration-300"
+        className="w-full sm:max-w-2xl bg-surface sm:border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom-8 sm:zoom-in-95 duration-300"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0 bg-surface/80 backdrop-blur-xl z-10">
+        <div className="flex items-center justify-between p-6 border-b border-border shrink-0 bg-surface/80 backdrop-blur-xl z-10">
           <div className="flex items-center gap-4">
             {step === 2 && (
               <button 
                 onClick={handleBack}
-                className="p-2 -ml-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-white/5"
+                className="p-2 -ml-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/"
                 aria-label="Go back to previous step"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -227,7 +227,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
           </div>
           <button 
             onClick={onClose}
-            className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-white/5 bg-background/50 border border-white/5"
+            className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/50 border border-border"
             aria-label="Close dialog"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -251,7 +251,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                       className={`p-4 rounded-xl border text-left transition-all duration-200 ${
                         formData.eventType === type 
                         ? "border-accent bg-accent/10 text-foreground" 
-                        : "border-white/10 bg-background/50 text-foreground-secondary hover:border-white/20 hover:bg-white/5"
+                        : "border-border bg-background/50 text-foreground-secondary hover:border-border hover:bg-foreground/"
                       }`}
                     >
                       <div className="font-semibold text-sm">{type}</div>
@@ -268,7 +268,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                       placeholder="Tell us what you're planning..."
                       value={formData.customEventType}
                       onChange={(e) => handleChange("customEventType", e.target.value)}
-                      className={`w-full bg-background border ${errors.customEventType ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                      className={`w-full bg-background border ${errors.customEventType ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                     />
                     {errors.customEventType && <p className="text-red-400 text-sm mt-1.5">{errors.customEventType}</p>}
                   </div>
@@ -287,7 +287,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                     placeholder="e.g. 25"
                     value={formData.groupSize}
                     onChange={(e) => handleChange("groupSize", e.target.value.replace(/\D/g, ''))}
-                    className={`w-full bg-background border ${errors.groupSize ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                    className={`w-full bg-background border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                   />
                   {errors.groupSize && <p className="text-red-400 text-sm">{errors.groupSize}</p>}
                 </div>
@@ -301,7 +301,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                     placeholder="e.g. Next Month or 15 Dec 2026"
                     value={formData.timeline}
                     onChange={(e) => handleChange("timeline", e.target.value)}
-                    className={`w-full bg-background border ${errors.timeline ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                    className={`w-full bg-background border ${errors.timeline ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                   />
                   {errors.timeline && <p className="text-red-400 text-sm">{errors.timeline}</p>}
                 </div>
@@ -326,7 +326,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                         className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
                           formData.location === option.id 
                             ? 'bg-accent/5 border-accent shadow-[0_0_15px_rgba(200,232,107,0.1)]' 
-                            : 'bg-background border-white/10 hover:border-white/20 hover:bg-white/5'
+                            : 'bg-background border-border hover:border-border hover:bg-foreground/'
                         }`}
                         role="radio"
                         aria-checked={formData.location === option.id}
@@ -349,7 +349,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="e.g. Mumbai, Bengaluru"
                   value={formData.cityName}
                   onChange={(e) => handleChange("cityName", e.target.value)}
-                  className={`w-full bg-background border ${errors.cityName ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border ${errors.cityName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
                 {errors.cityName && <p className="text-red-400 text-sm">{errors.cityName}</p>}
               </div>
@@ -363,7 +363,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="Tell us what you're imagining — the vibe, people, music, movement, food, or anything else that matters."
                   value={formData.vision}
                   onChange={(e) => handleChange("vision", e.target.value)}
-                  className={`w-full bg-background border ${errors.vision ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none`}
+                  className={`w-full bg-background border ${errors.vision ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none`}
                 />
                 {errors.vision && <p className="text-red-400 text-sm">{errors.vision}</p>}
               </div>
@@ -382,7 +382,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="Jane Doe"
                   value={formData.fullName}
                   onChange={(e) => handleChange("fullName", e.target.value)}
-                  className={`w-full bg-background border ${errors.fullName ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border ${errors.fullName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
                 {errors.fullName && <p className="text-red-400 text-sm">{errors.fullName}</p>}
               </div>
@@ -395,7 +395,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="jane@example.com"
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className={`w-full bg-background border ${errors.email ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
                 {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
               </div>
@@ -410,7 +410,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="9876543210"
                   value={formData.phone}
                   onChange={(e) => handleChange("phone", e.target.value.replace(/\D/g, "").slice(0, 10))}
-                  className={`w-full bg-background border ${errors.phone ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border ${errors.phone ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
                 {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
               </div>
@@ -423,7 +423,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="If applicable"
                   value={formData.company}
                   onChange={(e) => handleChange("company", e.target.value)}
-                  className={`w-full bg-background border border-white/10 rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border border-border rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
               </div>
             </div>
@@ -447,7 +447,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
 
         {/* Footer Actions */}
         {step !== "success" && (
-          <div className="p-6 border-t border-white/5 bg-surface/50 shrink-0">
+          <div className="p-6 border-t border-border bg-surface/50 shrink-0">
             {step === 1 ? (
               <Button size="lg" variant="primary" onClick={handleNext} className="w-full text-base font-semibold h-14">
                 Continue to Details

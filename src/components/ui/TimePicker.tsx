@@ -67,7 +67,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full bg-background/50 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
-          error ? "border-red-400/50" : "border-white/10 hover:border-white/20",
+          error ? "border-red-400/50" : "border-border hover:border-border",
           isOpen && "border-accent/50 ring-1 ring-accent/50",
           className
         )}
@@ -82,12 +82,12 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
 
       {isOpen && (
         <div className={cn(
-          "absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-0 sm:right-auto p-4 bg-surface/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-50 w-[240px] animate-in fade-in",
+          "absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-0 sm:right-auto p-4 bg-surface/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 w-[240px] animate-in fade-in",
           popDirection === 'up' 
             ? "bottom-full mb-2 slide-in-from-bottom-2" 
             : "top-full mt-2 slide-in-from-top-2"
         )}>
-          <div className="flex justify-between items-center h-40 mb-4 bg-black/20 rounded-xl p-2 border border-white/5">
+          <div className="flex justify-between items-center h-40 mb-4 bg-background/20 rounded-xl p-2 border border-border">
             {/* Hours */}
             <div className="flex-1 h-full overflow-y-auto snap-y snap-mandatory px-1 text-center relative scroll-smooth mask-image-fade [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <div className="h-[40%]" /> {/* Spacer */}
@@ -126,7 +126,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
               <div className="h-[40%]" />
             </div>
 
-            <div className="w-px h-full bg-white/10 mx-1" />
+            <div className="w-px h-full bg-foreground/10 mx-1" />
 
             {/* AM/PM */}
             <div className="flex-1 h-full flex flex-col justify-center gap-2 px-1">
@@ -136,7 +136,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
                   onClick={() => setAmpm(a)}
                   className={cn(
                     "h-10 flex items-center justify-center cursor-pointer transition-all duration-200 text-xs font-bold rounded-lg",
-                    ampm === a ? "bg-accent text-background shadow-[0_0_10px_rgba(200,232,107,0.3)]" : "bg-white/5 text-foreground-secondary hover:bg-white/10 hover:text-foreground"
+                    ampm === a ? "bg-accent text-background shadow-[0_0_10px_rgba(200,232,107,0.3)]" : "bg-foreground/5 text-foreground-secondary hover:bg-foreground/10 hover:text-foreground"
                   )}
                 >
                   {a}
@@ -148,7 +148,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
           <button 
             type="button"
             onClick={handleApply}
-            className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl transition-colors text-sm"
+            className="w-full bg-foreground/10 hover:bg-foreground/ text-foreground font-bold py-2.5 rounded-xl transition-colors text-sm"
           >
             Apply Time
           </button>

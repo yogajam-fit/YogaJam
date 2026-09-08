@@ -23,12 +23,12 @@ export default function FaqPage() {
           
           <FaqAccordion items={faqs} />
 
-          <div className="mt-16 text-center border-t border-white/10 pt-12">
-            <h3 className="text-xl md:text-2xl font-bold font-heading text-white mb-4">Still have questions?</h3>
+          <div className="mt-16 text-center border-t border-border pt-12">
+            <h3 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-4">Still have questions?</h3>
             <p className="text-foreground-secondary mb-6">
               Can't find the answer you're looking for? Reach out to our team.
             </p>
-            <a href="/help" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-surface border border-white/10 text-white font-bold text-sm hover:bg-white/5 transition-colors">
+            <a href="/help" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-surface border border-border text-foreground font-bold text-sm hover:bg-foreground/ transition-colors">
               Contact Support
             </a>
           </div>

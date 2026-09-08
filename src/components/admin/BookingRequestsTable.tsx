@@ -77,7 +77,8 @@ export function BookingRequestsTable() {
               type: 'booking_confirmation',
               name: request.name,
               eventTitle: request.events?.title,
-              amount: request.total_amount
+              amount: request.total_amount,
+              tickets: request.tickets
             })
           })
         } catch (e) {
@@ -97,6 +98,8 @@ export function BookingRequestsTable() {
               type: 'booking_rejected',
               name: request.name,
               eventTitle: request.events?.title,
+              amount: request.total_amount,
+              tickets: request.tickets
             })
           })
         } catch (e) {
@@ -115,7 +118,7 @@ export function BookingRequestsTable() {
       <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden">
       <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full text-left text-sm text-gray-300">
-          <thead className="bg-white/5 border-b border-border text-foreground-secondary">
+          <thead className="bg-foreground/ border-b border-border text-foreground-secondary">
             <tr>
               <th className="px-6 py-4 font-semibold">Date</th>
               <th className="px-6 py-4 font-semibold">Event</th>
@@ -153,7 +156,7 @@ export function BookingRequestsTable() {
                     <div className="text-xs font-bold text-accent">{req.total_amount || '-'}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="capitalize font-medium text-foreground text-xs px-2 py-1 bg-white/10 rounded inline-block">
+                    <div className="capitalize font-medium text-foreground text-xs px-2 py-1 bg-foreground/ rounded inline-block">
                       {req.verify_method}
                     </div>
                     {req.utr_number && (

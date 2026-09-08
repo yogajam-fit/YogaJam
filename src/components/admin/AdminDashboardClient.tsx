@@ -149,7 +149,7 @@ export function AdminDashboardClient({
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-300">
-                      <thead className="bg-white/5 border-b border-border text-foreground-secondary">
+                      <thead className="bg-foreground/ border-b border-border text-foreground-secondary">
                         <tr>
                           <th className="px-6 py-4 font-semibold">Event Title</th>
                           <th className="px-6 py-4 font-semibold">Date</th>

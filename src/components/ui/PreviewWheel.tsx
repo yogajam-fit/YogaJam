@@ -7,6 +7,7 @@ interface PreviewItem {
   id: string;
   image: string;
   title: string;
+  video?: string;
 }
 
 interface PreviewWheelProps {
@@ -82,8 +83,8 @@ export function PreviewWheel({ items, activeIndex, onActiveIndexChange }: Previe
                 onClick={() => handleItemClick(i)}
                 className={`w-24 h-12 backdrop-blur-md rounded-[14px] transition-all duration-500 cursor-pointer flex items-center justify-center group relative z-10 border overflow-hidden bg-cover bg-center
                   ${isActive
-                    ? 'border-white/40 scale-110 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-110 z-20'
-                    : 'bg-white/5 border-white/10 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.02)] opacity-70 hover:opacity-100 hover:z-20'
+                    ? 'border-border scale-110 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-110 z-20'
+                    : 'bg-foreground/ border-border hover:bg-foreground/ hover:border-border hover:-translate-y-1 hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.02)] opacity-70 hover:opacity-100 hover:z-20'
                   }
                 `}
                 style={{ backgroundImage: `url("${item.image}")` }}
@@ -99,7 +100,7 @@ export function PreviewWheel({ items, activeIndex, onActiveIndexChange }: Previe
       </div>
 
       {/* Subtle center glow to tie the layout together */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-foreground/ rounded-full blur-3xl pointer-events-none"></div>
     </div>
   );
 }

@@ -45,6 +45,7 @@ export function AboutSection() {
                 src="/images/What_Are_We.png"
                 alt="What are we"
                 fill
+                sizes="(max-width: 768px) 100vw, 400px"
                 className="object-contain drop-shadow-2xl"
                 priority
               />
@@ -54,7 +55,7 @@ export function AboutSection() {
 
         {/* Desktop Layout */}
         <div className="hidden md:block w-full mt-12">
-          <h3 className="text-center text-sm font-bold tracking-[0.2em] text-white/40 uppercase mb-12">Come if you&apos;re...</h3>
+          <h3 className="text-center text-sm font-bold tracking-[0.2em] text-foreground/40 uppercase mb-12">Come if you&apos;re...</h3>
           <div className="grid grid-cols-5 gap-4">
             {items.map((item, i) => (
               <div 
@@ -71,11 +72,11 @@ export function AboutSection() {
 
         {/* Mobile Circular Layout */}
         <div className="md:hidden flex flex-col items-center justify-center w-full mt-16 mb-8">
-          <h3 className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-white/40 uppercase mb-8">Come if you&apos;re...</h3>
+          <h3 className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-foreground/40 uppercase mb-8">Come if you&apos;re...</h3>
           <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] flex items-center justify-center">
             {/* Center Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-12 sm:px-14 z-10 pointer-events-none">
-              <p className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 text-lg sm:text-xl font-heading font-bold leading-snug animate-in fade-in zoom-in-95 duration-500 drop-shadow-sm" key={activeIndex}>
+              <p className="text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/60 text-lg sm:text-xl font-heading font-bold leading-snug animate-in fade-in zoom-in-95 duration-500 drop-shadow-sm" key={activeIndex}>
                 {items[activeIndex].text}
               </p>
             </div>
@@ -105,7 +106,7 @@ export function AboutSection() {
             })}
             
             {/* Subtle dashed orbit ring */}
-            <div className="absolute inset-0 border border-dashed border-white/10 rounded-full animate-[spin_60s_linear_infinite] pointer-events-none" />
+            <div className="absolute inset-0 border border-dashed border-border rounded-full animate-[spin_60s_linear_infinite] pointer-events-none" />
           </div>
         </div>
 

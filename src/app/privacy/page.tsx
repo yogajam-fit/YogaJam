@@ -21,14 +21,14 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-invert md:prose-lg max-w-none text-foreground-secondary leading-relaxed">
             <p>Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
             
-            <h2 className="text-xl md:text-2xl font-bold font-heading text-white mt-10 md:mt-12 mb-4 md:mb-6">1. Introduction</h2>
+            <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">1. Introduction</h2>
             <p>
               Welcome to YogaJam. We respect your privacy and are committed to protecting your personal data. 
               This privacy policy will inform you as to how we look after your personal data when you visit our website 
               (regardless of where you visit it from) and tell you about your privacy rights and how the law protects you.
             </p>
 
-            <h2 className="text-xl md:text-2xl font-bold font-heading text-white mt-10 md:mt-12 mb-4 md:mb-6">2. The Data We Collect About You</h2>
+            <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">2. The Data We Collect About You</h2>
             <p>
               Personal data, or personal information, means any information about an individual from which that person can be identified. 
               We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:
@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Technical Data</strong> includes internet protocol (IP) address, your login data, browser type and version, time zone setting and location.</li>
             </ul>
 
-            <h2 className="text-xl md:text-2xl font-bold font-heading text-white mt-10 md:mt-12 mb-4 md:mb-6">3. How We Use Your Personal Data</h2>
+            <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">3. How We Use Your Personal Data</h2>
             <p>
               We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:
             </p>
@@ -50,17 +50,17 @@ export default function PrivacyPolicyPage() {
               <li>Where we need to comply with a legal obligation.</li>
             </ul>
 
-            <h2 className="text-xl md:text-2xl font-bold font-heading text-white mt-10 md:mt-12 mb-4 md:mb-6">4. Data Security</h2>
+            <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">4. Data Security</h2>
             <p>
               We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorised way, altered or disclosed. 
               In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know.
             </p>
 
-            <h2 className="text-xl md:text-2xl font-bold font-heading text-white mt-10 md:mt-12 mb-4 md:mb-6">5. Contact Us</h2>
+            <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">5. Contact Us</h2>
             <p>
               If you have any questions about this privacy policy or our privacy practices, please contact us at:
               <br />
-              Email: <a href={`mailto:${contactData.email}`} className="text-white hover:text-accent transition-colors">{contactData.email}</a>
+              Email: <a href={`mailto:${contactData.email}`} className="text-foreground hover:text-accent transition-colors">{contactData.email}</a>
             </p>
           </div>
         </div>

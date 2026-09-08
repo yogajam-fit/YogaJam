@@ -141,17 +141,17 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
           onClick={handleClose}
         >
           <div 
-            className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden bg-surface sm:border border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-300 ease-out" 
+            className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden bg-surface sm:border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-300 ease-out" 
             onClick={(e) => e.stopPropagation()}
           >
             
-            <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0 bg-surface/80 backdrop-blur-xl z-10">
+            <div className="flex items-center justify-between p-6 border-b border-border shrink-0 bg-surface/80 backdrop-blur-xl z-10">
               <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground">
                 {isSubmitted ? "Request Sent" : "Start Planning"}
               </h2>
               <button 
                 onClick={handleClose}
-                className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-white/5 bg-background/50 border border-white/5"
+                className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/50 border border-border"
                 aria-label="Close dialog"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +187,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                         id="name" 
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
-                        className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                        className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                         placeholder="Your name"
                       />
                       {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
@@ -201,7 +201,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                         maxLength={10}
                         value={formData.contact}
                         onChange={(e) => handleChange("contact", e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                        className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                         placeholder="9876543210"
                       />
                       {errors.contact && <p className="text-red-400 text-xs mt-1">{errors.contact}</p>}
@@ -215,7 +215,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                       id="email" 
                       value={formData.email}
                       onChange={(e) => handleChange("email", e.target.value)}
-                      className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                      className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                       placeholder="your@email.com"
                     />
                     {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
@@ -228,7 +228,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                       id="city" 
                       value={formData.city}
                       onChange={(e) => handleChange("city", e.target.value)}
-                      className={`w-full bg-background/50 border ${errors.city ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                      className={`w-full bg-background/50 border ${errors.city ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                       placeholder="e.g. Bengaluru"
                     />
                     {errors.city && <p className="text-red-400 text-xs mt-1">{errors.city}</p>}
@@ -243,7 +243,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                         inputMode="numeric"
                         value={formData.groupSize}
                         onChange={(e) => handleChange("groupSize", e.target.value.replace(/\D/g, ''))}
-                        className={`w-full bg-background/50 border ${errors.groupSize ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                        className={`w-full bg-background/50 border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                         placeholder="Estimated number of people"
                       />
                       {errors.groupSize && <p className="text-red-400 text-xs mt-1">{errors.groupSize}</p>}
@@ -265,7 +265,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
             </div>
 
             {!isSubmitted && (
-              <div className="p-6 border-t border-white/5 bg-surface/50 shrink-0">
+              <div className="p-6 border-t border-border bg-surface/50 shrink-0">
                 <button 
                   type="submit" 
                   form="startPlanningForm"

@@ -53,7 +53,7 @@ export function ContactIcons() {
   return (
     <>
       <div
-        className="relative w-full h-14 rounded-xl border border-white/10 cursor-pointer"
+        className="relative w-full h-14 rounded-xl border border-border cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsMobileMenuOpen(true)}
@@ -90,12 +90,12 @@ export function ContactIcons() {
       {isMobileMenuOpen && mounted && createPortal(
         <div className="fixed inset-0 z-[200] lg:hidden flex items-end justify-center bg-black/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}>
           <div 
-            className="w-full bg-surface border-t border-white/10 rounded-t-3xl p-6 pb-12 animate-in slide-in-from-bottom-full duration-300"
+            className="w-full bg-surface border-t border-border rounded-t-3xl p-6 pb-12 animate-in slide-in-from-bottom-full duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-foreground font-heading">Contact Organizer</h3>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-foreground-secondary hover:text-foreground p-2 -mr-2 bg-background/50 rounded-full border border-white/5">
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-foreground-secondary hover:text-foreground p-2 -mr-2 bg-background/50 rounded-full border border-border">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -106,9 +106,9 @@ export function ContactIcons() {
                   key={action.id} 
                   href={action.href} 
                   target={"target" in action ? action.target : undefined}
-                  className="flex items-center gap-4 p-4 rounded-2xl border border-white/5 bg-background/50 active:scale-95 transition-all hover:bg-white/5"
+                  className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-background/50 active:scale-95 transition-all hover:bg-foreground/"
                 >
-                  <div className="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center bg-surface border border-white/5" style={{ color: action.color }}>
+                  <div className="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center bg-surface border border-border" style={{ color: action.color }}>
                     {action.icon}
                   </div>
                   <div className="flex flex-col">

@@ -8,6 +8,7 @@ interface DatePickerProps {
   className?: string;
   error?: boolean;
   popDirection?: 'up' | 'down';
+  allowPastDates?: boolean;
 }
 
 const MONTHS = [
@@ -16,7 +17,7 @@ const MONTHS = [
 ];
 const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-export function DatePicker({ value, onChange, className, error, popDirection = 'up' }: DatePickerProps) {
+export function DatePicker({ value, onChange, className, error, popDirection = 'up', allowPastDates = false }: DatePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   
   // Use today as default if no value, otherwise parse local date
@@ -79,7 +80,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full bg-background/50 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
-          error ? "border-red-400/50" : "border-white/10 hover:border-white/20",
+          error ? "border-red-400/50" : "border-border hover:border-border",
           isOpen && "border-accent/50 ring-1 ring-accent/50",
           className
         )}
@@ -94,19 +95,19 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
 
       {isOpen && (
         <div className={cn(
-          "absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-0 sm:right-auto p-4 bg-surface/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-50 w-[280px] animate-in fade-in",
+          "absolute left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-0 sm:right-auto p-4 bg-surface/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 w-[280px] animate-in fade-in",
           popDirection === 'up' 
             ? "bottom-full mb-2 slide-in-from-bottom-2" 
             : "top-full mt-2 slide-in-from-top-2"
         )}>
           <div className="flex items-center justify-between mb-4">
-            <button onClick={handlePrev} className="p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
+            <button onClick={handlePrev} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
             </button>
             <div className="text-sm font-semibold text-foreground tracking-wide">
               {MONTHS[month]} {year}
             </div>
-            <button onClick={handleNext} className="p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
+            <button onClick={handleNext} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -125,7 +126,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
               const currentDayObj = new Date(year, month, day);
               const todayObj = new Date();
               todayObj.setHours(0, 0, 0, 0);
-              const isPast = currentDayObj < todayObj;
+              const isPast = !allowPastDates && currentDayObj < todayObj;
               
               return (
                 <button
@@ -141,7 +142,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
                       ? "bg-accent text-background font-bold shadow-[0_0_10px_rgba(200,232,107,0.3)]" 
                       : isPast
                         ? "text-foreground-secondary/30 cursor-not-allowed"
-                        : "text-foreground hover:bg-white/10 hover:text-accent-warm"
+                        : "text-foreground hover:bg-foreground/10 hover:text-accent-warm"
                   )}
                 >
                   {day}

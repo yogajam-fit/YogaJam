@@ -133,7 +133,7 @@ function LoginForm() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-600/10 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <h2 className="mt-6 text-center text-4xl font-extrabold tracking-tight text-white font-manrope">
+        <h2 className="mt-6 text-center text-4xl font-extrabold tracking-tight text-foreground font-manrope">
           YogaJam
         </h2>
         <p className="mt-2 text-center text-sm text-gray-400">
@@ -174,7 +174,7 @@ function LoginForm() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full px-4 py-3.5 bg-white/[0.05] border border-white/[0.1] rounded-xl shadow-sm placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                    className="appearance-none block w-full px-4 py-3.5 bg-white/[0.05] border border-white/[0.1] rounded-xl shadow-sm placeholder-gray-500 text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                     placeholder="admin@example.com"
                   />
                 </div>
@@ -184,13 +184,13 @@ function LoginForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full flex justify-center py-3.5 px-4 border border-white/20 rounded-xl text-sm font-medium text-white bg-white/5 hover:bg-white/10 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-white/5 disabled:hover:border-white/20 transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
+                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full ease-out" />
                   <span className="relative flex items-center justify-center gap-2 tracking-wide">
                     {loading ? (
                       <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -230,7 +230,7 @@ function LoginForm() {
                       onChange={(e) => handleOtpChange(e.target.value, index)}
                       onKeyDown={(e) => handleOtpKeyDown(e, index)}
                       onPaste={handleOtpPaste}
-                      className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold bg-white/[0.05] border border-white/[0.1] rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                      className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold bg-white/[0.05] border border-white/[0.1] rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                     />
                   ))}
                 </div>
@@ -240,13 +240,13 @@ function LoginForm() {
                 <button
                   type="submit"
                   disabled={loading || otpArray.some(val => !val)}
-                  className="group relative w-full flex justify-center py-3.5 px-4 border border-white/20 rounded-xl text-sm font-medium text-white bg-white/5 hover:bg-white/10 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-white/5 disabled:hover:border-white/20 transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
+                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full ease-out" />
                   <span className="relative flex items-center justify-center gap-2 tracking-wide">
                     {loading ? (
                       <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -270,7 +270,7 @@ function LoginForm() {
                     setStep('email')
                     setOtpArray(Array(6).fill(''))
                   }}
-                  className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                  className="text-sm text-gray-400 hover:text-foreground transition-colors duration-200"
                  >
                    Use a different email
                  </button>

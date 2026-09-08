@@ -113,7 +113,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
             </h1>
             
             {/* Key Details Bar */}
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 text-sm md:text-base font-semibold text-foreground tracking-wide uppercase mt-6 p-4 md:p-6 bg-surface/30 backdrop-blur-md rounded-2xl border border-white/10 w-full md:w-fit">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 text-sm md:text-base font-semibold text-foreground tracking-wide uppercase mt-6 p-4 md:p-6 bg-surface/30 backdrop-blur-md rounded-2xl border border-border w-full md:w-fit">
               <div className="flex items-center gap-2">
                 <span className={`w-2.5 h-2.5 rounded-full ${hasEvents ? 'bg-accent animate-pulse' : 'bg-foreground-secondary'}`} />
                 {loadingEvents ? 'Loading Events...' : (hasEvents ? `${cityEvents.length} Active Events` : 'Coming Soon')}
@@ -151,7 +151,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                 <SectionHeading title="Where we host" align="left" className="mb-6" />
                 <div className="flex flex-wrap gap-3">
                   {city.locations.map((loc, i) => (
-                    <div key={i} className="px-5 py-2.5 rounded-full bg-surface border border-white/5 text-foreground font-medium text-sm hover:border-accent/30 transition-colors">
+                    <div key={i} className="px-5 py-2.5 rounded-full bg-surface border border-border text-foreground font-medium text-sm hover:border-accent/30 transition-colors">
                       {loc}
                     </div>
                   ))}
@@ -163,7 +163,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                 <SectionHeading title="Experiences to expect" align="left" className="mb-6" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {city.eventTypes.map((type, i) => (
-                    <div key={i} className="flex flex-col gap-3 p-6 rounded-3xl bg-surface border border-white/5 hover:border-white/10 transition-colors">
+                    <div key={i} className="flex flex-col gap-3 p-6 rounded-3xl bg-surface border border-border hover:border-border transition-colors">
                       <div className="flex items-center gap-3">
                         <svg className="w-5 h-5 text-accent shrink-0" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6L12 17.2l-6.2 4.5 2.4-7.6L2 9.6h7.6L12 2z" />
@@ -179,7 +179,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
               </div>
 
               {/* Who Can Join */}
-              <div className="pt-8 border-t border-white/5">
+              <div className="pt-8 border-t border-border">
                 <SectionHeading title={`Who can join YogaJam in ${city.name}?`} align="left" className="mb-6" />
                 <div className="prose prose-invert prose-lg max-w-none text-foreground-secondary leading-relaxed">
                   <p>
@@ -192,8 +192,8 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
               </div>
 
               {/* Host an Event */}
-              <div className="pt-8 border-t border-white/5 mb-10">
-                <div className="bg-gradient-to-br from-surface to-background border border-white/10 p-8 md:p-12 rounded-3xl relative overflow-hidden group">
+              <div className="pt-8 border-t border-border mb-10">
+                <div className="bg-gradient-to-br from-surface to-background border border-border p-8 md:p-12 rounded-3xl relative overflow-hidden group">
                   <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="relative z-10 flex flex-col items-start gap-4">
                     <div className="inline-block px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent-warm text-xs font-semibold tracking-widest uppercase">
@@ -240,13 +240,13 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-surface/50 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                  <div className="bg-surface/50 backdrop-blur-xl border border-border rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                     {/* Decorative blurred background element */}
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 blur-3xl rounded-full" />
                     
                     <div className="relative z-10">
                       <div className="mb-8">
-                        <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-foreground-secondary text-xs font-semibold tracking-widest uppercase mb-4">
+                        <div className="inline-block px-3 py-1 rounded-full bg-foreground/ border border-border text-foreground-secondary text-xs font-semibold tracking-widest uppercase mb-4">
                           Coming Soon
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold font-heading mb-2 text-foreground">We&apos;re expanding.</h3>
@@ -274,7 +274,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                               id="email" 
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
-                              className={`w-full bg-background/50 border ${error ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                              className={`w-full bg-background/50 border ${error ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                               placeholder="hello@example.com"
                             />
                             {error && <p className="text-red-400 text-xs mt-1">{error}</p>}

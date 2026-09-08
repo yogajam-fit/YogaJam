@@ -27,21 +27,21 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
         return (
           <div 
             key={index} 
-            className="border border-white/5 rounded-2xl bg-surface/50 overflow-hidden transition-colors hover:border-white/10"
+            className="border border-border rounded-2xl bg-surface/50 overflow-hidden transition-colors hover:border-border"
           >
             <button
               onClick={() => toggleItem(index)}
               className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
               aria-expanded={isOpen}
             >
-              <span className="text-lg md:text-xl font-bold text-white pr-8 font-heading leading-tight">{item.question}</span>
+              <span className="text-lg md:text-xl font-bold text-foreground pr-8 font-heading leading-tight">{item.question}</span>
               <div 
                 className={cn(
-                  "w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300",
+                  "w-8 h-8 rounded-full bg-foreground/5 flex items-center justify-center shrink-0 transition-transform duration-300",
                   isOpen ? "rotate-45 bg-accent/20" : "rotate-0"
                 )}
               >
-                <svg className={cn("w-5 h-5 transition-colors duration-300", isOpen ? "text-accent" : "text-white/60")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className={cn("w-5 h-5 transition-colors duration-300", isOpen ? "text-accent" : "text-foreground/60")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </div>

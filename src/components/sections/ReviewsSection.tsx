@@ -137,7 +137,7 @@ export function ReviewsSection() {
             </div>
           </div>
 
-          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl overflow-hidden relative bg-surface border border-white/5">
+          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl overflow-hidden relative bg-surface border border-border">
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${vid1Opacity ? 'opacity-100' : 'opacity-0'}`}>
               <video
                 key={VIDEO_REVIEWS[vid1Idx].id}
@@ -154,7 +154,7 @@ export function ReviewsSection() {
 
             <button
               onClick={toggleMute1}
-              className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-30 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-white/30 transition-all duration-300 shadow-lg"
+              className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-30 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-border flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-border transition-all duration-300 shadow-lg"
               aria-label={isMuted1 ? "Unmute video" : "Mute video"}
             >
               {isMuted1 ? (
@@ -170,7 +170,7 @@ export function ReviewsSection() {
             </button>
           </div>
 
-          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl bg-surface border border-white/5 p-5 sm:p-6 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface/60 transition-colors duration-500">
+          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl bg-surface border border-border p-5 sm:p-6 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface/60 transition-colors duration-500">
             {/* Decorative Quote */}
             <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-white/[0.03] group-hover:text-white/[0.05] rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14.017 21v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033zm-14.017 0v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033z" />
@@ -194,7 +194,7 @@ export function ReviewsSection() {
           </div>
 
           {/* Bottom Row: Card 3, Card 4, Arrows */}
-          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl bg-surface border border-white/5 p-5 sm:p-6 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface/60 transition-colors duration-500">
+          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl bg-surface border border-border p-5 sm:p-6 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface/60 transition-colors duration-500">
             {/* Decorative Quote */}
             <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-white/[0.03] group-hover:text-white/[0.05] rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14.017 21v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033zm-14.017 0v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033z" />
@@ -217,7 +217,7 @@ export function ReviewsSection() {
             </div>
           </div>
 
-          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl overflow-hidden relative bg-surface border border-white/5">
+          <div className="col-span-1 aspect-[4/3] w-full rounded-2xl overflow-hidden relative bg-surface border border-border">
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${vid2Opacity ? 'opacity-100' : 'opacity-0'}`}>
               <video
                 key={VIDEO_REVIEWS[vid2Idx].id}
@@ -234,7 +234,7 @@ export function ReviewsSection() {
 
             <button
               onClick={toggleMute2}
-              className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-30 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-white/30 transition-all duration-300 shadow-lg"
+              className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-30 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-border flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-border transition-all duration-300 shadow-lg"
               aria-label={isMuted2 ? "Unmute video" : "Mute video"}
             >
               {isMuted2 ? (
@@ -252,7 +252,7 @@ export function ReviewsSection() {
           {/* Bottom Row: Call to Action (Share Experience) */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 h-full w-full">
             <ReviewModal>
-              <div className="h-full w-full aspect-auto lg:aspect-[4/3] rounded-2xl bg-surface/40 hover:bg-surface/80 transition-colors duration-500 border border-white/5 p-6 md:p-8 flex flex-col justify-center relative overflow-hidden group cursor-pointer min-h-[200px]">
+              <div className="h-full w-full aspect-auto lg:aspect-[4/3] rounded-2xl bg-surface/40 hover:bg-surface/80 transition-colors duration-500 border border-border p-6 md:p-8 flex flex-col justify-center relative overflow-hidden group cursor-pointer min-h-[200px]">
                 {/* Background Decorative Icon */}
                 <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none">
                   <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24">

@@ -70,21 +70,21 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
 
       {isOpen && mounted && createPortal(
         <div 
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/80 backdrop-blur-md transition-all duration-300 ease-out" 
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-background/80 backdrop-blur-md transition-all duration-300 ease-out" 
           onClick={handleClose}
         >
           <div 
-            className="relative w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden bg-surface sm:border border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-300 ease-out" 
+            className="relative w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden bg-surface sm:border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-300 ease-out" 
             onClick={(e) => e.stopPropagation()}
           >
             
-            <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0 bg-surface/80 backdrop-blur-xl z-10">
+            <div className="flex items-center justify-between p-6 border-b border-border shrink-0 bg-surface/80 backdrop-blur-xl z-10">
               <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground">
                 {isSubmitted ? "You're on the list!" : "Join Waitlist"}
               </h2>
               <button 
                 onClick={handleClose}
-                className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-white/5 bg-background/50 border border-white/5"
+                className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/5 bg-background/50 border border-border"
                 aria-label="Close dialog"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,7 +119,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
                       id="name" 
                       value={formData.name}
                       onChange={(e) => handleChange("name", e.target.value)}
-                      className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                      className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                       placeholder="Your name"
                     />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
@@ -132,7 +132,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
                       id="email" 
                       value={formData.email}
                       onChange={(e) => handleChange("email", e.target.value)}
-                      className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                      className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                       placeholder="your@email.com"
                     />
                     {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
@@ -143,7 +143,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
             </div>
 
             {!isSubmitted && (
-              <div className="p-6 border-t border-white/5 bg-surface/50 shrink-0">
+              <div className="p-6 border-t border-border bg-surface/50 shrink-0">
                 <button 
                   type="submit" 
                   form="waitlistForm"

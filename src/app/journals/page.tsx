@@ -63,14 +63,14 @@ export default function JournalsPage() {
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
                   <header className="relative z-10">
                     <div className="flex items-center gap-3 mb-4">
-                      <time dateTime={journal.date} className="text-sm font-medium text-white/70">
+                      <time dateTime={journal.date} className="text-sm font-medium text-foreground/70">
                         {new Date(journal.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                       </time>
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold font-heading text-white mb-3 leading-tight group-hover:text-accent transition-colors duration-300">
+                    <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-3 leading-tight group-hover:text-accent transition-colors duration-300">
                       {journal.title}
                     </h2>
-                    <p className="text-white/80 line-clamp-2 text-sm md:text-base leading-relaxed">
+                    <p className="text-foreground/80 line-clamp-2 text-sm md:text-base leading-relaxed">
                       {journal.excerpt}
                     </p>
                   </header>
