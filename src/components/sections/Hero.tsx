@@ -58,36 +58,48 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
     <section className="relative w-full h-[75svh] md:h-auto md:min-h-0 pt-[15vh] md:pt-[12vh] pb-12 md:pb-0 flex items-end md:items-center bg-background md:bg-transparent overflow-hidden">
       {/* Background Media with Dark Overlay */}
       <div className="absolute inset-0 md:fixed md:inset-0 z-0 bg-black overflow-hidden">
-        {/* Mobile & Desktop Images */}
-        {activeItem.image_mobile ? (
-          <>
-            <Image
-              src={activeItem.image}
-              alt={activeItem.title}
-              fill
-              sizes="100vw"
-              priority
-              className={`hidden md:block object-cover object-center md:object-right transition-opacity duration-500 ease-in-out ${showVideo && activeItem.video ? "opacity-0" : "opacity-100"}`}
-            />
-            <Image
-              src={activeItem.image_mobile}
-              alt={activeItem.title}
-              fill
-              sizes="100vw"
-              priority
-              className={`md:hidden object-cover object-center transition-opacity duration-500 ease-in-out ${showVideo && activeItem.video_mobile ? "opacity-0" : "opacity-40"}`}
-            />
-          </>
-        ) : (
-          <Image
-            src={activeItem.image}
-            alt={activeItem.title}
-            fill
-            sizes="100vw"
-            priority
-            className={`object-cover object-center md:object-right transition-opacity duration-500 ease-in-out ${showVideo && (activeItem.video || activeItem.video_mobile) ? "opacity-0" : "opacity-40 md:opacity-100"}`}
-          />
-        )}
+        {/* Images (Cross-faded) */}
+        {items.map((item, idx) => {
+          const isActive = idx === activeIndex;
+          const isVideoPlaying = isActive && showVideo && (item.video || item.video_mobile);
+          
+          return (
+            <div 
+              key={item.id} 
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+            >
+              {item.image_mobile ? (
+                <>
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="100vw"
+                    priority={idx === 0}
+                    className={`hidden md:block object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
+                  />
+                  <Image
+                    src={item.image_mobile}
+                    alt={item.title}
+                    fill
+                    sizes="100vw"
+                    priority={idx === 0}
+                    className={`md:hidden object-cover object-center transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-40"}`}
+                  />
+                </>
+              ) : (
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="100vw"
+                  priority={idx === 0}
+                  className={`object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-40 md:opacity-100"}`}
+                />
+              )}
+            </div>
+          );
+        })}
 
         {/* Desktop Video */}
         {showVideo && "video" in activeItem && activeItem.video && (
@@ -162,22 +174,35 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
 
         <div className="w-full lg:w-4/5 xl:w-3/5 flex flex-col justify-center text-left items-start lg:pl-[230px] xl:pl-[240px]">
 
-          <div key={activeItem.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col justify-end items-start h-[190px] md:h-[280px] lg:h-[320px] xl:h-[360px]">
-            <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white font-heading mb-2 md:mb-3 leading-tight drop-shadow-xl">
-              {activeItem.title}{" "}
-              <span className="text-white/80 font-medium">{activeItem.subtitle}</span>
-            </h1>
+          <div className="relative w-full h-[190px] md:h-[280px] lg:h-[320px] xl:h-[360px]">
+            {items.map((item, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <div 
+                  key={item.id} 
+                  className={`absolute bottom-0 left-0 w-full flex flex-col justify-end items-start ${
+                    isActive 
+                      ? "transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-100 translate-y-0 pointer-events-auto" 
+                      : "opacity-0 translate-y-4 pointer-events-none" // instantly disappears and resets position
+                  }`}
+                >
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white font-heading mb-2 md:mb-3 leading-tight drop-shadow-xl">
+                    {item.title}{" "}
+                    <span className="text-white/80 font-medium">{item.subtitle}</span>
+                  </h1>
 
-            <div className="flex flex-wrap items-center justify-start gap-1.5 md:gap-3 px-2.5 py-1 md:px-0 md:py-0 bg-accent-warm/90 md:bg-transparent rounded-full text-[9px] md:text-sm font-bold md:font-semibold text-background md:text-accent-warm mb-3 md:mb-4 tracking-wider uppercase shadow-md md:shadow-none">
-              <span>{activeItem.duration}</span>
-              <span className="shrink-0 inline-block w-1 h-1 rounded-full bg-background/40 md:bg-accent-warm"></span>
-              <span>{activeItem.venue}</span>
-            </div>
+                  <div className="flex flex-wrap items-center justify-start gap-1.5 md:gap-3 px-2.5 py-1 md:px-0 md:py-0 bg-accent-warm/90 md:bg-transparent rounded-full text-[9px] md:text-sm font-bold md:font-semibold text-background md:text-accent-warm mb-3 md:mb-4 tracking-wider uppercase shadow-md md:shadow-none">
+                    <span>{item.duration}</span>
+                    <span className="shrink-0 inline-block w-1 h-1 rounded-full bg-background/40 md:bg-accent-warm"></span>
+                    <span>{item.venue}</span>
+                  </div>
 
-            {/* Fixed height ensures the description block is mathematically identical in height across all items so buttons don't jump */}
-            <p className="text-white/90 text-[13px] md:text-base max-w-xl leading-snug md:leading-relaxed font-medium line-clamp-3 overflow-hidden drop-shadow-md">
-              {activeItem.desc}
-            </p>
+                  <p className="text-white/90 text-[13px] md:text-base max-w-xl leading-snug md:leading-relaxed font-medium line-clamp-3 overflow-hidden drop-shadow-md">
+                    {item.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
 
           {/* CTA Buttons & Desktop Mute Button */}
