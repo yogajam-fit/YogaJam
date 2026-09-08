@@ -16,7 +16,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
 
   const activeItem = items[activeIndex];
 
-  // Autoplay logic: show image for 5s, then video (if exists) or wait another 5s
+  // Autoplay logic: show image for 3s, then video (if exists) or wait another 3s
   React.useEffect(() => {
     // Reset to showing image when slide changes
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,16 +25,18 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
     let nextTimeout: NodeJS.Timeout;
 
     const initialTimeout = setTimeout(() => {
-      // TypeScript safety: check if video property exists
-      if ("video" in activeItem && activeItem.video) {
+      // TypeScript safety: check if video or video_mobile property exists
+      const hasVideo = "video" in activeItem && activeItem.video;
+      const hasMobileVideo = "video_mobile" in activeItem && activeItem.video_mobile;
+      if (hasVideo || hasMobileVideo) {
         setShowVideo(true);
       } else {
-        // No video, wait another 5 seconds then move to next
+        // No video, wait another 3 seconds (6s total) then move to next
         nextTimeout = setTimeout(() => {
           setActiveIndex((prev) => (prev + 1) % items.length);
-        }, 5000);
+        }, 3000);
       }
-    }, 5000);
+    }, 3000);
 
     return () => {
       clearTimeout(initialTimeout);
@@ -42,19 +44,52 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
     };
   }, [activeIndex, activeItem]);
 
-  return (
-    <section className="relative w-full pt-[12vh] pb-0 flex items-center bg-transparent">
-      {/* Background Media with Dark Overlay */}
-      <div className="absolute w-full h-[100vh] md:fixed md:inset-0 z-0 bg-black overflow-hidden">
-        <Image
-          src={activeItem.image}
-          alt={activeItem.title}
-          fill
-          sizes="100vw"
-          priority
-          className={`object-cover object-[70%_center] md:object-right transition-opacity duration-1000 ease-in-out ${showVideo ? "opacity-0" : "opacity-100"}`}
-        />
+  // Scroll active mobile thumbnail into view
+  React.useEffect(() => {
+    const el = document.getElementById(`hero-mobile-thumb-${activeIndex}`);
+    const container = document.getElementById('hero-mobile-slider');
+    if (el && container) {
+      const scrollLeft = el.offsetLeft - container.offsetWidth / 2 + el.offsetWidth / 2;
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+    }
+  }, [activeIndex]);
 
+  return (
+    <section className="relative w-full h-[75svh] md:h-auto md:min-h-0 pt-[15vh] md:pt-[12vh] pb-12 md:pb-0 flex items-end md:items-center bg-background md:bg-transparent overflow-hidden">
+      {/* Background Media with Dark Overlay */}
+      <div className="absolute inset-0 md:fixed md:inset-0 z-0 bg-black overflow-hidden">
+        {/* Mobile & Desktop Images */}
+        {activeItem.image_mobile ? (
+          <>
+            <Image
+              src={activeItem.image}
+              alt={activeItem.title}
+              fill
+              sizes="100vw"
+              priority
+              className={`hidden md:block object-cover object-center md:object-right transition-opacity duration-500 ease-in-out ${showVideo && activeItem.video ? "opacity-0" : "opacity-100"}`}
+            />
+            <Image
+              src={activeItem.image_mobile}
+              alt={activeItem.title}
+              fill
+              sizes="100vw"
+              priority
+              className={`md:hidden object-cover object-center transition-opacity duration-500 ease-in-out ${showVideo && activeItem.video_mobile ? "opacity-0" : "opacity-40"}`}
+            />
+          </>
+        ) : (
+          <Image
+            src={activeItem.image}
+            alt={activeItem.title}
+            fill
+            sizes="100vw"
+            priority
+            className={`object-cover object-center md:object-right transition-opacity duration-500 ease-in-out ${showVideo && (activeItem.video || activeItem.video_mobile) ? "opacity-0" : "opacity-40 md:opacity-100"}`}
+          />
+        )}
+
+        {/* Desktop Video */}
         {showVideo && "video" in activeItem && activeItem.video && (
           <video
             src={activeItem.video as string}
@@ -62,15 +97,30 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
             muted={isMuted}
             playsInline
             onEnded={() => setActiveIndex((prev) => (prev + 1) % items.length)}
-            className="absolute inset-0 w-full h-full object-cover animate-in fade-in duration-1000"
+            className={`absolute inset-0 w-full h-full object-cover opacity-100 animate-in fade-in duration-500 ${activeItem.video_mobile ? 'hidden md:block' : ''}`}
+          />
+        )}
+
+        {/* Mobile Video */}
+        {showVideo && "video_mobile" in activeItem && activeItem.video_mobile && (
+          <video
+            src={activeItem.video_mobile as string}
+            autoPlay
+            muted={isMuted}
+            playsInline
+            onEnded={() => setActiveIndex((prev) => (prev + 1) % items.length)}
+            className={`absolute inset-0 w-full h-full object-cover opacity-60 animate-in fade-in duration-500 md:hidden`}
           />
         )}
 
         {/* Cinematic gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none" />
-
+        {/* Mobile: Strong bottom gradient to blend into the next section cleanly */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-10 pointer-events-none md:hidden" />
+        
+        {/* Desktop overlays */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none" />
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none" />
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none" />
       </div>
 
       {/* Mobile Mute/Unmute Button (Floating Top Right) */}
@@ -162,16 +212,32 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
             )}
           </div>
 
-          {/* Mobile Pagination Dots */}
-          <div className="flex lg:hidden items-center justify-center gap-2 mt-8 md:mt-12 mb-4 w-full">
-            {items.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveIndex(idx)}
-                className={`h-2 rounded-full transition-all duration-300 flex-shrink-0 ${idx === activeIndex ? "w-6 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2 bg-foreground/20 hover:bg-foreground/40"}`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
+          {/* Mobile Horizontal Previews (Circular Tabs) */}
+          <div id="hero-mobile-slider" className="flex lg:hidden overflow-x-auto snap-x snap-mandatory gap-2.5 mt-6 md:mt-10 mb-2 w-full pb-4 pt-2 items-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1 mask-linear-fade">
+            {items.map((item, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <button
+                  key={idx}
+                  id={`hero-mobile-thumb-${idx}`}
+                  onClick={() => setActiveIndex(idx)}
+                  className={`relative flex-shrink-0 w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden snap-center transition-all duration-300 ease-out ${
+                    isActive 
+                      ? "scale-100 opacity-100 shadow-[0_0_8px_rgba(251,191,36,0.5)] ring-1 ring-accent" 
+                      : "scale-90 opacity-50 hover:opacity-80 grayscale-[30%] hover:grayscale-0 ring-1 ring-white/10"
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                >
+                  <Image
+                    src={item.image_mobile || item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 640px) 48px, 64px"
+                    className="object-cover"
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
       </Container>

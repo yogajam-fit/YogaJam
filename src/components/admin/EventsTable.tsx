@@ -19,7 +19,9 @@ export type EventRecord = {
   preview_highlight?: string
   full_desc: string
   image: string
+  image_mobile?: string
   video?: string
+  video_mobile?: string
   qr_code?: string
   includes: string[]
   run_of_show: { time: string, title: string, desc: string }[]
@@ -227,7 +229,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [platforms, setPlatforms] = useState<{name: string, url: string}[]>(initialPlatforms)
   const [eventDate, setEventDate] = useState(() => parseDateString(event?.date || ''))
   const [imageUrl, setImageUrl] = useState(event?.image || '')
+  const [imageMobileUrl, setImageMobileUrl] = useState(event?.image_mobile || '')
   const [videoUrl, setVideoUrl] = useState(event?.video || '')
+  const [videoMobileUrl, setVideoMobileUrl] = useState(event?.video_mobile || '')
   const [qrUrl, setQrUrl] = useState(event?.qr_code || '')
   const [isUploading, setIsUploading] = useState(false)
   
@@ -243,7 +247,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
 
   const supabase = createClient()
   
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video' | 'qr') => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'image_mobile' | 'video' | 'video_mobile' | 'qr') => {
     const file = e.target.files?.[0]
     if (!file) return
     
@@ -251,7 +255,12 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
     try {
       const formData = new FormData()
       formData.append("file", file)
-      formData.append("folder", `/events/${type}s`)
+      
+      let folderPath = '/events/images'
+      if (type.startsWith('video')) folderPath = '/events/videos'
+      if (type === 'qr') folderPath = '/qrs' // Segregate QR codes entirely
+      
+      formData.append("folder", folderPath)
 
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -265,7 +274,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       const data = await response.json()
       
       if (type === 'image') setImageUrl(data.url)
+      if (type === 'image_mobile') setImageMobileUrl(data.url)
       if (type === 'video') setVideoUrl(data.url)
+      if (type === 'video_mobile') setVideoMobileUrl(data.url)
       if (type === 'qr') setQrUrl(data.url)
     } catch (error: any) {
       alert(`Error uploading ${type}: ` + error.message)
@@ -315,7 +326,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       location: formData.get('location'),
       location_url: formData.get('location_url'),
       image: imageUrl,
+      image_mobile: imageMobileUrl,
       video: videoUrl,
+      video_mobile: videoMobileUrl,
       qr_code: qrUrl,
       preview_desc: formData.get('preview_desc'),
       preview_highlight: formData.get('preview_highlight'),
@@ -406,7 +419,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Media & Assets</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-foreground-secondary mb-1">Event Poster Image <span className="text-red-400">*</span></label>
+                <label className="block text-foreground-secondary mb-1">Event Poster Image (Desktop/Default) <span className="text-red-400">*</span></label>
                 <div className="flex gap-2">
                   <input 
                     value={imageUrl} 
@@ -422,7 +435,22 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 </div>
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Cinematic Promo Video</label>
+                <label className="block text-foreground-secondary mb-1">Mobile Event Poster (Optional)</label>
+                <div className="flex gap-2">
+                  <input 
+                    value={imageMobileUrl} 
+                    onChange={(e) => setImageMobileUrl(e.target.value)} 
+                    placeholder="https://..." 
+                    className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
+                  />
+                  <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+                    {isUploading ? '...' : 'Upload'}
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image_mobile')} disabled={isUploading} />
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="block text-foreground-secondary mb-1">Promo Video (Desktop/Default)</label>
                 <div className="flex gap-2">
                   <input 
                     value={videoUrl} 
@@ -433,6 +461,21 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     {isUploading ? '...' : 'Upload'}
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video')} disabled={isUploading} />
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="block text-foreground-secondary mb-1">Mobile Promo Video (Optional)</label>
+                <div className="flex gap-2">
+                  <input 
+                    value={videoMobileUrl} 
+                    onChange={(e) => setVideoMobileUrl(e.target.value)} 
+                    placeholder="https://..." 
+                    className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
+                  />
+                  <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+                    {isUploading ? '...' : 'Upload'}
+                    <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video_mobile')} disabled={isUploading} />
                   </label>
                 </div>
               </div>

@@ -34,18 +34,7 @@ export function Navbar() {
 
   React.useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      setIsScrolled(currentScrollY > 50);
-
-      // Hide if scrolling down and past 100px, show if scrolling up
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        setIsHidden(true);
-      } else if (currentScrollY < lastScrollY.current) {
-        setIsHidden(false);
-      }
-      
-      lastScrollY.current = currentScrollY;
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -56,8 +45,7 @@ export function Navbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent bg-transparent",
-        isScrolled ? "py-4" : "py-6",
-        isHidden ? "-translate-y-full" : "translate-y-0"
+        isScrolled ? "py-4" : "py-6"
       )}
     >
       <Container className="flex items-center justify-between relative z-50">
