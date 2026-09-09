@@ -55,7 +55,8 @@ export async function EventsShowcase() {
               <div key={event.id} className="w-[40vw] sm:w-[30vw] snap-center shrink-0 md:w-auto md:min-w-0">
                 <EventCard
                   href={`/events/${event.id}`}
-                  imageSrc={event.image}
+                  image={event.image}
+                  image_mobile={event.image_mobile}
                   badgeText={event.date}
                   title={event.title}
                   detail1Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}

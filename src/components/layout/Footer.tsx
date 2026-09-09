@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { Container } from "@/components/ui/Container";
 import { createClient } from "@/utils/supabase/client";
 
@@ -58,7 +59,7 @@ export function Footer() {
           <div className="md:col-span-2 lg:col-span-4 flex flex-col justify-between">
             <div>
               <Link href="/" className="text-3xl font-bold font-heading tracking-tight text-foreground mb-4 block">
-                YogaJam<span className="text-accent">.</span>
+                <NextImage src="/images/logo.svg" alt="YogaJam" width={200} height={68} className="w-auto h-10 sm:h-14" unoptimized />
               </Link>
               <p className="text-foreground-secondary text-sm font-medium tracking-wide mb-8">
                 Movement. Music. Connection.

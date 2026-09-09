@@ -15,6 +15,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "YogaJam",
   description: "A cinematic dark wellness experience.",
+  manifest: "/site.webmanifest",
 };
 
 import type { Viewport } from "next";

@@ -7,7 +7,17 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PreviewWheel } from "@/components/ui/PreviewWheel";
 import Link from "next/link";
-import { heroPreviewData as previewItems } from "@/content/hero";
+import { heroEvergreenData, heroFallbackData } from "@/content/hero";
+
+// Default items if none are provided (for preview purposes)
+const previewItems = [...heroEvergreenData, ...heroFallbackData];
+
+const getOrigUrl = (url: string | undefined | null) => {
+  if (!url) return undefined;
+  if (!url.includes('ik.imagekit.io')) return url;
+  return url.includes('?') ? `${url}&tr=orig-true` : `${url}?tr=orig-true`;
+};
+
 
 export function Hero({ items = previewItems }: { items?: any[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -101,28 +111,22 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
           );
         })}
 
-        {/* Desktop Video */}
-        {showVideo && "video" in activeItem && activeItem.video && (
+        {/* Video Player */}
+        {showVideo && ("video" in activeItem || "video_mobile" in activeItem) && (
           <video
-            src={activeItem.video as string}
             autoPlay
             muted={isMuted}
             playsInline
             onEnded={() => setActiveIndex((prev) => (prev + 1) % items.length)}
-            className={`absolute inset-0 w-full h-full object-cover opacity-100 animate-in fade-in duration-500 ${activeItem.video_mobile ? 'hidden md:block' : ''}`}
-          />
-        )}
-
-        {/* Mobile Video */}
-        {showVideo && "video_mobile" in activeItem && activeItem.video_mobile && (
-          <video
-            src={activeItem.video_mobile as string}
-            autoPlay
-            muted={isMuted}
-            playsInline
-            onEnded={() => setActiveIndex((prev) => (prev + 1) % items.length)}
-            className={`absolute inset-0 w-full h-full object-cover opacity-60 animate-in fade-in duration-500 md:hidden`}
-          />
+            className="absolute inset-0 w-full h-full object-cover opacity-100 animate-in fade-in duration-500"
+          >
+            {activeItem.video_mobile && (
+              <source src={getOrigUrl(activeItem.video_mobile as string)} media="(max-width: 768px)" type="video/mp4" />
+            )}
+            {activeItem.video && (
+              <source src={getOrigUrl(activeItem.video as string)} type="video/mp4" />
+            )}
+          </video>
         )}
 
         {/* Cinematic gradient overlays */}
@@ -187,9 +191,14 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                   }`}
                 >
                   <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white font-heading mb-2 md:mb-3 leading-tight drop-shadow-xl">
-                    {item.title}{" "}
-                    <span className="text-white/80 font-medium">{item.subtitle}</span>
+                    {item.title}
+                    <span className="text-white/80 font-medium block mt-1">{item.subtitle}</span>
                   </h1>
+                  {item.eventId && (
+                    <span className="text-accent text-xs md:text-sm font-bold uppercase tracking-widest mb-3 md:mb-4 block drop-shadow-md">
+                      Upcoming Event
+                    </span>
+                  )}
 
                   <div className="flex flex-wrap items-center justify-start gap-1.5 md:gap-3 px-2.5 py-1 md:px-0 md:py-0 bg-accent-warm/90 md:bg-transparent rounded-full text-[9px] md:text-sm font-bold md:font-semibold text-background md:text-accent-warm mb-3 md:mb-4 tracking-wider uppercase shadow-md md:shadow-none">
                     <span>{item.duration}</span>
@@ -207,14 +216,11 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
 
           {/* CTA Buttons & Desktop Mute Button */}
           <div className="flex items-center mt-4 md:mt-8 w-full">
-            <div className="grid grid-cols-2 sm:grid-cols-[6fr_4fr] gap-3 md:gap-4 max-w-xl w-full">
-              <Button asChild size="lg" variant="primary" className="w-full h-11 md:h-12 shadow-lg shadow-accent/20 overflow-hidden p-0 text-[13px] md:text-base">
-                <Link href="/events" className="w-full h-full flex items-center justify-center px-2 md:px-8 py-2 md:py-3">Book Experience</Link>
-              </Button>
-              <Button size="lg" variant="outline" className="w-full h-11 md:h-12 backdrop-blur-md bg-background/30 border-border hover:bg-foreground/ text-[13px] md:text-base text-white">
-                Learn More
-              </Button>
-            </div>
+            <Button asChild size="lg" variant="primary" className="w-[75%] h-11 md:h-12 shadow-lg shadow-accent/20 overflow-hidden p-0 text-[13px] md:text-base">
+              <Link href={activeItem.link || "/events"} className="w-full flex items-center justify-center px-8 md:px-10 py-2 md:py-3">
+                {activeItem.eventId ? "Book Experience" : "Learn More"}
+              </Link>
+            </Button>
 
             {/* Desktop Mute Button (Far Right, vertically aligned with CTAs) */}
             {showVideo && "video" in activeItem && activeItem.video && (
@@ -248,8 +254,8 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                   onClick={() => setActiveIndex(idx)}
                   className={`relative flex-shrink-0 w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden snap-center transition-all duration-300 ease-out ${
                     isActive 
-                      ? "scale-100 opacity-100 shadow-[0_0_8px_rgba(251,191,36,0.5)] ring-1 ring-accent" 
-                      : "scale-90 opacity-50 hover:opacity-80 grayscale-[30%] hover:grayscale-0 ring-1 ring-white/10"
+                      ? "scale-100 opacity-100 shadow-[0_0_8px_rgba(251,191,36,0.5)] ring-1 ring-accent z-10" 
+                      : "scale-90 opacity-80 hover:opacity-100"
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 >

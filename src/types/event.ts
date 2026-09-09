@@ -3,6 +3,7 @@ export interface Event {
   title: string;
   description: string;
   image: string;
+  image_mobile?: string;
   category: string;
   location?: string;
   date?: string;

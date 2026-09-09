@@ -36,7 +36,7 @@ export default async function CitiesPage() {
                 <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}>
                   <EventCard
                     href={`/cities/${city.id}`}
-                    imageSrc={city.image}
+                    image={city.image}
                     title={city.name}
                     previewDesc={city.description}
                     actionText="Explore City"
@@ -68,7 +68,7 @@ export default async function CitiesPage() {
               <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${(activeCities.length + index) * 150}ms`, animationFillMode: 'both' }}>
                 <EventCard
                   href={`/cities/${city.id}`}
-                  imageSrc={city.image}
+                  image={city.image}
                   title={city.name}
                   previewDesc={city.description}
                   actionText="Explore City"

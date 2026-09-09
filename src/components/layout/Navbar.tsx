@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -55,7 +56,7 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(false)}
           className="text-xl font-bold tracking-tight text-foreground uppercase flex items-center gap-1 font-heading"
         >
-          {siteConfig.name}
+          <NextImage src="/images/logo.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-8 sm:h-12" unoptimized />
         </Link>
 
         {/* Right side: Nav + CTA */}

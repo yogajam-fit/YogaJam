@@ -4,7 +4,8 @@ import Link from "next/link";
 
 interface EventCardProps {
   href: string;
-  imageSrc: string;
+  image: string;
+  image_mobile?: string;
   badgeText?: React.ReactNode;
   title: string;
   detail1Icon?: React.ReactNode;
@@ -20,7 +21,8 @@ interface EventCardProps {
 
 export function EventCard({
   href,
-  imageSrc,
+  image,
+  image_mobile,
   badgeText,
   title,
   detail1Icon,
@@ -41,18 +43,18 @@ export function EventCard({
       {/* Event Image Box (Square on mobile, absolute background on desktop) */}
       <div className="relative w-full aspect-square md:aspect-auto md:absolute md:inset-0 md:w-full md:h-full rounded-2xl md:rounded-none overflow-hidden bg-[#050505] border border-border md:border-none group-hover:border-accent/40 md:group-hover:border-none">
         <Image
-          src={imageSrc}
+          src={image_mobile || image}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-opacity duration-1000 opacity-80 md:opacity-60 group-hover:opacity-100 md:group-hover:opacity-30"
+          className="object-cover transition-opacity duration-1000 opacity-100 group-hover:opacity-100 md:group-hover:opacity-40"
         />
         {/* Gradient only needed on desktop since mobile text is outside */}
-        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
         
         {/* Badge inside the image */}
         {badgeText && (
-          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-surface/80 backdrop-blur-md border border-border px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] sm:text-[11px] font-semibold tracking-wider uppercase text-accent-warm z-10 transition-opacity duration-300 md:group-hover:opacity-0 flex items-center gap-1.5 md:gap-2">
+          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-surface/80 backdrop-blur-md border border-border px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] sm:text-[11px] font-semibold tracking-wider uppercase text-accent-warm z-10 transition-opacity duration-300 md:group-hover:opacity-0 flex items-center gap-1.5 md:gap-2 shadow-sm">
             {badgeText}
           </div>
         )}
@@ -64,10 +66,10 @@ export function EventCard({
         <div className="relative w-full mb-1 md:mb-2">
           {/* Default State: Title, Details */}
           <div className="flex flex-col transition-all duration-500 ease-in-out md:group-hover:opacity-0 md:group-hover:-translate-y-4">
-            <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading mb-1 md:mb-2 text-foreground leading-tight">{title}</h3>
+            <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading mb-1 md:mb-2 text-foreground leading-tight drop-shadow-md">{title}</h3>
             {(detail1Text || detail2Text) && (
               <>
-                <div className="flex text-foreground-secondary text-[10px] sm:text-xs md:text-sm">
+                <div className="flex text-foreground-secondary text-[10px] sm:text-xs md:text-sm drop-shadow-md">
                   <span className="truncate">
                     {detail1Text && detail2Text ? `${detail1Text} • ${detail2Text}` : detail1Text || detail2Text}
                   </span>
