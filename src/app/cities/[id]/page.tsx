@@ -314,3 +314,4 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
     </main>
   );
 }
+ 

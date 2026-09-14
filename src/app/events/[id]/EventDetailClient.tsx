@@ -181,8 +181,14 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
               <div className="fixed bottom-0 left-0 right-0 z-40 p-4 bg-background/90 backdrop-blur-xl border-t border-border lg:static lg:bg-transparent lg:border-none lg:p-0 lg:w-1/3 lg:mt-0 lg:z-auto">
                 <div className="lg:sticky lg:top-32 lg:bg-surface/50 lg:backdrop-blur-xl lg:border lg:border-border lg:rounded-3xl lg:p-8 lg:shadow-2xl">
                   <div className="hidden lg:block">
-                    <h3 className="text-xl font-bold font-heading mb-2 text-foreground">Reserve your spot</h3>
-                    <p className="text-sm text-foreground-secondary mb-6">Spots are extremely limited. Secure your ticket now before we sell out.</p>
+                    <h3 className="text-xl font-bold font-heading mb-2 text-foreground">
+                      {event?.booking_type === "coming_soon" ? "Opening Soon" : "Reserve your spot"}
+                    </h3>
+                    <p className="text-sm text-foreground-secondary mb-6">
+                      {event?.booking_type === "coming_soon" 
+                        ? "Booking hasn't opened for this event yet. Check back soon for updates." 
+                        : "Spots are extremely limited. Secure your ticket now before we sell out."}
+                    </p>
                   </div>
                   <div className="max-w-lg mx-auto md:ml-auto md:mr-0 lg:mx-0 lg:max-w-none w-full">
                     <BookingButton event={event} mounted={mounted} />
@@ -328,6 +334,18 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
 
   if (bookingType === "contact") {
     return null;
+  }
+
+  if (bookingType === "coming_soon") {
+    return (
+      <Button 
+        size="lg" 
+        variant="secondary" 
+        className="w-full h-14 text-sm sm:text-base font-semibold opacity-70 cursor-not-allowed pointer-events-none"
+      >
+        Booking Opening Soon
+      </Button>
+    );
   }
 
   if (bookingType === "qr") {

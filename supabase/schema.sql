@@ -130,7 +130,7 @@ create table if not exists public.events (
   qr_code text,
   includes jsonb not null default '[]'::jsonb,
   run_of_show jsonb not null default '[]'::jsonb,
-  booking_type text not null check (booking_type in ('platform', 'qr', 'contact')),
+  booking_type text not null check (booking_type in ('platform', 'qr', 'contact', 'coming_soon')),
   booking_links jsonb default '{}'::jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

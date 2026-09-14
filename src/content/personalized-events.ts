@@ -46,7 +46,7 @@ export const personalizedEventsData = [
 
   {
     id: "private-birthday",
-    title: "Birthday & Bachelorette Jams",
+    title: "Birthday Jams",
     label: "Private",
     size: "10 - 100+ people",
     location: "Your Venue",

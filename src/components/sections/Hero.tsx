@@ -94,7 +94,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                     fill
                     sizes="100vw"
                     priority={idx === 0}
-                    className={`md:hidden object-cover object-center transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-40"}`}
+                    className={`md:hidden object-cover object-center transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
                   />
                 </>
               ) : (
@@ -104,7 +104,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                   fill
                   sizes="100vw"
                   priority={idx === 0}
-                  className={`object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-40 md:opacity-100"}`}
+                  className={`object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
                 />
               )}
             </div>
@@ -130,8 +130,8 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
         )}
 
         {/* Cinematic gradient overlays */}
-        {/* Mobile: Strong bottom gradient to blend into the next section cleanly */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-10 pointer-events-none md:hidden" />
+        {/* Mobile: Cinematic bottom gradient to provide text readability without muting the top of the photo */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background from-10% via-background/80 via-40% to-transparent to-70% z-10 pointer-events-none md:hidden" />
         
         {/* Desktop overlays */}
         <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none" />
@@ -244,7 +244,10 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
           </div>
 
           {/* Mobile Horizontal Previews (Circular Tabs) */}
-          <div id="hero-mobile-slider" className="flex lg:hidden overflow-x-auto snap-x snap-mandatory gap-2.5 mt-6 md:mt-10 mb-2 w-full pb-4 pt-2 items-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1 mask-linear-fade">
+          <div 
+            id="hero-mobile-slider" 
+            className="flex lg:hidden overflow-x-auto scroll-smooth snap-x snap-mandatory gap-2.5 mt-6 md:mt-10 mb-2 w-full max-w-[300px] sm:max-w-[360px] mx-auto pb-4 pt-2 items-center px-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
             {items.map((item, idx) => {
               const isActive = idx === activeIndex;
               return (

@@ -10,16 +10,28 @@ export interface City {
 
 export const activeCities: City[] = [
   {
-    id: "bangalore",
-    name: "Bangalore",
+    id: "bengaluru",
+    name: "Bengaluru",
     description: "The heart of YogaJam. Experience our flagship events across the city's most beautiful spaces.",
     image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&q=80&w=1200",
-    fullDesc: "<p>Bangalore is where YogaJam was born. Known for its perfect weather and vibrant startup culture, we've curated a community of mindful movers who aren't afraid to sweat to heavy basslines.</p><br/><p>From secret rooftop sunsets in Indiranagar to expansive green spaces in the heart of the city, Bengaluru offers the perfect backdrop for our signature high-energy flows and deep house yin sessions.</p>",
+    fullDesc: "<p>Bengaluru is where YogaJam was born. Known for its perfect weather and vibrant startup culture, we've curated a community of mindful movers who aren't afraid to sweat to heavy basslines.</p><br/><p>From secret rooftop sunsets in Indiranagar to expansive green spaces in the heart of the city, Bengaluru offers the perfect backdrop for our signature high-energy flows and deep house yin sessions.</p>",
     locations: ["Indiranagar", "Koramangala", "Cubbon Park", "Whitefield"],
     eventTypes: [
       { name: "Corporate Wellness", description: "Transform your team's energy with private corporate sessions. From desk-relief stretches to high-energy team building flows." },
       { name: "Private Birthday Jams", description: "Celebrate your day with a private, high-energy flow tailored exclusively to you and your closest friends, complete with a curated playlist." },
       { name: "Brand Activations", description: "Partner with us for unique wellness activations. We create custom, immersive experiences that align with your brand's aesthetic." }
+    ]
+  },
+  {
+    id: "mysore",
+    name: "Mysore",
+    description: "Deep roots and deep flows in the yoga capital of the South.",
+    image: "/images/hero/hero-bg.jpg",
+    fullDesc: "<p>Taking the YogaJam energy to the historic city of Mysore. We blend the deep traditional roots of Ashtanga with our signature modern, cinematic approach to wellness.</p><br/><p>Expect intimate sessions in beautiful heritage spaces, focusing on deep connection and dynamic movement.</p>",
+    locations: ["Gokulam", "Vontikoppal"],
+    eventTypes: [
+      { name: "Weekend Retreats", description: "Escape the city for a quick recharge featuring intense flows and restorative sound baths." },
+      { name: "Community Jams", description: "Open-level sessions designed to bring the local wellness community together under one roof." }
     ]
   },
   {
@@ -34,7 +46,10 @@ export const activeCities: City[] = [
       { name: "Corporate Retreats", description: "Take your team offsite for a day of movement, mindfulness, and connection, customized to your company culture." },
       { name: "Pre-Wedding Flows", description: "A mindful start to your celebrations. We host calming and connection-focused sessions for the bridal party and guests." }
     ]
-  },
+  }
+];
+
+export const upcomingCities: City[] = [
   {
     id: "goa",
     name: "Goa",
@@ -60,10 +75,7 @@ export const activeCities: City[] = [
       { name: "Intimate Retreats", description: "Small, curated gatherings for friends or family seeking a profound, distraction-free wellness experience." },
       { name: "Cultural Immersions", description: "Bespoke events combining YogaJam's signature flow with traditional ceremonies and authentic local experiences." }
     ]
-  }
-];
-
-export const upcomingCities: City[] = [
+  },
   {
     id: "delhi-ncr",
     name: "Delhi NCR",

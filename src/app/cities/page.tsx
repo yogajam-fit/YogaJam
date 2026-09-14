@@ -15,8 +15,11 @@ export const metadata: Metadata = {
 
 export default async function CitiesPage() {
   const supabase = await createClient();
-  const { data: dbEvents } = await supabase.from('events').select('city');
+  const { data: dbEvents } = await supabase.from('events').select('city, date');
   const events = dbEvents || [];
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
 
   return (
     <main className="flex min-h-screen flex-col pt-32 pb-24 bg-background">
@@ -30,7 +33,11 @@ export default async function CitiesPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-6">
             {activeCities.map((city, index) => {
-              const activeCount = events.filter(e => e.city.toLowerCase() === city.name.toLowerCase()).length;
+              const activeCount = events.filter(e => 
+                e.city.toLowerCase() === city.name.toLowerCase() && 
+                e.date && 
+                new Date(e.date) >= now
+              ).length;
 
               return (
                 <div key={city.id} className="animate-in fade-in zoom-in-95" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}>

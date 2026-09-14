@@ -25,7 +25,7 @@ export type EventRecord = {
   qr_code?: string
   includes: string[]
   run_of_show: { time: string, title: string, desc: string }[]
-  booking_type: 'platform' | 'qr' | 'contact'
+  booking_type: 'platform' | 'qr' | 'contact' | 'coming_soon'
   booking_links: Record<string, string> | null
   created_at?: string
 }
@@ -509,12 +509,13 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 <label className="block text-foreground-secondary mb-1">Booking Type</label>
                 <select 
                   value={bookingType} 
-                  onChange={(e) => setBookingType(e.target.value as 'platform' | 'qr' | 'contact')}
+                  onChange={(e) => setBookingType(e.target.value as 'platform' | 'qr' | 'contact' | 'coming_soon')}
                   className="w-full md:w-1/2 bg-[#1a1a1a] border border-border rounded-lg p-2.5 text-foreground appearance-none"
                 >
                   <option value="platform">External Platform (BookMyShow, District)</option>
                   <option value="qr">Manual QR Code Upload</option>
                   <option value="contact">Email Contact Only</option>
+                  <option value="coming_soon">Coming Soon</option>
                 </select>
               </div>
               
