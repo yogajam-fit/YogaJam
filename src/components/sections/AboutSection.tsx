@@ -15,15 +15,46 @@ const items = [
 
 export function AboutSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const tracerRef = React.useRef<HTMLDivElement>(null);
+  const startTimeRef = React.useRef(Date.now());
+  const isMobileRef = React.useRef(false);
 
-  // Auto-rotate on mobile
+  // Auto-rotate and sync tracer robustly (solves tab throttling desync)
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
-    const interval = setInterval(() => {
-      setActiveIndex(prev => (prev + 1) % items.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [activeIndex]);
+    isMobileRef.current = window.innerWidth < 768;
+    if (!isMobileRef.current) return;
+    
+    let animationFrameId: number;
+    
+    const tick = () => {
+      const elapsed = Date.now() - startTimeRef.current;
+      
+      // Update tracer rotation directly via DOM for 60fps performance
+      if (tracerRef.current) {
+        const rotation = (elapsed / 20000) * 360;
+        tracerRef.current.style.transform = `rotate(${rotation}deg)`;
+      }
+      
+      // Trigger the active icon precisely when the tracer hits its border (556ms offset)
+      setActiveIndex(prev => {
+        const newIndex = Math.floor((elapsed + 556) / 4000) % items.length;
+        return prev === newIndex ? prev : newIndex;
+      });
+      
+      animationFrameId = requestAnimationFrame(tick);
+    };
+    
+    animationFrameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  const handleIconClick = (i: number) => {
+    setActiveIndex(i);
+    if (isMobileRef.current) {
+      // Offset start time so the tracer instantly jumps to the clicked icon
+      startTimeRef.current = Date.now() - (i * 4000);
+    }
+  };
 
   return (
     <section id="about" className="relative z-20 w-full py-12 md:py-16 overflow-hidden bg-background">
@@ -81,6 +112,19 @@ export function AboutSection() {
               </p>
             </div>
             
+            {/* Subtle dashed orbit track */}
+            <div className="absolute inset-0 border border-dashed border-border rounded-full pointer-events-none" />
+
+            {/* Animated glowing tracer traveling around the track (synced with JS loop) */}
+            <div 
+              ref={tracerRef}
+              className="absolute inset-0 border-2 border-accent rounded-full pointer-events-none" 
+              style={{ 
+                maskImage: "conic-gradient(from 0deg, transparent 70%, black 100%)", 
+                WebkitMaskImage: "conic-gradient(from 0deg, transparent 70%, black 100%)"
+              }} 
+            />
+
             {/* Orbiting Emojis */}
             {items.map((item, i) => {
               const angle = (i * 72); // Symmetrical around the Y-axis
@@ -91,22 +135,21 @@ export function AboutSection() {
                   style={{ transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
                 >
                   <button 
-                    onClick={() => setActiveIndex(i)}
-                    className={`absolute top-0 left-1/2 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl transition-all duration-500 pointer-events-auto border-2 ${
+                    onClick={() => handleIconClick(i)}
+                    className={`group absolute top-0 left-1/2 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl transition-all duration-500 pointer-events-auto border-2 ${
                       activeIndex === i 
-                        ? "bg-surface-elevated border-accent shadow-[0_0_20px_rgba(200,232,107,0.3)] grayscale-0 opacity-100 z-20" 
-                        : "bg-surface border-border grayscale opacity-50 hover:grayscale-0 hover:opacity-100 z-10"
+                        ? "bg-surface-elevated border-accent shadow-[0_0_20px_rgba(200,232,107,0.3)] grayscale-0" 
+                        : "bg-background border-border grayscale hover:grayscale-0"
                     }`}
                     style={{ transform: `translate(-50%, -50%) rotate(${-angle}deg)` }}
                   >
-                    {item.icon}
+                    <span className={`transition-opacity duration-500 ${activeIndex === i ? "opacity-100" : "opacity-50 group-hover:opacity-100"}`}>
+                      {item.icon}
+                    </span>
                   </button>
                 </div>
               );
             })}
-            
-            {/* Subtle dashed orbit ring */}
-            <div className="absolute inset-0 border border-dashed border-border rounded-full animate-[spin_60s_linear_infinite] pointer-events-none" />
           </div>
         </div>
 
