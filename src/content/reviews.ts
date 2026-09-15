@@ -1,17 +1,19 @@
-export const videoReviewsData = [
-  { id: "v1", src: "/videos/6174519-hd_1920_1080_30fps.mp4" },
-  { id: "v2", src: "/videos/9003382-hd_1920_1080_25fps.mp4" },
-  { id: "v3", src: "/videos/12900608_3840_2160_120fps.mp4" },
-  { id: "v4", src: "/videos/6174519-hd_1920_1080_30fps.mp4" },
-  { id: "v5", src: "/videos/9003382-hd_1920_1080_25fps.mp4" },
-  { id: "v6", src: "/videos/12900608_3840_2160_120fps.mp4" },
+export const videoReviewsData: any[] = [
+  //   { id: "v6", src: "/videos/12900608_3840_2160_120fps.mp4" },
 ];
 
 export const textReviewsData = [
-  { id: "t1", text: "YogaJam completely changed how I connect with people. The energy is unmatched!", author: "Sarah M." },
-  { id: "t2", text: "I've never experienced anything like the night sessions. It's the perfect mix of workout and party.", author: "James T." },
-  { id: "t3", text: "The private retreats are life-changing. Disconnecting from the city and finding peace was exactly what I needed.", author: "Elena R." },
-  { id: "t4", text: "Every event is curated to perfection. You arrive as strangers and leave as a community.", author: "Michael K." },
-  { id: "t5", text: "An absolute must-do if you love wellness and good music. The vibes are immaculate.", author: "Jessica H." },
-  { id: "t6", text: "I found my tribe here. The movement flows are challenging but so rewarding.", author: "David L." },
+  { id: "t1", text: "Honestly, the best weekend I've had in ages. It didn't even feel like a workout—just pure fun and amazing energy.", author: "Priya K." },
+  { id: "t2", text: "I was skeptical about blending yoga and house music, but the vibe was electric. Totally going to the next one!", author: "Rohan M." },
+  { id: "t3", text: "The community here is something else. You walk in alone and leave with five new friends. Absolutely loved it.", author: "Anjali S." },
+  { id: "t4", text: "Finally, a weekend plan that doesn't just involve sitting at a cafe or a loud club. This was exactly what I was looking for.", author: "Karan D." },
+  { id: "t5", text: "The flow was challenging but the music carried me through it. I felt so rejuvenated the next morning!", author: "Meera V." },
+  { id: "t6", text: "Such a brilliant concept. The combination of deep house beats and movement was almost therapeutic.", author: "Aditya P." },
+  { id: "t7", text: "This is exactly what the city needed. No pretentiousness, just good vibes, great music, and a lot of sweat.", author: "Neha G." },
+  { id: "t8", text: "I've been to a lot of wellness retreats, but this felt so fresh and modern. Huge shoutout to the organizers.", author: "Varun T." },
+];
+
+export const ALL_REVIEWS = [
+  ...videoReviewsData.map(v => ({ ...v, type: 'video' })),
+  ...textReviewsData.map(t => ({ ...t, type: 'text' }))
 ];

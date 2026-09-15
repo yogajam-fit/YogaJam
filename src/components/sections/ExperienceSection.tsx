@@ -135,7 +135,7 @@ export function ExperienceSection() {
                     muted={diff !== 0 || isMuted}
                     playsInline
                     onEnded={nextExperience}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain bg-black/40"
                     poster={exp.poster}
                   >
                     <source src={exp.videoSrc} type="video/mp4" />
