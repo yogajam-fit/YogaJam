@@ -9,14 +9,13 @@ export const metadata = {
 
 export default function HelpPage() {
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
       <Container>
         <div className="max-w-4xl mx-auto">
           <SectionHeading 
             title="Need Help?"
-            subtitle="Whether you have a question about an upcoming event, need support with a booking, or want to collaborate, we're here for you."
             align="left"
-            className="mb-16"
+            className="mb-6 md:mb-8"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">

@@ -22,7 +22,7 @@ export default async function CitiesPage() {
   now.setHours(0, 0, 0, 0);
 
   return (
-    <main className="flex min-h-screen flex-col pt-32 pb-24 bg-background">
+    <main className="flex flex-1 flex-col pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
       <Container className="flex flex-col gap-16 md:gap-20">
         
         {/* Active Cities */}
@@ -65,7 +65,6 @@ export default async function CitiesPage() {
           <div className="flex flex-col gap-2">
             <SectionHeading 
               title="Coming Soon" 
-              subtitle="We're expanding. Join the waitlist to be the first to know when we launch in your city."
               align="left"
             />
           </div>

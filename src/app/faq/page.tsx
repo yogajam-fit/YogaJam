@@ -11,14 +11,13 @@ export const metadata = {
 
 export default function FaqPage() {
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-24 bg-background overflow-hidden">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background overflow-hidden">
       <Container>
         <div className="max-w-3xl mx-auto">
           <SectionHeading 
             title={<>Frequently Asked <span className="text-accent-warm">Questions</span></>}
-            subtitle="Everything you need to know before stepping onto the mat."
             align="center"
-            className="mb-12 md:mb-16"
+            className="mb-6 md:mb-8"
           />
           
           <FaqAccordion items={faqs} />

@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function TermsOfConditionPage() {
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
       <Container>
         <div className="max-w-4xl mx-auto">
           <SectionHeading 

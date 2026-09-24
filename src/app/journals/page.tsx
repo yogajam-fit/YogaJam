@@ -27,18 +27,8 @@ export default function JournalsPage() {
   const categories = ["All", "Culture", "Practices", "Wellness", "Community", "Music"];
 
   return (
-    <div className="min-h-screen bg-background pt-32 pb-24">
-      {/* Header Section */}
-      <div className="max-w-7xl mx-auto px-6 mb-16">
-        <header className="max-w-3xl">
-          <SectionHeading 
-            title="Journals"
-            subtitle="Thoughts, interviews, and deep dives into the culture of modern wellness, sound, and movement."
-            align="left"
-            className="mb-6"
-          />
-        </header>
-      </div>
+    <div className="flex-1 bg-background pt-24 md:pt-32 pb-16 md:pb-24">
+
 
       {/* Bento Box / Masonry Grid */}
       <div className="max-w-7xl mx-auto px-6">

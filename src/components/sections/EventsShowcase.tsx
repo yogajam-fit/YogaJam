@@ -29,7 +29,7 @@ export async function EventsShowcase() {
   const hasEvents = sortedEvents && sortedEvents.length > 0;
 
   return (
-    <section className="pt-4 pb-12 md:py-16 relative z-10">
+    <section className="py-8 md:py-16 relative z-10">
       {/* Foolproof gradient transition using explicit hex codes to avoid CSS variable parsing issues */}
       <div className="absolute top-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent to-[#0B0D0C] -z-10 pointer-events-none" />
       <div className="absolute top-[150px] bottom-0 left-0 w-full bg-[#0B0D0C] -z-10 pointer-events-none" />

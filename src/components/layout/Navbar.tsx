@@ -45,10 +45,13 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent bg-transparent",
-        isScrolled ? "py-4" : "py-6"
+        "fixed top-0 left-0 right-0 z-[999] transition-all duration-300",
+        isScrolled ? "py-3 md:py-4" : "py-4 md:py-6"
       )}
     >
+      {/* Mobile: Cinematic top gradient to ensure navbar visibility over bright videos */}
+      <div className="absolute top-0 left-0 w-full h-[140px] bg-gradient-to-b from-background from-10% via-background/80 via-40% to-transparent to-80% -z-10 pointer-events-none md:hidden" />
+
       <Container className="flex items-center justify-between relative z-50">
         {/* Logo */}
         <Link 
@@ -56,7 +59,7 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(false)}
           className="text-xl font-bold tracking-tight text-foreground uppercase flex items-center gap-1 font-heading"
         >
-          <NextImage src="/images/logo.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-8 sm:h-12" unoptimized />
+          <NextImage src="/images/logo-medium.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-8 sm:h-12" unoptimized />
         </Link>
 
         {/* Right side: Nav + CTA */}

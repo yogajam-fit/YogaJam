@@ -6,6 +6,9 @@ import { EventsTable } from './EventsTable'
 import { BookingRequestsTable } from './BookingRequestsTable'
 import { HostRequestsTable } from './HostRequestsTable'
 import { ReviewsTable } from './ReviewsTable'
+import { GalleryTable } from './GalleryTable'
+import { ChannelTable } from './ChannelTable'
+import { ContactsTable } from './ContactsTable'
 
 import { createClient } from '@/utils/supabase/client'
 import { Loader } from '@/components/ui/Loader'
@@ -239,6 +242,48 @@ export function AdminDashboardClient({
                   </div>
                 </div>
                 <ReviewsTable />
+              </div>
+            )}
+
+            {activeTab === 'gallery' && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+                <div className="mb-10 flex justify-between items-end">
+                  <div>
+                    <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Gallery Management</h1>
+                    <p className="text-foreground-secondary max-w-2xl">
+                      Upload and manage images for the public gallery page.
+                    </p>
+                  </div>
+                </div>
+                <GalleryTable />
+              </div>
+            )}
+
+            {activeTab === 'channel' && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+                <div className="mb-10 flex justify-between items-end">
+                  <div>
+                    <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">YogaJam Channel Management</h1>
+                    <p className="text-foreground-secondary max-w-2xl">
+                      Add and manage videos displayed in the YogaJam Channel section on the homepage.
+                    </p>
+                  </div>
+                </div>
+                <ChannelTable />
+              </div>
+            )}
+
+            {activeTab === 'contacts' && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+                <div className="mb-10 flex justify-between items-end">
+                  <div>
+                    <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Contacts & Socials</h1>
+                    <p className="text-foreground-secondary max-w-2xl">
+                      Manage emails, phone numbers, and social media links that appear across the website.
+                    </p>
+                  </div>
+                </div>
+                <ContactsTable />
               </div>
             )}
 

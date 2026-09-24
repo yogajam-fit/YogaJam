@@ -9,7 +9,7 @@ import { EventCard } from "@/components/ui/EventCard";
 import { personalizedEventsData as celebrations } from "@/content/personalized-events";
 export function PersonalizedEventsSection() {
   return (
-    <section className="py-12 md:py-16 relative z-10 bg-background">
+    <section className="py-8 md:py-16 relative z-10 bg-background">
       <Container>
         {/* Section Header */}
         <div className="flex flex-row items-end justify-between gap-4 mb-6 md:mb-10">

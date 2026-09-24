@@ -26,7 +26,7 @@ export function SectionHeading({ title, subtitle, className, align = "center", a
     )}>
       <Component className={cn(
         sizeClasses[Component],
-        "font-heading font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-foreground to-accent-warm leading-tight pb-1"
+        "font-heading font-bold tracking-tight text-foreground leading-tight pb-1"
       )}>
         {title}
       </Component>

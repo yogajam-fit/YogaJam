@@ -12,10 +12,11 @@ export const siteConfig = {
   navigation: {
     main: [
       { name: "Home", href: "/" },
+      { name: "Gallery", href: "/gallery" },
       { name: "Events", href: "/events" },
       { name: "Custom", href: "/personalized-events" },
-      { name: "Cities", href: "/cities" },
       { name: "Journals", href: "/journals" },
+      { name: "Our team", href: "/team" },
     ],
     social: contactData.socials.map(social => ({
       name: social.name,

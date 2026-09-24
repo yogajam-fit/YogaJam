@@ -65,7 +65,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
   }, [activeIndex]);
 
   return (
-    <section className="relative w-full h-[75svh] md:h-auto md:min-h-0 pt-[15vh] md:pt-[12vh] pb-12 md:pb-0 flex items-end md:items-center bg-background md:bg-transparent overflow-hidden">
+    <section className="relative w-full min-h-[85svh] h-auto md:h-auto md:min-h-0 pt-[15vh] md:pt-[12vh] pb-4 md:pb-0 flex items-end md:items-center bg-background md:bg-transparent overflow-hidden">
       {/* Background Media with Dark Overlay */}
       <div className="absolute inset-0 md:fixed md:inset-0 z-0 bg-black overflow-hidden">
         {/* Images (Cross-faded) */}
@@ -143,7 +143,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
       {showVideo && "video" in activeItem && activeItem.video && (
         <button
           onClick={() => setIsMuted(!isMuted)}
-          className="absolute md:hidden z-[100] top-24 right-4 w-10 h-10 rounded-full bg-surface/50 backdrop-blur-md border border-border flex items-center justify-center text-foreground hover:bg-surface hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          className="absolute md:hidden z-30 top-24 right-4 w-10 h-10 rounded-full bg-surface/50 backdrop-blur-md border border-border flex items-center justify-center text-foreground hover:bg-surface hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
           aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
           {isMuted ? (

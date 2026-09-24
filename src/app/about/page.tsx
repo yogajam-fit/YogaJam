@@ -12,13 +12,12 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-24 bg-background overflow-hidden">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background overflow-hidden">
       <Container>
         {/* Hero Section */}
-        <div className="max-w-4xl mx-auto text-center mb-20 md:mb-32">
+        <div className="max-w-4xl mx-auto text-center mb-6 md:mb-8">
           <SectionHeading 
             title={<>Movement. Music. <span className="text-accent-warm">Connection.</span></>}
-            subtitle="We believe that wellness shouldn't be boring. YogaJam was born out of a desire to merge the high energy of a club night with the deep restorative power of mindful movement."
             align="center"
           />
         </div>

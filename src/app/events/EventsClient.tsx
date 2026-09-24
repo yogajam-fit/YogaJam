@@ -10,7 +10,13 @@ import type { EventRecord } from "@/components/admin/EventsTable";
 import { NewsletterInlineForm } from "@/components/ui/NewsletterInlineForm";
 import { formatPrice } from "@/lib/utils";
 
-export function EventsClient({ events }: { events: EventRecord[] }) {
+import { useSearchParams } from 'next/navigation';
+
+function EventsClientContent({ events }: { events: EventRecord[] }) {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const showUpcoming = tab !== 'past';
+  const showPast = tab !== 'upcoming';
   const [activeCity, setActiveCity] = React.useState("All");
   
   // Extract unique cities from the city column
@@ -41,35 +47,19 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
     : pastEvents.filter(e => (e.city || e.location).endsWith(activeCity));
 
   return (
-    <main className="min-h-screen pt-32 pb-24 bg-background">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
       <Container>
         {/* Page Header */}
-        <div className="max-w-2xl mb-16">
-          <SectionHeading 
-            title="Upcoming Events"
-            subtitle="Discover our upcoming sessions. Immerse yourself in our cinematic wellness experiences designed to help you find your center and unleash your energy."
-            align="left"
-          />
-        </div>
-
-        {/* Filters */}
-        {events.length > 0 && (
-          <div className="flex md:flex-wrap items-center gap-3 mb-10 overflow-x-auto md:overflow-visible pb-4 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {cities.map((city) => (
-              <button
-                key={city}
-                onClick={() => setActiveCity(city)}
-                className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
-                  activeCity === city
-                    ? "bg-accent text-background shadow-[0_0_15px_rgba(200,232,107,0.4)]"
-                    : "bg-surface/50 border border-border text-foreground-secondary hover:text-foreground hover:bg-surface"
-                }`}
-              >
-                {city}
-              </button>
-            ))}
+        {showUpcoming && showPast && (
+          <div className="max-w-2xl mb-4 md:mb-6">
+            <SectionHeading 
+              title="Upcoming Events"
+              align="left"
+            />
           </div>
         )}
+
+
 
         {/* Events Grid */}
         {events.length === 0 ? (
@@ -98,8 +88,8 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
             </div>
           </div>
         ) : (
-          <div className="space-y-16">
-            {filteredUpcoming.length > 0 ? (
+          <div className="space-y-10 md:space-y-16">
+            {showUpcoming && (filteredUpcoming.length > 0 ? (
               <div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
                   {filteredUpcoming.map((event) => (
@@ -110,8 +100,14 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
                       image_mobile={event.image_mobile}
                       badgeText={event.date}
                       title={event.title}
-                      detail1Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-                      detail1Text={formatPrice(event.price || event.time)}
+                      detail1Icon={
+                        event.price && event.price !== "0" && event.price !== "Free" && event.price !== "" ? (
+                          <svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                        ) : (
+                          <svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        )
+                      }
+                      detail1Text={event.price && event.price !== "0" && event.price !== "Free" && event.price !== "" ? formatPrice(event.price) : event.time}
                       detail2Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
                       detail2Text={event.city}
                       previewDesc={event.preview_desc}
@@ -136,17 +132,18 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
                   <NewsletterInlineForm />
                 </div>
               </div>
-            )}
+            ))}
             
-            {filteredPast.length > 0 && (
+            {showPast && filteredPast.length > 0 && (
               <div>
-                <div className="max-w-2xl mb-8">
-                  <SectionHeading 
-                    title="Past Events"
-                    subtitle="A look back at the people, places and experiences that made YogaJam."
-                    align="left"
-                  />
-                </div>
+                {showUpcoming && (
+                  <div className="max-w-2xl mb-4 md:mb-6">
+                    <SectionHeading 
+                      title="Past Events"
+                      align="left"
+                    />
+                  </div>
+                )}
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8 opacity-75">
                   {filteredPast.map((event) => (
                     <EventCard
@@ -156,8 +153,6 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
                       image_mobile={event.image_mobile}
                       badgeText={event.date}
                       title={event.title}
-                      detail1Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-                      detail1Text="Completed"
                       detail2Icon={<svg className="w-4 h-4 text-accent-dark flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
                       detail2Text={event.city}
                       previewDesc={event.preview_desc}
@@ -171,5 +166,13 @@ export function EventsClient({ events }: { events: EventRecord[] }) {
         )}
       </Container>
     </main>
+  );
+}
+
+export function EventsClient({ events }: { events: EventRecord[] }) {
+  return (
+    <React.Suspense fallback={<div className="flex-1 bg-background" />}>
+      <EventsClientContent events={events} />
+    </React.Suspense>
   );
 }

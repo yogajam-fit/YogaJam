@@ -1,10 +1,10 @@
 import { Hero } from "@/components/sections/Hero";
-import { EventsShowcase } from "@/components/sections/EventsShowcase";
+import { EventNavigationCards } from "@/components/sections/EventNavigationCards";
 import { AboutSection } from "@/components/sections/AboutSection";
-import { PersonalizedEventsSection } from "@/components/sections/PersonalizedEventsSection";
+
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
-import { TeamSection } from "@/components/sections/TeamSection";
+import { HomeGallerySection } from "@/components/sections/HomeGallerySection";
 
 import { createClient } from '@/utils/supabase/server';
 import { heroEvergreenData } from '@/content/hero';
@@ -120,12 +120,16 @@ export default async function Home() {
   return (
     <main className="flex-1 flex flex-col">
       <Hero items={heroItems} />
-      <EventsShowcase />
+      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <EventNavigationCards />
+      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
       <AboutSection />
-      <PersonalizedEventsSection />
+      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+
       <ExperienceSection />
+      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
       <ReviewsSection />
-      <TeamSection />
+      <HomeGallerySection />
     </main>
   );
 }

@@ -1,18 +1,42 @@
 "use client";
 
-// removed Image import
 import { Container } from "@/components/ui/Container";
 import { useState, useRef, useEffect } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { experiencesData as experiences } from "@/content/experiences";
+import { experiencesData as defaultExperiences } from "@/content/experiences";
+import { createClient } from "@/utils/supabase/client";
 
 export function ExperienceSection() {
+  const [experiences, setExperiences] = useState<any[]>(defaultExperiences);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const supabase = createClient();
 
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    async function fetchChannel() {
+      const { data } = await supabase.from('channel').select('*').order('created_at', { ascending: true });
+      if (data && data.length > 0) {
+        setExperiences(data.map(item => ({
+          id: item.id,
+          videoSrc: item.video_url
+        })));
+      }
+    }
+    fetchChannel();
+  }, []);
 
+  // Swipe detection state
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50;
+
+  // Toggle mute
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
+  // Play current video, pause others
   useEffect(() => {
     videoRefs.current.forEach((video, idx) => {
       if (!video) return;
@@ -23,50 +47,7 @@ export function ExperienceSection() {
         video.pause();
       }
     });
-
-    // Auto-scroll mobile container when currentIndex changes (e.g. video ends)
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      const container = document.getElementById('experience-scroll-container');
-      if (container && container.clientWidth > 0) {
-        const itemWidth = container.clientWidth + 16; // Account for gap-4
-        const currentScrollIndex = Math.round(container.scrollLeft / itemWidth);
-        if (currentScrollIndex !== currentIndex) {
-           container.scrollTo({ left: currentIndex * itemWidth, behavior: 'smooth' });
-        }
-      }
-    }
   }, [currentIndex]);
-
-  const activeExperience = experiences[currentIndex];
-
-  useEffect(() => {
-    const handleGlobalMute = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      if (customEvent.detail && customEvent.detail.source !== "experience") {
-        setIsMuted(true);
-        // Force the active video to mute immediately
-        const activeVideo = videoRefs.current[currentIndex];
-        if (activeVideo) {
-          activeVideo.muted = true;
-        }
-      }
-    };
-    window.addEventListener("muteOtherVideos", handleGlobalMute);
-    return () => window.removeEventListener("muteOtherVideos", handleGlobalMute);
-  }, [currentIndex]);
-
-  const toggleMute = () => {
-    const activeVideo = videoRefs.current[currentIndex];
-    if (activeVideo) {
-      const newMuted = !activeVideo.muted;
-      activeVideo.muted = newMuted;
-      setIsMuted(newMuted);
-
-      if (!newMuted) {
-        window.dispatchEvent(new CustomEvent("muteOtherVideos", { detail: { source: "experience" } }));
-      }
-    }
-  };
 
   const nextExperience = () => {
     setCurrentIndex((prev) => (prev + 1) % experiences.length);
@@ -76,159 +57,148 @@ export function ExperienceSection() {
     setCurrentIndex((prev) => (prev - 1 + experiences.length) % experiences.length);
   };
 
+  const setExperience = (idx: number) => {
+    setCurrentIndex(idx);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      nextExperience();
+    } else if (isRightSwipe) {
+      prevExperience();
+    }
+  };
+
   return (
-    <section className="py-12 md:py-16 relative z-10 bg-background">
+    <section className="py-6 md:py-8 relative z-10 bg-background overflow-hidden">
       <Container>
-        {/* Section Header */}
-        <SectionHeading 
-          title="Moments that moved us."
-          subtitle="From sunrise flows to high-energy nights — here's what happens when people come together."
-          align="left"
-          className="mb-10 max-w-3xl"
-        />
+        <div className="flex flex-col-reverse md:flex-row md:items-center justify-between gap-6 md:gap-16">
+          
+          {/* Left: Video Stack Layout */}
+          <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
+            {/* Deck Container */}
+            <div 
+              className="relative h-[65vh] md:h-[75vh] aspect-[10/16] shrink-0 mx-auto"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {experiences.map((exp, idx) => {
+                const len = experiences.length;
+                const diff = (idx - currentIndex + len) % len;
 
-        {/* Content Layout */}
-        <div className="flex flex-col lg:flex-row gap-0 lg:gap-20 items-stretch">
-          {/* Left: Video Deck */}
-          <div 
-            id="experience-scroll-container"
-            className="w-full lg:w-1/2 relative flex lg:block gap-4 lg:gap-0 overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden aspect-video lg:mb-0 lg:mr-8"
-            onScroll={(e) => {
-              if (typeof window !== 'undefined' && window.innerWidth >= 1024) return;
-              const container = e.currentTarget;
-              
-              if (scrollTimeout.current) {
-                clearTimeout(scrollTimeout.current);
-              }
-              
-              scrollTimeout.current = setTimeout(() => {
-                const itemWidth = container.clientWidth + 16; 
-                const index = Math.round(container.scrollLeft / itemWidth);
-                if (index !== currentIndex) {
-                  setCurrentIndex(index);
+                // Stacked logic for both mobile and desktop
+                let stackClasses = "";
+                if (diff === 0) {
+                  // Active Card
+                  stackClasses = "z-20 translate-x-0 translate-y-0 opacity-100 scale-100 shadow-2xl";
+                } else if (diff === 1) {
+                  // Next Card (peeking from the right)
+                  stackClasses = "z-10 translate-x-8 md:translate-x-12 translate-y-0 opacity-70 scale-95 brightness-50 cursor-pointer";
+                } else if (diff === len - 1) {
+                  // Previous Card (peeking from the left)
+                  stackClasses = "z-10 -translate-x-8 md:-translate-x-12 translate-y-0 opacity-70 scale-95 brightness-50 cursor-pointer";
+                } else if (diff === 2) {
+                  // 3rd Card (peeking further right)
+                  stackClasses = "z-0 translate-x-16 md:translate-x-20 translate-y-0 opacity-30 scale-90 brightness-25 pointer-events-none hidden md:block";
+                } else if (diff === len - 2) {
+                  // Card before previous (peeking further left)
+                  stackClasses = "z-0 -translate-x-16 md:-translate-x-20 translate-y-0 opacity-30 scale-90 brightness-25 pointer-events-none hidden md:block";
+                } else {
+                  // Hidden Cards
+                  stackClasses = "z-0 opacity-0 translate-x-0 translate-y-0 scale-90 pointer-events-none";
                 }
-              }, 150);
-            }}
-          >
-            {experiences.map((exp, idx) => {
-              const diff = (idx - currentIndex + experiences.length) % experiences.length;
 
-              let desktopClasses = "";
-              if (diff === 0) {
-                desktopClasses = "lg:z-20 lg:translate-x-0 lg:translate-y-0 lg:opacity-100 lg:shadow-2xl";
-              } else if (diff === 1) {
-                desktopClasses = "lg:z-10 lg:translate-x-3 lg:translate-y-3 lg:opacity-60 lg:brightness-50";
-              } else {
-                desktopClasses = "lg:z-0 lg:opacity-0 lg:translate-x-0 lg:translate-y-0 lg:pointer-events-none";
-              }
-
-              return (
-                <div
-                  key={exp.id}
-                  className={`w-full shrink-0 snap-center relative lg:absolute lg:top-0 lg:left-0 lg:w-full lg:h-full bg-surface overflow-hidden rounded-2xl transition-all duration-700 ease-in-out lg:cursor-pointer aspect-video lg:aspect-auto ${desktopClasses}`}
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && window.innerWidth >= 1024 && diff !== 0) nextExperience();
-                  }}
-                >
-                  <video
-                    ref={(el) => { videoRefs.current[idx] = el; }}
-                    muted={diff !== 0 || isMuted}
-                    playsInline
-                    onEnded={nextExperience}
-                    className="absolute inset-0 w-full h-full object-contain bg-black/40"
-                    poster={exp.poster}
+                return (
+                  <div
+                    key={exp.id}
+                    className={`absolute top-0 left-0 w-full h-full bg-[#0B0D0C] border border-border overflow-hidden rounded-2xl transition-all duration-700 ease-in-out ${stackClasses}`}
+                    onClick={() => {
+                      if (diff === 1) nextExperience();
+                      if (diff === len - 1) prevExperience();
+                    }}
                   >
-                    <source src={exp.videoSrc} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-
-                  {/* Show mute button only on active slide on desktop, but always on mobile if it's the current index */}
-                  {(diff === 0 || (typeof window !== 'undefined' && window.innerWidth < 1024 && idx === currentIndex)) && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleMute();
-                      }}
-                      className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-border flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 hover:border-border transition-all duration-300 shadow-lg"
-                      aria-label={isMuted ? "Unmute video" : "Mute video"}
+                    <video
+                      ref={(el) => { videoRefs.current[idx] = el; }}
+                      muted={diff !== 0 || isMuted}
+                      playsInline
+                      onEnded={nextExperience}
+                      className="absolute inset-0 w-full h-full object-cover"
                     >
-                      {isMuted ? (
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        </svg>
-                      )}
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                      <source src={exp.videoSrc} type="video/mp4" />
+                    </video>
 
-          {/* Mobile Indicator */}
-          <div className="flex lg:hidden items-center justify-center gap-3 w-full mt-6 mb-8">
-            {experiences.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  setCurrentIndex(idx);
-                  const container = document.getElementById('experience-scroll-container');
-                  if (container) {
-                    const itemWidth = container.clientWidth + 16;
-                    container.scrollTo({ left: idx * itemWidth, behavior: 'smooth' });
-                  }
-                }}
-                className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-foreground/20 hover:bg-foreground/40"}`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-
-          {/* Right: Text Content */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-between">
-            <div className="flex flex-col justify-start min-h-[200px] lg:min-h-[160px]">
-              <div key={activeExperience.id} className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <h3 className="text-2xl md:text-4xl font-bold text-foreground font-heading mb-4 md:mb-6">
-                  {activeExperience.title}
-                </h3>
-                <p className="text-foreground-secondary text-base md:text-lg leading-relaxed">
-                  {activeExperience.description}
-                </p>
-              </div>
+                    {/* Mute Toggle (Only on Active Video) */}
+                    {diff === 0 && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleMute();
+                        }}
+                        className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300"
+                        aria-label={isMuted ? "Unmute video" : "Mute video"}
+                      >
+                        {isMuted ? (
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                          </svg>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Navigation Controls (Desktop Only) */}
-            <div className="hidden lg:flex items-center gap-5 mt-8">
-              <button
-                onClick={prevExperience}
-                className="w-12 h-12 rounded-full bg-[#111111] border border-border flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
-                aria-label="Previous experience"
+            {/* Navigation & Indicators */}
+            <div className="flex items-center justify-center gap-6 w-full mt-8 md:mt-12">
+              {/* Prev Button (Desktop Only) */}
+              <button 
+                onClick={prevExperience} 
+                className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-surface border border-border text-foreground hover:bg-accent hover:border-accent hover:text-black transition-all duration-300 shadow-sm"
+                aria-label="Previous video"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
 
-              {/* Pagination Dots */}
-              <div className="flex items-center justify-center gap-3 w-[80px]">
+              {/* Dots */}
+              <div className="flex items-center justify-center gap-3">
                 {experiences.map((_, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={() => setExperience(idx)}
                     className={`h-2.5 rounded-full transition-all duration-300 flex-shrink-0 ${idx === currentIndex ? "w-8 bg-accent shadow-[0_0_8px_rgba(251,191,36,0.6)]" : "w-2.5 bg-foreground/20 hover:bg-foreground/40"}`}
-                    aria-label={`Go to slide ${idx + 1}`}
+                    aria-label={`Go to video ${idx + 1}`}
                   />
                 ))}
               </div>
 
-              <button
-                onClick={nextExperience}
-                className="w-12 h-12 rounded-full bg-[#111111] border border-border flex items-center justify-center text-white/80 hover:text-black hover:bg-accent hover:border-accent transition-all duration-300 shadow-md flex-shrink-0"
-                aria-label="Next experience"
+              {/* Next Button (Desktop Only) */}
+              <button 
+                onClick={nextExperience} 
+                className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-surface border border-border text-foreground hover:bg-accent hover:border-accent hover:text-black transition-all duration-300 shadow-sm"
+                aria-label="Next video"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -236,6 +206,17 @@ export function ExperienceSection() {
               </button>
             </div>
           </div>
+
+          {/* Right: Section Header */}
+          <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
+            <SectionHeading 
+              title="YogaJam Channel"
+              subtitle="From sunrise flows to high-energy nights — here's what happens when people come together."
+              align="left"
+              className="!mb-0"
+            />
+          </div>
+
         </div>
       </Container>
     </section>

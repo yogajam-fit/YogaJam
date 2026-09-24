@@ -1,67 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-const items = [
-  { icon: "🧘", text: "Looking for a different way to move" },
-  { icon: "🎉", text: "Looking for a healthier way to celebrate" },
-  { icon: "🫂", text: "Looking to meet people" },
-  { icon: "🏢", text: "Looking to bring your team together" },
-  { icon: "🌴", text: "Looking for an experience outside the routine" }
-];
-
 export function AboutSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const tracerRef = React.useRef<HTMLDivElement>(null);
-  const startTimeRef = React.useRef(Date.now());
-  const isMobileRef = React.useRef(false);
-
-  // Auto-rotate and sync tracer robustly (solves tab throttling desync)
-  useEffect(() => {
-    isMobileRef.current = window.innerWidth < 768;
-    if (!isMobileRef.current) return;
-    
-    let animationFrameId: number;
-    
-    const tick = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      
-      // Update tracer rotation directly via DOM for 60fps performance
-      if (tracerRef.current) {
-        const rotation = (elapsed / 20000) * 360;
-        tracerRef.current.style.transform = `rotate(${rotation}deg)`;
-      }
-      
-      // Trigger the active icon precisely when the tracer hits its border (556ms offset)
-      setActiveIndex(prev => {
-        const newIndex = Math.floor((elapsed + 556) / 4000) % items.length;
-        return prev === newIndex ? prev : newIndex;
-      });
-      
-      animationFrameId = requestAnimationFrame(tick);
-    };
-    
-    animationFrameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
-
-  const handleIconClick = (i: number) => {
-    setActiveIndex(i);
-    if (isMobileRef.current) {
-      // Offset start time so the tracer instantly jumps to the clicked icon
-      startTimeRef.current = Date.now() - (i * 4000);
-    }
-  };
-
   return (
-    <section id="about" className="relative z-20 w-full py-12 md:py-16 overflow-hidden bg-background">
+    <section id="about" className="relative z-20 w-full py-6 md:py-8 overflow-hidden bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col justify-center">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-12">
           <div className="md:w-1/2 shrink-0">
             <SectionHeading 
               title={<>This isn&apos;t a workout.<br/>This is YogaJam.</>}
@@ -70,7 +19,7 @@ export function AboutSection() {
             />
           </div>
           
-          <div className="md:w-1/2 flex justify-center md:justify-end mt-12 md:mt-0">
+          <div className="md:w-1/2 flex justify-center md:justify-end">
             <div className="relative w-full max-w-[400px] h-[300px] sm:h-[400px] lg:h-[450px]">
               <Image 
                 src="/images/What_Are_We.png"
@@ -84,76 +33,8 @@ export function AboutSection() {
           </div>
         </div>
 
-        {/* Desktop Layout */}
-        <div className="hidden md:block w-full mt-12">
-          <h3 className="text-center text-sm font-bold tracking-[0.2em] text-foreground/40 uppercase mb-12">Come if you&apos;re...</h3>
-          <div className="grid grid-cols-5 gap-4">
-            {items.map((item, i) => (
-              <div 
-                key={i} 
-                className="group animate-float flex flex-col items-center text-center gap-4 p-6 rounded-2xl bg-surface border border-border hover:bg-surface-elevated hover:border-accent/30 hover:shadow-[0_0_20px_rgba(200,232,107,0.1)] transition-all duration-500"
-                style={{ animationDelay: `${i * 0.4}s` }}
-              >
-                <span className="text-3xl grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">{item.icon}</span>
-                <span className="text-xs text-foreground-secondary font-medium leading-relaxed group-hover:text-accent-warm transition-colors">{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile Circular Layout */}
-        <div className="md:hidden flex flex-col items-center justify-center w-full mt-16 mb-8">
-          <h3 className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-foreground/40 uppercase mb-8">Come if you&apos;re...</h3>
-          <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] flex items-center justify-center">
-            {/* Center Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-12 sm:px-14 z-10 pointer-events-none">
-              <p className="text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/60 text-lg sm:text-xl font-heading font-bold leading-snug animate-in fade-in zoom-in-95 duration-500 drop-shadow-sm" key={activeIndex}>
-                {items[activeIndex].text}
-              </p>
-            </div>
-            
-            {/* Subtle dashed orbit track */}
-            <div className="absolute inset-0 border border-dashed border-border rounded-full pointer-events-none" />
-
-            {/* Animated glowing tracer traveling around the track (synced with JS loop) */}
-            <div 
-              ref={tracerRef}
-              className="absolute inset-0 border-2 border-accent rounded-full pointer-events-none" 
-              style={{ 
-                maskImage: "conic-gradient(from 0deg, transparent 70%, black 100%)", 
-                WebkitMaskImage: "conic-gradient(from 0deg, transparent 70%, black 100%)"
-              }} 
-            />
-
-            {/* Orbiting Emojis */}
-            {items.map((item, i) => {
-              const angle = (i * 72); // Symmetrical around the Y-axis
-              return (
-                <div 
-                  key={i}
-                  className="absolute top-1/2 left-1/2 w-full h-full pointer-events-none"
-                  style={{ transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
-                >
-                  <button 
-                    onClick={() => handleIconClick(i)}
-                    className={`group absolute top-0 left-1/2 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl transition-all duration-500 pointer-events-auto border-2 ${
-                      activeIndex === i 
-                        ? "bg-surface-elevated border-accent shadow-[0_0_20px_rgba(200,232,107,0.3)] grayscale-0" 
-                        : "bg-background border-border grayscale hover:grayscale-0"
-                    }`}
-                    style={{ transform: `translate(-50%, -50%) rotate(${-angle}deg)` }}
-                  >
-                    <span className={`transition-opacity duration-500 ${activeIndex === i ? "opacity-100" : "opacity-50 group-hover:opacity-100"}`}>
-                      {item.icon}
-                    </span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
       </div>
     </section>
   );
 }
+

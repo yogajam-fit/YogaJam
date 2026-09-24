@@ -27,6 +27,7 @@ export type EventRecord = {
   run_of_show: { time: string, title: string, desc: string }[]
   booking_type: 'platform' | 'qr' | 'contact' | 'coming_soon'
   booking_links: Record<string, string> | null
+  past_videos?: string[]
   created_at?: string
 }
 
@@ -36,6 +37,7 @@ export function EventsTable() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventRecord | null>(null)
   const [sortAscending, setSortAscending] = useState<boolean | null>(null)
+  const [filterType, setFilterType] = useState<'all' | 'upcoming' | 'past'>('all')
   const supabase = createClient()
   const router = useRouter()
 
@@ -97,13 +99,61 @@ export function EventsTable() {
     return <Loader />
   }
 
+  const isPastEvent = (dateStr: string) => {
+    const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return false
+    // Compare end of event day with current time
+    d.setHours(23, 59, 59, 999)
+    return d.getTime() < new Date().getTime()
+  }
+
+  const filteredEvents = events.filter((e) => {
+    if (filterType === 'all') return true
+    const past = isPastEvent(e.date)
+    return filterType === 'past' ? past : !past
+  })
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-foreground">All Events</h2>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+          <h2 className="text-2xl font-extrabold font-heading text-foreground tracking-tight">Events</h2>
+          
+          <div className="flex p-1 bg-surface border border-border/50 rounded-xl shadow-inner relative">
+            <button 
+              onClick={() => setFilterType('all')} 
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'all' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+            >
+              All Events
+              {filterType === 'all' && (
+                <div className="absolute inset-0 bg-accent rounded-lg -z-10 shadow-[0_0_15px_rgba(200,232,107,0.4)] animate-in zoom-in-95 duration-200"></div>
+              )}
+            </button>
+            
+            <button 
+              onClick={() => setFilterType('upcoming')} 
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'upcoming' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+            >
+              Upcoming
+              {filterType === 'upcoming' && (
+                <div className="absolute inset-0 bg-accent rounded-lg -z-10 shadow-[0_0_15px_rgba(200,232,107,0.4)] animate-in zoom-in-95 duration-200"></div>
+              )}
+            </button>
+            
+            <button 
+              onClick={() => setFilterType('past')} 
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'past' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+            >
+              Past
+              {filterType === 'past' && (
+                <div className="absolute inset-0 bg-accent rounded-lg -z-10 shadow-[0_0_15px_rgba(200,232,107,0.4)] animate-in zoom-in-95 duration-200"></div>
+              )}
+            </button>
+          </div>
+        </div>
         <button 
           onClick={handleAddNew}
-          className="bg-accent hover:bg-accent-warm text-background px-4 py-2 rounded-xl font-bold transition-colors shadow-[0_0_20px_rgba(200,232,107,0.3)]"
+          className="bg-accent hover:bg-accent-warm text-background px-4 py-2 rounded-xl font-bold transition-colors shadow-[0_0_20px_rgba(200,232,107,0.3)] whitespace-nowrap"
         >
           + Add New Event
         </button>
@@ -136,7 +186,7 @@ export function EventsTable() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {[...events].sort((a, b) => {
+              {[...filteredEvents].sort((a, b) => {
                 if (sortAscending === null) return 0;
                 // Try parsing the date, fallback to 0 if invalid
                 const dateA = new Date(a.date).getTime() || 0;
@@ -166,10 +216,10 @@ export function EventsTable() {
                   </td>
                 </tr>
               ))}
-              {events.length === 0 && (
+              {filteredEvents.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                    No events found. Click "Add New Event" to create one.
+                    No events found for this filter.
                   </td>
                 </tr>
               )}
@@ -233,6 +283,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [videoUrl, setVideoUrl] = useState(event?.video || '')
   const [videoMobileUrl, setVideoMobileUrl] = useState(event?.video_mobile || '')
   const [qrUrl, setQrUrl] = useState(event?.qr_code || '')
+  const [pastVideos, setPastVideos] = useState<string[]>(event?.past_videos || [])
   const [isUploading, setIsUploading] = useState(false)
   
   // Split time into start and end for picker
@@ -282,6 +333,60 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       alert(`Error uploading ${type}: ` + error.message)
     } finally {
       setIsUploading(false)
+    }
+  }
+
+  const handleMultiplePastVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+    
+    setIsUploading(true)
+    const newUrls: string[] = []
+    
+    try {
+      // Get authentication parameters from our new endpoint
+      const authRes = await fetch("/api/imagekit-auth");
+      if (!authRes.ok) {
+        const err = await authRes.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to authenticate upload");
+      }
+      const authParams = await authRes.json();
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("fileName", file.name)
+        formData.append("folder", '/events/past_videos')
+        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_/qgLQu9DrfPQ8WelcnmViJD34tA=")
+        formData.append("signature", authParams.signature)
+        formData.append("expire", authParams.expire)
+        formData.append("token", authParams.token)
+
+        // Upload DIRECTLY to ImageKit to bypass Next.js file size limits
+        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+          method: "POST",
+          body: formData,
+        })
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}))
+          throw new Error(err.message || `Failed to upload ${file.name}`)
+        }
+
+        const data = await response.json()
+        newUrls.push(data.url)
+      }
+      
+      setPastVideos(prev => {
+        const filtered = prev.filter(v => v.trim() !== '')
+        return [...filtered, ...newUrls]
+      })
+    } catch (error: any) {
+      alert(`Error uploading videos: ` + error.message)
+    } finally {
+      setIsUploading(false)
+      e.target.value = ''
     }
   }
 
@@ -336,6 +441,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       booking_type: bookingType,
       includes: includes.filter(i => i.trim() !== ''),
       run_of_show: runOfShow.filter(r => r.time.trim() !== '' || r.title.trim() !== ''),
+      past_videos: pastVideos.filter(v => v.trim() !== ''),
       booking_links
     }
 
@@ -481,6 +587,59 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
               </div>
             </div>
           </div>
+
+          {/* Past Videos (Only visible if the selected date is in the past) */}
+          {(() => {
+            const currentSelectedDateStr = formatDateString(eventDate) || (event?.date || '');
+            const d = new Date(currentSelectedDateStr);
+            d.setHours(23, 59, 59, 999);
+            const isCurrentlyPast = !isNaN(d.getTime()) && d.getTime() < new Date().getTime();
+            
+            if (!isCurrentlyPast) return null;
+            
+            return (
+              <div>
+                <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Past Event Videos</h4>
+                <p className="text-sm text-foreground-secondary mb-4">This event is in the past! You can add gallery videos of this event below.</p>
+                <div className="space-y-3">
+                  {pastVideos.map((vid, index) => (
+                    <div key={index} className="flex gap-2 items-center">
+                      <input 
+                        value={vid} 
+                        onChange={(e) => {
+                          const newVids = [...pastVideos]
+                          newVids[index] = e.target.value
+                          setPastVideos(newVids)
+                        }}
+                        placeholder="https://... (Video URL)"
+                        className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
+                      />
+                      <button 
+                        type="button" 
+                        onClick={() => setPastVideos(pastVideos.filter((_, i) => i !== index))}
+                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg"
+                      >✕</button>
+                    </div>
+                  ))}
+                  
+                  <div className="flex gap-4 items-center pt-2">
+                    <label className="cursor-pointer bg-accent hover:bg-accent-warm px-4 py-2.5 rounded-lg text-background text-sm font-bold flex items-center transition-colors">
+                      {isUploading ? 'Uploading...' : 'Upload Multiple Videos'}
+                      <input type="file" accept="video/*" multiple className="hidden" onChange={handleMultiplePastVideoUpload} disabled={isUploading} />
+                    </label>
+                    <span className="text-foreground-secondary text-sm">or</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setPastVideos([...pastVideos, ''])}
+                      className="text-foreground-secondary hover:text-foreground text-sm font-bold flex items-center gap-1 transition-colors"
+                    >
+                      + Add URL Manually
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Descriptions */}
           <div>

@@ -10,6 +10,15 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { EventRecord } from "@/components/admin/EventsTable";
 import { createClient } from "@/utils/supabase/client";
 import { formatPrice, toTitleCase } from "@/lib/utils";
+import { MasonryGrid } from "@/components/ui/MasonryGrid";
+
+const getOriginalVideoUrl = (url?: string) => {
+  if (!url) return url;
+  if (url.includes('ik.imagekit.io') && !url.includes('tr=')) {
+    return url + (url.includes('?') ? '&' : '?') + 'tr=orig-true';
+  }
+  return url;
+};
 
 export function EventDetailClient({ event }: { event: EventRecord }) {
   const [mounted, setMounted] = React.useState(false);
@@ -44,7 +53,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
           />
           {event.video && (
             <video 
-              src={event.video} 
+              src={getOriginalVideoUrl(event.video)} 
               autoPlay 
               muted 
               loop 
@@ -158,6 +167,26 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+              
+              {/* Past Videos Gallery */}
+              {isPastEvent && event.past_videos && event.past_videos.length > 0 && (
+                <div className="mt-16 mb-8 w-full">
+                  <SectionHeading title="Event Gallery" align="left" className="mb-8" />
+                  <MasonryGrid 
+                    items={event.past_videos} 
+                    renderItem={(vid: string) => (
+                      <div className="rounded-2xl overflow-hidden bg-black shadow-md border border-border">
+                        <video 
+                          src={getOriginalVideoUrl(vid)} 
+                          controls 
+                          playsInline
+                          className="w-full h-auto block" 
+                        />
+                      </div>
+                    )} 
+                  />
                 </div>
               )}
             </div>

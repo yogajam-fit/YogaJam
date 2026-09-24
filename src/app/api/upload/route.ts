@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import ImageKit, { toFile } from "@imagekit/nodejs";
+import ImageKit from "@imagekit/nodejs";
 
 const imagekit = new ImageKit({
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
 });
 
 export async function POST(req: Request) {
@@ -18,18 +20,15 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
-    // Convert Node Buffer to an ImageKit Uploadable File object
-    const ikFile = await toFile(buffer, file.name);
-
-    const result = await imagekit.files.upload({
-      file: ikFile,
+    const result = await imagekit.upload({
+      file: buffer,
       fileName: file.name,
       folder: folder,
     });
 
     return NextResponse.json(result);
-  } catch (error) {
+  } catch (error: any) {
     console.error("ImageKit upload error:", error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    return NextResponse.json({ error: error?.message || String(error) }, { status: 500 });
   }
 }

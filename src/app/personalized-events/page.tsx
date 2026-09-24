@@ -14,19 +14,12 @@ export default function PersonalizedEventsPage() {
   const dynamicCategories = Array.from(new Set(personalizedEvents.map(e => e.label))).filter(Boolean);
   const categories = ["All", ...dynamicCategories];
   return (
-    <main className="min-h-screen pt-32 pb-24 bg-background">
+    <main className="flex-1 pt-24 md:pt-32 pb-16 md:pb-24 bg-background">
       <Container>
-        {/* Page Header */}
-        <div className="max-w-2xl mb-16">
-          <SectionHeading 
-            title={<>Host your special <span className="text-accent-warm">moment with us</span></>}
-            subtitle="We bring the experience to your kind of celebration. Pick one, make it your own, or build something completely yours."
-            align="left"
-          />
-        </div>
+
 
         {/* Filters */}
-        <div className="flex md:flex-wrap items-center gap-3 mb-10 overflow-x-auto md:overflow-visible pb-4 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex md:flex-wrap items-center gap-3 mb-6 md:mb-8 overflow-x-auto md:overflow-visible pb-2 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((cat) => (
             <button
               key={cat}
