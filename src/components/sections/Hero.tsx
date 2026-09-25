@@ -117,14 +117,15 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
             autoPlay
             muted={isMuted}
             playsInline
+            preload="metadata"
             onEnded={() => setActiveIndex((prev) => (prev + 1) % items.length)}
             className="absolute inset-0 w-full h-full object-cover opacity-100 animate-in fade-in duration-500"
           >
             {activeItem.video_mobile && (
-              <source src={getOrigUrl(activeItem.video_mobile as string)} media="(max-width: 768px)" type="video/mp4" />
+              <source src={`${getOrigUrl(activeItem.video_mobile as string)}#t=0.001`} media="(max-width: 768px)" type="video/mp4" />
             )}
             {activeItem.video && (
-              <source src={getOrigUrl(activeItem.video as string)} type="video/mp4" />
+              <source src={`${getOrigUrl(activeItem.video as string)}#t=0.001`} type="video/mp4" />
             )}
           </video>
         )}

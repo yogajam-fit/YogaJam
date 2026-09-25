@@ -53,11 +53,12 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
           />
           {event.video && showVideo && (
             <video 
-              src={getOriginalVideoUrl(event.video)} 
+              src={`${getOriginalVideoUrl(event.video)}#t=0.001`} 
               autoPlay 
               muted 
               loop 
               playsInline
+              preload="metadata"
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-60`}
             />
           )}
@@ -618,8 +619,9 @@ function VideoWithLoader({ src }: { src: string }) {
       )}
       <video 
         ref={videoRef}
-        src={src} 
+        src={`${src}#t=0.001`} 
         playsInline
+        preload="metadata"
         muted={isMuted}
         onLoadedData={() => setIsLoading(false)}
         onPlay={() => setIsPlaying(true)}

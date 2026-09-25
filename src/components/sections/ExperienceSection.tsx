@@ -172,11 +172,11 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload={diff === 0 ? "auto" : "none"}
+                      preload={diff === 0 ? "auto" : "metadata"}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
                     >
-                      <source src={exp.videoSrc} type="video/mp4" />
+                      <source src={`${exp.videoSrc}#t=0.001`} type="video/mp4" />
                     </video>
 
                     {/* Mute Toggle (Only on Active Video) */}
