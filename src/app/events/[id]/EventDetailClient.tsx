@@ -3,6 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
+import { BaseModal } from "@/components/ui/BaseModal";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ContactIcons } from "@/components/ui/ContactModal";
@@ -374,161 +375,141 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
         <Button onClick={() => setIsQRModalOpen(true)} size="lg" variant="primary" className="w-full h-14 text-sm sm:text-base font-semibold shadow-[0_0_20px_rgba(200,232,107,0.2)] hover:shadow-[0_0_30px_rgba(200,232,107,0.4)] transition-all">
           {buttonText}
         </Button>
-        {isQRModalOpen && mounted && createPortal(
-          <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center bg-black/80 backdrop-blur-sm md:p-4" onClick={resetModal}>
-            <div 
-              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden bg-surface sm:border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 sm:zoom-in-95 duration-300 ease-out" 
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-6 border-b border-border shrink-0 bg-surface/80 backdrop-blur-xl z-10">
-                <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground">
-                  {isSubmitted ? "Request Sent" : (step === 1 ? "Your Details" : "Complete Your Payment")}
-                </h2>
-                <button 
-                  onClick={resetModal}
-                  className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/50 border border-border"
-                  aria-label="Close dialog"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="overflow-y-auto p-6 md:p-8 custom-scrollbar relative flex-1">
-                {!isSubmitted ? (
-                  <>
-                    <p className="text-sm text-foreground-secondary mb-6 text-center">
-                      {step === 1 
-                        ? "Please enter your details to reserve your spot." 
-                        : "Scan the QR code to pay, then upload a screenshot or enter your UTR number below."}
-                    </p>
-                    
-                    {step === 1 ? (
-                      <form onSubmit={handleNextStep} className="flex flex-col gap-4 animate-in fade-in slide-in-from-right-4 duration-300" noValidate>
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs font-semibold text-foreground-secondary uppercase">Full Name</label>
-                          <input type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
-                          {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs font-semibold text-foreground-secondary uppercase">Email Address</label>
-                          <input type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
-                          {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs font-semibold text-foreground-secondary uppercase">Phone Number</label>
-                          <input type="tel" placeholder="9876543210" value={contact} onChange={(e) => setContact(e.target.value.replace(/\D/g, '').slice(0, 10))} className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
-                          {errors.contact && <p className="text-red-400 text-xs mt-1">{errors.contact}</p>}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs font-semibold text-foreground-secondary uppercase">Number of Tickets</label>
-                          <div className={`flex items-center gap-6 w-max bg-background/50 border ${errors.tickets ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-2 transition-all`}>
-                            <span className="text-xl font-bold text-foreground font-heading">{numTickets}</span>
-                            <div className="flex items-center gap-1.5">
-                              <button
-                                type="button"
-                                onClick={() => setNumTickets(Math.max(1, numTickets - 1))}
-                                disabled={numTickets <= 1}
-                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-foreground/ hover:bg-foreground/ active:scale-95 text-foreground disabled:opacity-30 disabled:hover:bg-foreground/ disabled:active:scale-100 transition-all"
-                              >
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setNumTickets(Math.min(10, numTickets + 1))}
-                                disabled={numTickets >= 10}
-                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-foreground/ hover:bg-foreground/ active:scale-95 text-foreground disabled:opacity-30 disabled:hover:bg-foreground/ disabled:active:scale-100 transition-all"
-                              >
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                              </button>
-                            </div>
-                          </div>
-                          {errors.tickets && <p className="text-red-400 text-xs mt-1">{errors.tickets}</p>}
-                        </div>
-                        <Button type="submit" className="w-full h-12 bg-accent text-background font-bold mt-2 hover:scale-[1.02] transition-transform">
-                          Proceed to Payment
-                        </Button>
-                      </form>
-                    ) : (
-                      <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                        {event?.price && (
-                          <div className="text-center mb-6">
-                            <p className="text-sm text-foreground-secondary font-medium mb-1">Total Amount ({numTickets} {numTickets === 1 ? 'ticket' : 'tickets'})</p>
-                            <p className="text-3xl font-bold text-accent font-heading">
-                              ₹{(parseInt(event.price.replace(/\D/g, ''), 10) * numTickets).toLocaleString('en-IN')}
-                            </p>
-                          </div>
-                        )}
-                        <div className="flex justify-center mb-6">
-                          <div className="bg-white p-4 rounded-xl">
-                            <Image src={event?.qr_code || "/images/hero/hero-bg.jpg"} alt="QR Code" width={200} height={200} unoptimized={true} className="object-cover rounded-lg w-[200px] h-[200px]" />
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 p-1 bg-foreground/ rounded-xl mb-6">
-                          <button
-                            type="button"
-                            onClick={() => setVerifyMethod('screenshot')}
-                            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'screenshot' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
-                          >
-                            Screenshot
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setVerifyMethod('utr')}
-                            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'utr' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
-                          >
-                            UTR Number
-                          </button>
-                        </div>
-
-                        <form onSubmit={handleQRSubmit} className="flex flex-col gap-4" noValidate>
-                          {verifyMethod === 'screenshot' ? (
-                            <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <label className="text-xs font-semibold text-foreground-secondary uppercase">Upload Screenshot</label>
-                              <input key="file-input" type="file" accept="image/*" onChange={(e) => setScreenshotFile(e.target.files?.[0] || null)} className="text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20 transition-all cursor-pointer" required />
-                            </div>
-                          ) : (
-                            <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <label className="text-xs font-semibold text-foreground-secondary uppercase">Enter UTR Number</label>
-                              <input key="utr-input" type="text" placeholder="Enter 12-digit UTR / Transaction ID" value={utrNumber} onChange={(e) => setUtrNumber(e.target.value.replace(/\D/g, '').slice(0, 12))} pattern="\d{12}" title="UTR Number must be exactly 12 digits" className={`w-full bg-background/50 border ${errors.utr ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
-                              {errors.utr && <p className="text-red-400 text-xs mt-1">{errors.utr}</p>}
-                            </div>
-                          )}
-                          <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-accent text-background font-bold mt-2 hover:scale-[1.02] transition-transform">
-                            {isSubmitting ? (
-                              <span className="flex items-center justify-center gap-2">
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Submitting...
-                              </span>
-                            ) : (
-                              "Submit Payment"
-                            )}
-                          </Button>
-                        </form>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center min-h-[350px] py-12 text-center animate-in fade-in zoom-in-95 duration-500 ease-out">
-                    <h3 className="text-3xl md:text-4xl font-bold font-heading text-foreground mb-4 tracking-tight">
-                      Thank <span className="text-accent-warm">You!</span>
-                    </h3>
-                    
-                    <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed mx-auto">
-                      Your journey begins here. We've received your request and our team will verify your payment and send your ticket shortly to <strong className="text-foreground font-semibold">{email}</strong>.
+      <BaseModal
+        isOpen={isQRModalOpen}
+        onClose={resetModal}
+        title={isSubmitted ? "Request Sent" : (step === 1 ? "Your Details" : "Complete Your Payment")}
+        maxWidthClass="max-w-2xl"
+      >
+        {!isSubmitted ? (
+          <>
+            <p className="text-sm text-foreground-secondary mb-6 text-center">
+              {step === 1 
+                ? "Please enter your details to reserve your spot." 
+                : "Scan the QR code to pay, then upload a screenshot or enter your UTR number below."}
+            </p>
+            
+            {step === 1 ? (
+              <form onSubmit={handleNextStep} className="flex flex-col gap-4 animate-in fade-in slide-in-from-right-4 duration-300" noValidate>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Full Name</label>
+                  <input type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Email Address</label>
+                  <input type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Phone Number</label>
+                  <input type="tel" placeholder="9876543210" value={contact} onChange={(e) => setContact(e.target.value.replace(/\D/g, '').slice(0, 10))} className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  {errors.contact && <p className="text-red-400 text-xs mt-1">{errors.contact}</p>}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Number of Tickets</label>
+                  <div className={`flex items-center gap-6 w-max bg-background/50 border ${errors.tickets ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-2 transition-all`}>
+                    <span className="text-xl font-bold text-foreground font-heading">{numTickets}</span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setNumTickets(Math.max(1, numTickets - 1))}
+                        disabled={numTickets <= 1}
+                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-foreground/ hover:bg-foreground/ active:scale-95 text-foreground disabled:opacity-30 disabled:hover:bg-foreground/ disabled:active:scale-100 transition-all"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNumTickets(Math.min(10, numTickets + 1))}
+                        disabled={numTickets >= 10}
+                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-foreground/ hover:bg-foreground/ active:scale-95 text-foreground disabled:opacity-30 disabled:hover:bg-foreground/ disabled:active:scale-100 transition-all"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                  {errors.tickets && <p className="text-red-400 text-xs mt-1">{errors.tickets}</p>}
+                </div>
+                <Button type="submit" className="w-full h-12 bg-accent text-background font-bold mt-2 hover:scale-[1.02] transition-transform">
+                  Proceed to Payment
+                </Button>
+              </form>
+            ) : (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                {event?.price && (
+                  <div className="text-center mb-6">
+                    <p className="text-sm text-foreground-secondary font-medium mb-1">Total Amount ({numTickets} {numTickets === 1 ? 'ticket' : 'tickets'})</p>
+                    <p className="text-3xl font-bold text-accent font-heading">
+                      ₹{(parseInt(event.price.replace(/\D/g, ''), 10) * numTickets).toLocaleString('en-IN')}
                     </p>
                   </div>
                 )}
+                <div className="flex justify-center mb-6">
+                  <div className="bg-white p-4 rounded-xl">
+                    <Image src={event?.qr_code || "/images/hero/hero-bg.jpg"} alt="QR Code" width={200} height={200} unoptimized={true} className="object-cover rounded-lg w-[200px] h-[200px]" />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 p-1 bg-foreground/ rounded-xl mb-6">
+                  <button
+                    type="button"
+                    onClick={() => setVerifyMethod('screenshot')}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'screenshot' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+                  >
+                    Screenshot
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVerifyMethod('utr')}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'utr' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+                  >
+                    UTR Number
+                  </button>
+                </div>
+
+                <form onSubmit={handleQRSubmit} className="flex flex-col gap-4" noValidate>
+                  {verifyMethod === 'screenshot' ? (
+                    <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <label className="text-xs font-semibold text-foreground-secondary uppercase">Upload Screenshot</label>
+                      <input key="file-input" type="file" accept="image/*" onChange={(e) => setScreenshotFile(e.target.files?.[0] || null)} className="text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20 transition-all cursor-pointer" required />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <label className="text-xs font-semibold text-foreground-secondary uppercase">Enter UTR Number</label>
+                      <input key="utr-input" type="text" placeholder="Enter 12-digit UTR / Transaction ID" value={utrNumber} onChange={(e) => setUtrNumber(e.target.value.replace(/\D/g, '').slice(0, 12))} pattern="\d{12}" title="UTR Number must be exactly 12 digits" className={`w-full bg-background/50 border ${errors.utr ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                      {errors.utr && <p className="text-red-400 text-xs mt-1">{errors.utr}</p>}
+                    </div>
+                  )}
+                  <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-accent text-background font-bold mt-2 hover:scale-[1.02] transition-transform">
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Submitting...
+                      </span>
+                    ) : (
+                      "Submit Payment"
+                    )}
+                  </Button>
+                </form>
               </div>
-            </div>
-          </div>,
-          document.body
+            )}
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center min-h-[350px] py-12 text-center animate-in fade-in zoom-in-95 duration-500 ease-out">
+            <h3 className="text-3xl md:text-4xl font-bold font-heading text-foreground mb-4 tracking-tight">
+              Thank <span className="text-accent-warm">You!</span>
+            </h3>
+            
+            <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed mx-auto">
+              Your journey begins here. We've received your request and our team will verify your payment and send your ticket shortly to <strong className="text-foreground font-semibold">{email}</strong>.
+            </p>
+          </div>
         )}
+      </BaseModal>
       </>
     );
   }
@@ -556,39 +537,29 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
       </Button>
 
       {/* Platform Selection Modal */}
-      {isMobileMenuOpen && mounted && createPortal(
-        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4" onClick={() => setIsMobileMenuOpen(false)}>
-          <div
-            className="w-full sm:max-w-md bg-surface border-t sm:border border-border rounded-t-3xl sm:rounded-3xl p-6 pb-12 sm:pb-6 animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-bold text-foreground font-heading">Choose Platform</h3>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-foreground-secondary hover:text-foreground p-2 -mr-2 bg-background/50 rounded-full border border-border">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              {platformEntries.map(([name, url]) => (
-                <a
-                  key={name}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between h-20 px-6 rounded-2xl border border-border bg-background/50 active:scale-95 transition-all hover:bg-foreground/20 hover:border-accent group/modalbtn"
-                >
-                  <span className="font-heading font-bold text-xl text-foreground group-hover/modalbtn:text-accent transition-colors">{name}</span>
-                  <svg className="w-5 h-5 text-foreground-secondary group-hover/modalbtn:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+      <BaseModal
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        title="Choose Platform"
+        maxWidthClass="max-w-md"
+      >
+        <div className="flex flex-col gap-3">
+          {platformEntries.map(([name, url]) => (
+            <a
+              key={name}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between h-20 px-6 rounded-2xl border border-border bg-background/50 active:scale-95 transition-all hover:bg-foreground/20 hover:border-accent group/modalbtn"
+            >
+              <span className="font-heading font-bold text-xl text-foreground group-hover/modalbtn:text-accent transition-colors">{name}</span>
+              <svg className="w-5 h-5 text-foreground-secondary group-hover/modalbtn:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          ))}
+        </div>
+      </BaseModal>
     </>
   );
 }
