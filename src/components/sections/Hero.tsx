@@ -196,7 +196,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                   </h1>
                   {item.eventId && (
                     <span className="text-accent text-xs md:text-sm font-bold uppercase tracking-widest mb-3 md:mb-4 block drop-shadow-md">
-                      Upcoming Event
+                      {item.isPast ? "Recent Event" : "Upcoming Event"}
                     </span>
                   )}
 

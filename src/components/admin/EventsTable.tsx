@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Loader } from '@/components/ui/Loader'
+import { FullscreenLoader } from '@/components/ui/FullscreenLoader'
 import { formatPrice } from '@/lib/utils'
 
 export type EventRecord = {
@@ -87,11 +88,19 @@ export function EventsTable() {
       }
       
       for (const url of urlsToDelete) {
-        await fetch('/api/imagekit-delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
-        }).catch(err => console.error('Failed to delete from ImageKit:', err));
+        if (url.includes('cloudinary.com')) {
+          await fetch('/api/cloudinary-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          }).catch(err => console.error('Failed to delete from Cloudinary:', err));
+        } else {
+          await fetch('/api/imagekit-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          }).catch(err => console.error('Failed to delete from ImageKit:', err));
+        }
       }
     }
     
@@ -299,6 +308,45 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [qrUrl, setQrUrl] = useState(event?.qr_code || '')
   const [pastVideos, setPastVideos] = useState<string[]>(event?.past_videos || [])
   const [isUploading, setIsUploading] = useState(false)
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
+
+  const loadingMessage = isSubmitting 
+    ? "Saving your event..." 
+    : isUploading 
+      ? "Uploading your media..." 
+      : deletingIndex !== null 
+        ? "Removing video..." 
+        : null;
+  
+  const handleRemovePastVideo = async (index: number) => {
+    const urlToRemove = pastVideos[index];
+    if (urlToRemove && urlToRemove.trim() !== '') {
+      const confirmed = confirm("Are you sure you want to delete this video? This will permanently remove it from your cloud storage immediately.");
+      if (!confirmed) return;
+      
+      setDeletingIndex(index);
+      try {
+        if (urlToRemove.includes('cloudinary.com')) {
+          await fetch('/api/cloudinary-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: urlToRemove })
+          });
+        } else {
+          await fetch('/api/imagekit-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: urlToRemove })
+          });
+        }
+      } catch (err) {
+        console.error("Failed to delete video from cloud:", err);
+      } finally {
+        setDeletingIndex(null);
+      }
+    }
+    setPastVideos(pastVideos.filter((_, i) => i !== index));
+  }
   
   // Split time into start and end for picker
   const [startTime, setStartTime] = useState(() => {
@@ -359,7 +407,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
     
     try {
       // Get authentication parameters from our new endpoint
-      const authRes = await fetch("/api/imagekit-auth");
+      const authRes = await fetch("/api/cloudinary-sign");
       if (!authRes.ok) {
         const err = await authRes.json().catch(() => ({}));
         throw new Error(err.error || "Failed to authenticate upload");
@@ -370,26 +418,24 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
         const file = files[i]
         const formData = new FormData()
         formData.append("file", file)
-        formData.append("fileName", file.name)
-        formData.append("folder", '/events/past_videos')
-        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_/qgLQu9DrfPQ8WelcnmViJD34tA=")
+        formData.append("folder", authParams.folder)
+        formData.append("api_key", authParams.api_key)
+        formData.append("timestamp", authParams.timestamp)
         formData.append("signature", authParams.signature)
-        formData.append("expire", authParams.expire)
-        formData.append("token", authParams.token)
 
-        // Upload DIRECTLY to ImageKit to bypass Next.js file size limits
-        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        // Upload DIRECTLY to Cloudinary to bypass Next.js file size limits
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${authParams.cloud_name}/video/upload`, {
           method: "POST",
           body: formData,
         })
 
         if (!response.ok) {
           const err = await response.json().catch(() => ({}))
-          throw new Error(err.message || `Failed to upload ${file.name}`)
+          throw new Error(err.error?.message || `Failed to upload ${file.name}`)
         }
 
         const data = await response.json()
-        newUrls.push(data.url)
+        newUrls.push(data.secure_url)
       }
       
       setPastVideos(prev => {
@@ -472,6 +518,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      {loadingMessage && <FullscreenLoader message={loadingMessage} />}
       <div className="bg-[#111] border border-border w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
         <div className="flex justify-between items-center p-6 border-b border-border/50 bg-black/20">
           <h3 className="text-xl font-bold text-foreground">{event ? 'Edit Event' : 'Add New Event'}</h3>
@@ -549,7 +596,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
-                    {isUploading ? '...' : 'Upload'}
+                    Upload
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image')} disabled={isUploading} />
                   </label>
                 </div>
@@ -564,7 +611,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
-                    {isUploading ? '...' : 'Upload'}
+                    Upload
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image_mobile')} disabled={isUploading} />
                   </label>
                 </div>
@@ -579,7 +626,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
-                    {isUploading ? '...' : 'Upload'}
+                    Upload
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video')} disabled={isUploading} />
                   </label>
                 </div>
@@ -594,7 +641,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
-                    {isUploading ? '...' : 'Upload'}
+                    Upload
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video_mobile')} disabled={isUploading} />
                   </label>
                 </div>
@@ -630,15 +677,16 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       />
                       <button 
                         type="button" 
-                        onClick={() => setPastVideos(pastVideos.filter((_, i) => i !== index))}
-                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg"
+                        onClick={() => handleRemovePastVideo(index)}
+                        disabled={deletingIndex === index}
+                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg disabled:opacity-50"
                       >✕</button>
                     </div>
                   ))}
                   
                   <div className="flex gap-4 items-center pt-2">
                     <label className="cursor-pointer bg-accent hover:bg-accent-warm px-4 py-2.5 rounded-lg text-background text-sm font-bold flex items-center transition-colors">
-                      {isUploading ? 'Uploading...' : 'Upload Multiple Videos'}
+                      Upload Multiple Videos
                       <input type="file" accept="video/*" multiple className="hidden" onChange={handleMultiplePastVideoUpload} disabled={isUploading} />
                     </label>
                     <span className="text-foreground-secondary text-sm">or</span>
@@ -751,7 +799,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                     />
                     <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
-                      {isUploading ? '...' : 'Upload'}
+                      Upload
                       {/* Using any cast on type parameter since handleFileUpload type is constrained to 'image' | 'video', but in JS it's fine or I will pass 'qr' as any */}
                       <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'qr' as any)} disabled={isUploading} />
                     </label>
@@ -863,7 +911,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
           <div className="flex justify-end gap-4 pt-6 border-t border-border">
             <button type="button" onClick={onClose} className="px-6 py-2 rounded-lg text-foreground-secondary hover:text-foreground">Cancel</button>
             <button type="submit" disabled={isSubmitting || isUploading} className="px-8 py-2.5 rounded-lg bg-accent text-background font-bold hover:bg-accent-warm disabled:opacity-50 transition-colors">
-              {isSubmitting ? 'Saving...' : 'Save Event'}
+              Save Event
             </button>
           </div>
         </form>

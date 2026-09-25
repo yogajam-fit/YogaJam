@@ -17,17 +17,15 @@ export const heroEvergreenData = [
     desc: "We're taking the Jam beyond Bengaluru. New cities, new people, same energy — come move, connect and experience YogaJam when we land near you.",
     image: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Desktop_02.png",
     image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Mobile_02.png",
-    // video: "/videos/9003382-hd_1920_1080_25fps.mp4",
-    // video_mobile: "/videos/9003382-hd_1920_1080_25fps.mp4",
     link: "/cities"
   },
   {
     id: "evt-2",
-    title: "Your Event", subtitle: "Your Jam",
+    title: "Plan Your Event", subtitle: "You Say, We Build",
     duration: "Customizable", level: "All levels", venue: "Your Place",
     desc: "Got a moment worth celebrating? We'll turn it into a YogaJam experience built around your people, your vibe, and your occasion.",
-    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Desktop_03.png",
-    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Mobile_03.png",
+    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner.png",
+    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner%20(1).png",
     link: "/personalized-events"
   },
   {
@@ -35,13 +33,28 @@ export const heroEvergreenData = [
     title: "Read. Feel.", subtitle: "Move. Repeat.",
     duration: "5 min read", level: "All levels", venue: "The YogaJam Journal",
     desc: "Stories about movement, people, places and the little moments that make a Jam worth remembering.",
-    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Desktop_04.png",
-    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Mobile_04.png",
-    // video: "/videos/12900608_3840_2160_120fps.mp4",
-    // video_mobile: "/videos/12900608_3840_2160_120fps.mp4",
+    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/The%20YogaJam%20Journal%20website%20banner.png",
+    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/The%20YogaJam%20Journal%20website%20banner%20(1).png",
     link: "/journals"
   },
-  
+  {
+    id: "evt-testimonial",
+    title: "Hear It", subtitle: "From Them",
+    duration: "Community", level: "All levels", venue: "Reviews",
+    desc: "Read what people are saying about their YogaJam experiences.",
+    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner%20(2).png",
+    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner%20(3).png",
+    link: "/#reviews"
+  },
+  {
+    id: "evt-channel",
+    title: "YogaJam", subtitle: "Channel",
+    duration: "Watch", level: "All levels", venue: "Experiences",
+    desc: "Move Better. Live More. Discover the benefits of yoga, wellness, and movement through our Jams.",
+    image: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner%20(4).png",
+    image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/YogaJam%20Event%20Banner%20(4).png",
+    link: "/#channel"
+  }
 ];
 
 // These 4 items are ONLY used as fallbacks to replace missing upcoming events

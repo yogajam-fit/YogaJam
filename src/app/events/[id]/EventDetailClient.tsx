@@ -10,7 +10,6 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { EventRecord } from "@/components/admin/EventsTable";
 import { createClient } from "@/utils/supabase/client";
 import { formatPrice, toTitleCase } from "@/lib/utils";
-import { MasonryGrid } from "@/components/ui/MasonryGrid";
 
 const getOriginalVideoUrl = (url?: string) => {
   if (!url) return url;
@@ -51,14 +50,14 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
             priority
             className={`object-cover transition-opacity duration-1000 ${showVideo ? 'opacity-0' : 'opacity-60'}`}
           />
-          {event.video && (
+          {event.video && showVideo && (
             <video 
               src={getOriginalVideoUrl(event.video)} 
               autoPlay 
               muted 
               loop 
               playsInline
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${showVideo ? 'opacity-60' : 'opacity-0'}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-60`}
             />
           )}
           {/* Gradients for text readability */}
@@ -174,19 +173,11 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
               {isPastEvent && event.past_videos && event.past_videos.length > 0 && (
                 <div className="mt-16 mb-8 w-full">
                   <SectionHeading title="Event Gallery" align="left" className="mb-8" />
-                  <MasonryGrid 
-                    items={event.past_videos} 
-                    renderItem={(vid: string) => (
-                      <div className="rounded-2xl overflow-hidden bg-black shadow-md border border-border">
-                        <video 
-                          src={getOriginalVideoUrl(vid)} 
-                          controls 
-                          playsInline
-                          className="w-full h-auto block" 
-                        />
-                      </div>
-                    )} 
-                  />
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                    {event.past_videos.map((vid: string, idx: number) => (
+                      <VideoWithLoader key={idx} src={getOriginalVideoUrl(vid) as string} />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -599,5 +590,120 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
         document.body
       )}
     </>
+  );
+}
+
+function VideoWithLoader({ src }: { src: string }) {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isMuted, setIsMuted] = React.useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        document.querySelectorAll('video').forEach((vid) => {
+          if (vid !== videoRef.current && !vid.paused) {
+            vid.pause();
+          }
+        });
+        videoRef.current.play();
+      }
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const toggleFullscreen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      if (videoRef.current.requestFullscreen) {
+        videoRef.current.requestFullscreen();
+      } else if ((videoRef.current as any).webkitEnterFullscreen) {
+        (videoRef.current as any).webkitEnterFullscreen();
+      }
+    }
+  };
+
+  return (
+    <div 
+      className="relative w-full aspect-[9/16] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-md border border-border group cursor-pointer"
+      onClick={togglePlay}
+    >
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10 pointer-events-none">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/loader.svg" alt="Loading..." className="w-12 h-12 animate-pulse drop-shadow-xl" />
+        </div>
+      )}
+      <video 
+        ref={videoRef}
+        src={src} 
+        playsInline
+        muted={isMuted}
+        onLoadedData={() => setIsLoading(false)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => setIsPlaying(false)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`} 
+      />
+      
+      {/* Play/Pause Overlay */}
+      {!isLoading && (
+        <div className={`absolute inset-0 flex items-center justify-center bg-black/20 transition-all duration-300 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+          <button 
+            className="flex items-center justify-center text-white/90 hover:text-white hover:scale-110 transition-all duration-300 drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+            aria-label={isPlaying ? "Pause video" : "Play video"}
+          >
+            {isPlaying ? (
+              <svg className="w-14 h-14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+            ) : (
+              <svg className="w-14 h-14 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* Bottom Controls */}
+      {!isLoading && isPlaying && (
+        <>
+          <button
+            onClick={toggleFullscreen}
+            className="absolute bottom-4 left-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-0 group-hover:opacity-100"
+            aria-label="Fullscreen"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+
+          <button
+            onClick={toggleMute}
+            className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-0 group-hover:opacity-100"
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
+          >
+            {isMuted ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              </svg>
+            )}
+          </button>
+        </>
+      )}
+    </div>
   );
 }

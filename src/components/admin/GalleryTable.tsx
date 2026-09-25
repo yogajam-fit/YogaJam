@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Loader } from '@/components/ui/Loader'
+import { FullscreenLoader } from '@/components/ui/FullscreenLoader'
 import Image from 'next/image'
 
 export type GalleryRecord = {
@@ -15,7 +16,7 @@ export function GalleryTable() {
   const supabase = createClient()
   const [images, setImages] = useState<GalleryRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isUploading, setIsUploading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
 
   useEffect(() => {
     fetchImages()
@@ -51,7 +52,7 @@ export function GalleryTable() {
       return
     }
 
-    setIsUploading(true)
+    setLoadingMessage(`Uploading ${validFiles.length} image(s)...`)
     let uploadedCount = 0
     
     try {
@@ -93,7 +94,7 @@ export function GalleryTable() {
     } catch (error: any) {
       alert(`Error uploading image(s): ` + error.message)
     } finally {
-      setIsUploading(false)
+      setLoadingMessage(null)
       // Reset input
       e.target.value = ''
     }
@@ -102,6 +103,7 @@ export function GalleryTable() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this image?')) return
     
+    setLoadingMessage("Removing image from gallery...")
     try {
       const itemToDelete = images.find(img => img.id === id);
 
@@ -123,6 +125,8 @@ export function GalleryTable() {
       setImages(images.filter(img => img.id !== id))
     } catch (error: any) {
       alert('Error deleting image: ' + error.message)
+    } finally {
+      setLoadingMessage(null);
     }
   }
 
@@ -130,17 +134,17 @@ export function GalleryTable() {
 
   return (
     <div className="space-y-6">
+      {loadingMessage && <FullscreenLoader message={loadingMessage} />}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold font-heading">Gallery Images</h2>
         <label className="cursor-pointer bg-accent hover:bg-accent-warm px-4 py-2 rounded-lg text-background text-sm font-bold flex items-center transition-colors">
-          {isUploading ? 'Uploading...' : '+ Add New Image'}
+          + Add New Image
           <input 
             type="file" 
             accept="image/*" 
             multiple
             className="hidden" 
             onChange={handleFileUpload} 
-            disabled={isUploading} 
           />
         </label>
       </div>

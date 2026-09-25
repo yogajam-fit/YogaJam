@@ -100,7 +100,7 @@ export function ReviewsSection() {
   }
 
   return (
-    <section className="py-6 md:py-8 relative z-10 bg-background">
+    <section id="reviews" className="py-6 md:py-8 relative z-10 bg-background">
       <Container>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 items-center">
 

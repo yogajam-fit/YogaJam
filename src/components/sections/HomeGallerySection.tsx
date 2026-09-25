@@ -9,6 +9,7 @@ import Link from "next/link";
 
 export function HomeGallerySection() {
   const [dbImages, setDbImages] = useState<{id: string, src: string, alt: string}[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const exactScrollLeftRef = React.useRef<number>(0);
   const [isInteracting, setIsInteracting] = useState(false);
@@ -20,6 +21,7 @@ export function HomeGallerySection() {
       if (data && data.length > 0) {
         setDbImages(data.map(img => ({ id: img.id, src: img.url, alt: "Gallery Image" })));
       }
+      setIsLoading(false);
     }
     fetchImages();
   }, []);
@@ -100,7 +102,7 @@ export function HomeGallerySection() {
     };
   }, []);
 
-  if (itemsToUse.length === 0) return null;
+  if (itemsToUse.length === 0 && !isLoading) return null;
 
   return (
     <section className="py-12 md:py-16 relative overflow-hidden bg-background">
@@ -118,7 +120,13 @@ export function HomeGallerySection() {
           </Link>
         </div>
 
-        <div className="relative flex w-full overflow-hidden group rounded-xl">
+        <div className="relative flex w-full overflow-hidden group rounded-xl min-h-[200px] sm:min-h-[280px] md:min-h-[350px]">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center z-50 bg-background/80 backdrop-blur-sm rounded-xl">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/loader.svg" alt="Loading..." className="w-12 h-12 animate-pulse drop-shadow-xl" />
+            </div>
+          )}
           {/* Left and Right Fade Overlays */}
           <div className="absolute top-0 left-0 w-[15%] h-full bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute top-0 right-0 w-[15%] h-full bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
@@ -140,7 +148,7 @@ export function HomeGallerySection() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={image.src}
+                  src={image.src.includes('ik.imagekit.io') ? (image.src.includes('?') ? `${image.src}&tr=w-600` : `${image.src}?tr=w-600`) : image.src}
                   alt={image.alt}
                   loading="lazy"
                   className="h-full w-auto object-cover transition-transform duration-700 ease-out group-hover/image:scale-105"

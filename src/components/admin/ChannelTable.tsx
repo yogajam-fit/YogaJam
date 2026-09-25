@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Loader } from '@/components/ui/Loader'
+import { FullscreenLoader } from '@/components/ui/FullscreenLoader'
 
 export type ChannelVideo = {
   id: string
@@ -14,6 +15,7 @@ export function ChannelTable() {
   const [videos, setVideos] = useState<ChannelVideo[]>([])
   const [loading, setLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
   const supabase = createClient()
 
   useEffect(() => {
@@ -35,37 +37,48 @@ export function ChannelTable() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this video?')) return
 
-    const videoToDelete = videos.find(v => v.id === id);
+    setLoadingMessage("Removing video from channel...")
+    try {
+      const videoToDelete = videos.find(v => v.id === id);
 
-    const { error } = await supabase.from('channel').delete().eq('id', id)
-    if (error) {
-      alert('Error deleting video: ' + error.message)
-    } else {
-      if (videoToDelete && videoToDelete.video_url) {
-        await fetch('/api/imagekit-delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: videoToDelete.video_url })
-        }).catch(err => console.error('Failed to delete from ImageKit:', err));
+      const { error } = await supabase.from('channel').delete().eq('id', id)
+      if (error) {
+        alert('Error deleting video: ' + error.message)
+      } else {
+        if (videoToDelete && videoToDelete.video_url) {
+          await fetch('/api/imagekit-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: videoToDelete.video_url })
+          }).catch(err => console.error('Failed to delete from ImageKit:', err));
+        }
+        fetchVideos()
       }
-      fetchVideos()
+    } finally {
+      setLoadingMessage(null)
     }
   }
 
   const handleAddVideo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
+    setLoadingMessage("Adding video to channel...")
     
-    const newVideo = {
-      video_url: formData.get('video_url') as string,
-    }
-    
-    const { error } = await supabase.from('channel').insert(newVideo)
-    if (error) {
-      alert('Error adding video: ' + error.message)
-    } else {
-      setIsAdding(false)
-      fetchVideos()
+    try {
+      const formData = new FormData(e.currentTarget)
+      
+      const newVideo = {
+        video_url: formData.get('video_url') as string,
+      }
+      
+      const { error } = await supabase.from('channel').insert(newVideo)
+      if (error) {
+        alert('Error adding video: ' + error.message)
+      } else {
+        setIsAdding(false)
+        fetchVideos()
+      }
+    } finally {
+      setLoadingMessage(null)
     }
   }
 
@@ -75,6 +88,7 @@ export function ChannelTable() {
 
   return (
     <div className="space-y-6">
+      {loadingMessage && <FullscreenLoader message={loadingMessage} />}
       <div className="flex justify-end">
         <button 
           onClick={() => setIsAdding(!isAdding)}

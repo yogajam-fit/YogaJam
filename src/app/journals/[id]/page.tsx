@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ShareArticleButton } from "@/components/ui/ShareArticleButton";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 interface JournalPageProps {
   params: Promise<{ id: string }>;
@@ -47,8 +48,32 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
   const wordCount = journal.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length;
   const readTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": journal.title,
+    "image": [journal.image],
+    "datePublished": journal.date,
+    "dateModified": journal.date,
+    "author": [{
+      "@type": "Person",
+      "name": "YogaJam Editorial",
+      "url": "https://yogajam.fit/about"
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "YogaJam",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://yogajam.fit/icon.png"
+      }
+    },
+    "description": journal.excerpt
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={articleSchema} />
       {/* Cinematic Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] w-full">
         <Image 

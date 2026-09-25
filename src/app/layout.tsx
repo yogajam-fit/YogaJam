@@ -13,8 +13,40 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "YogaJam",
-  description: "A cinematic dark wellness experience.",
+  metadataBase: new URL('https://yogajam.fit'),
+  title: {
+    default: "YogaJam | Where Life Feels Alive",
+    template: "%s | YogaJam",
+  },
+  description: "Immerse yourself in YogaJam's signature cinematic wellness experiences in Bengaluru. From Bollywood yoga to live music events and private celebrations.",
+  applicationName: "YogaJam",
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "YogaJam | Where Life Feels Alive",
+    description: "Immerse yourself in YogaJam's signature cinematic wellness experiences in Bengaluru.",
+    url: "https://yogajam.fit",
+    siteName: "YogaJam",
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "YogaJam | Where Life Feels Alive",
+    description: "Immerse yourself in YogaJam's signature cinematic wellness experiences in Bengaluru.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: "/site.webmanifest",
 };
 
@@ -37,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${manrope.variable} antialiased`}
+      className={`${inter.variable} ${manrope.variable} antialiased scroll-smooth`}
     >
       <body className="min-h-screen flex flex-col overscroll-none">
         <ClientLayoutWrapper>

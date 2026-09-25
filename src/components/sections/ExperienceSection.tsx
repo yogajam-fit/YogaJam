@@ -3,11 +3,11 @@
 import { Container } from "@/components/ui/Container";
 import { useState, useRef, useEffect } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { experiencesData as defaultExperiences } from "@/content/experiences";
 import { createClient } from "@/utils/supabase/client";
 
 export function ExperienceSection() {
-  const [experiences, setExperiences] = useState<any[]>(defaultExperiences);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -22,6 +22,7 @@ export function ExperienceSection() {
           videoSrc: item.video_url
         })));
       }
+      setIsLoading(false);
     }
     fetchChannel();
   }, []);
@@ -84,7 +85,7 @@ export function ExperienceSection() {
   };
 
   return (
-    <section className="py-6 md:py-8 relative z-10 bg-background overflow-hidden">
+    <section id="channel" className="py-6 md:py-8 relative z-10 bg-background overflow-hidden">
       <Container>
         <div className="flex flex-col-reverse md:flex-row md:items-center justify-between gap-6 md:gap-16">
           
@@ -92,11 +93,17 @@ export function ExperienceSection() {
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
             {/* Deck Container */}
             <div 
-              className="relative h-[65vh] md:h-[75vh] aspect-[10/16] shrink-0 mx-auto touch-pan-y"
+              className="relative h-[65vh] md:h-[75vh] aspect-[10/16] shrink-0 mx-auto touch-pan-y rounded-2xl bg-black"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/50 rounded-2xl pointer-events-none">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/images/loader.svg" alt="Loading..." className="w-12 h-12 animate-pulse drop-shadow-xl" />
+                </div>
+              )}
               {experiences.map((exp, idx) => {
                 const len = experiences.length;
                 const diff = (idx - currentIndex + len) % len;
@@ -136,6 +143,7 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
+                      preload={diff === 0 ? "auto" : "none"}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
                     >
@@ -211,10 +219,13 @@ export function ExperienceSection() {
           <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
             <SectionHeading 
               title="YogaJam Channel"
-              subtitle="From sunrise flows to high-energy nights — here's what happens when people come together."
+              subtitle="Move Better. Live More."
               align="left"
               className="!mb-0"
             />
+            <p className="mt-6 text-foreground-secondary text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
+              Discover the benefits of yoga, wellness, and movement through our Jams. Get inspired, learn something new, and explore a lifestyle that brings people together.
+            </p>
           </div>
 
         </div>
