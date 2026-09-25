@@ -649,7 +649,7 @@ function VideoWithLoader({ src }: { src: string }) {
         <>
           <button
             onClick={toggleFullscreen}
-            className="absolute bottom-4 left-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-0 group-hover:opacity-100"
+            className="absolute bottom-4 left-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-100 md:opacity-0 md:group-hover:opacity-100"
             aria-label="Fullscreen"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -659,7 +659,7 @@ function VideoWithLoader({ src }: { src: string }) {
 
           <button
             onClick={toggleMute}
-            className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-0 group-hover:opacity-100"
+            className="absolute bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 hover:scale-110 transition-all duration-300 shadow-xl opacity-100 md:opacity-0 md:group-hover:opacity-100"
             aria-label={isMuted ? "Unmute video" : "Mute video"}
           >
             {isMuted ? (
