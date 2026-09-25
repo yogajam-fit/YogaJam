@@ -247,8 +247,7 @@ export function ExperienceSection() {
           {/* Right: Section Header */}
           <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
             <SectionHeading 
-              title="YogaJam Channel"
-              subtitle="Move Better. Live More."
+              title={<>YogaJam Channel<br/>Move Better. Live More.</>}
               align="left"
               className="!mb-0"
             />
