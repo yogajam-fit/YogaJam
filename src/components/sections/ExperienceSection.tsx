@@ -10,7 +10,10 @@ export function ExperienceSection() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [isInView, setIsInView] = useState(false);
+  
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -37,18 +40,44 @@ export function ExperienceSection() {
     setIsMuted(!isMuted);
   };
 
+  // Intersection Observer for viewport playback
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 } // Trigger when at least 10% of the section is visible
+    );
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Play current video, pause others
   useEffect(() => {
     videoRefs.current.forEach((video, idx) => {
       if (!video) return;
+      
+      // We only want to force currentTime = 0 if we're actually changing videos,
+      // not just scrolling in and out of view.
       if (idx === currentIndex) {
-        video.currentTime = 0;
-        video.play().catch(e => console.log("Playback prevented:", e));
+        if (isInView) {
+          video.play().catch(e => console.log("Playback prevented:", e));
+        } else {
+          video.pause();
+        }
       } else {
         video.pause();
+        // reset inactive videos so they start from beginning next time
+        video.currentTime = 0;
       }
     });
-  }, [currentIndex]);
+  }, [currentIndex, isInView]);
 
   const nextExperience = () => {
     setCurrentIndex((prev) => (prev + 1) % experiences.length);
@@ -85,7 +114,7 @@ export function ExperienceSection() {
   };
 
   return (
-    <section id="channel" className="py-6 md:py-8 relative z-10 bg-background overflow-hidden">
+    <section ref={sectionRef} id="channel" className="py-6 md:py-8 relative z-10 bg-background overflow-hidden">
       <Container>
         <div className="flex flex-col-reverse md:flex-row md:items-center justify-between gap-6 md:gap-16">
           
