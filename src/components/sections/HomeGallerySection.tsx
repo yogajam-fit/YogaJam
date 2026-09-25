@@ -10,6 +10,7 @@ import Link from "next/link";
 export function HomeGallerySection() {
   const [dbImages, setDbImages] = useState<{id: string, src: string, alt: string}[]>([]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const exactScrollLeftRef = React.useRef<number>(0);
   const [isInteracting, setIsInteracting] = useState(false);
   const supabase = createClient();
 
@@ -46,25 +47,44 @@ export function HomeGallerySection() {
     // Wait 2 seconds before resuming auto-scroll to let momentum scroll finish
     interactTimeoutRef.current = setTimeout(() => {
       setIsInteracting(false);
+      // Resync float tracker with actual scroll position
+      if (scrollRef.current) {
+        exactScrollLeftRef.current = scrollRef.current.scrollLeft;
+      }
     }, 2000);
+  };
+
+  const handleScroll = () => {
+    // Keep tracker in sync while user is manually scrolling
+    if (isInteracting && scrollRef.current) {
+      exactScrollLeftRef.current = scrollRef.current.scrollLeft;
+    }
   };
 
   useEffect(() => {
     let animationFrameId: number;
     let lastTime = performance.now();
     
+    // Init float tracker
+    if (scrollRef.current && exactScrollLeftRef.current === 0) {
+      exactScrollLeftRef.current = scrollRef.current.scrollLeft;
+    }
+    
     const autoScroll = (time: number) => {
       const deltaTime = time - lastTime;
       lastTime = time;
       
       if (scrollRef.current && !isInteracting) {
-        // scroll by some amount (e.g. 0.05px per ms)
-        scrollRef.current.scrollLeft += deltaTime * 0.05;
+        // Accumulate exact scroll position safely
+        exactScrollLeftRef.current += deltaTime * 0.05;
         
         // Loop back logic
-        if (scrollRef.current.scrollLeft >= (scrollRef.current.scrollWidth / 2)) {
-          scrollRef.current.scrollLeft -= (scrollRef.current.scrollWidth / 2);
+        const maxScroll = scrollRef.current.scrollWidth / 2;
+        if (exactScrollLeftRef.current >= maxScroll) {
+          exactScrollLeftRef.current -= maxScroll;
         }
+        
+        scrollRef.current.scrollLeft = exactScrollLeftRef.current;
       }
       animationFrameId = requestAnimationFrame(autoScroll);
     };
@@ -110,6 +130,7 @@ export function HomeGallerySection() {
             onTouchStart={handleInteractionStart}
             onTouchEnd={handleInteractionEnd}
             onTouchCancel={handleInteractionEnd}
+            onScroll={handleScroll}
             className="flex w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
           >
             {itemsToRender.map((image, index) => (
