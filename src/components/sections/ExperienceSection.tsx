@@ -252,7 +252,7 @@ export function ExperienceSection() {
               align="left"
               className="!mb-0"
             />
-            <p className="mt-6 text-foreground-secondary text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
+            <p className="hidden md:block mt-6 text-foreground-secondary text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
               Discover the benefits of yoga, wellness, and movement through our Jams. Get inspired, learn something new, and explore a lifestyle that brings people together.
             </p>
           </div>

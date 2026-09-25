@@ -14,7 +14,7 @@ export function AboutSection() {
           <div className="md:w-1/2 shrink-0">
             <SectionHeading 
               title={<>This isn&apos;t a workout.<br/>This is YogaJam.</>}
-              subtitle="We blend high-energy movement, deep house beats, and an electric community to create wellness experiences you actually want to show up for."
+              subtitle={<span className="hidden md:inline">We blend high-energy movement, deep house beats, and an electric community to create wellness experiences you actually want to show up for.</span>}
               align="left"
             />
           </div>
