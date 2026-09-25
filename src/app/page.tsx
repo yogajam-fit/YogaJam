@@ -142,6 +142,7 @@ export default async function Home() {
       <ExperienceSection />
       <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
       <ReviewsSection />
+      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
       <HomeGallerySection />
     </main>
   );

@@ -105,7 +105,7 @@ export function HomeGallerySection() {
   if (itemsToUse.length === 0 && !isLoading) return null;
 
   return (
-    <section className="py-12 md:py-16 relative overflow-hidden bg-background">
+    <section className="py-6 md:py-8 relative overflow-hidden bg-background">
       <Container>
         <div className="flex items-end justify-between mb-4 md:mb-6">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight tracking-tight max-w-[70%]">
