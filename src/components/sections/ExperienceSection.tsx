@@ -92,7 +92,7 @@ export function ExperienceSection() {
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
             {/* Deck Container */}
             <div 
-              className="relative h-[65vh] md:h-[75vh] aspect-[10/16] shrink-0 mx-auto"
+              className="relative h-[65vh] md:h-[75vh] aspect-[10/16] shrink-0 mx-auto touch-pan-y"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}

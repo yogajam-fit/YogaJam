@@ -71,14 +71,28 @@ export function EventsTable() {
     
     // Extract media paths to delete from storage
     const eventToDelete = events.find(e => e.id === id)
-    // Note: We skip deleting media from ImageKit to preserve historical backups
-    // as it requires specific fileIds which we don't store in the database currently.
     
     const { error } = await supabase.from('events').delete().eq('id', id)
     
     if (error) {
       alert('Failed to delete event: ' + error.message)
       return
+    }
+
+    if (eventToDelete) {
+      const urlsToDelete = [];
+      if (eventToDelete.video) urlsToDelete.push(eventToDelete.video);
+      if (eventToDelete.past_videos && eventToDelete.past_videos.length > 0) {
+        urlsToDelete.push(...eventToDelete.past_videos);
+      }
+      
+      for (const url of urlsToDelete) {
+        await fetch('/api/imagekit-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        }).catch(err => console.error('Failed to delete from ImageKit:', err));
+      }
     }
     
     setEvents(events.filter(e => e.id !== id))

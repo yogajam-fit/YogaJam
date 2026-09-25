@@ -30,6 +30,25 @@ export function HomeGallerySection() {
   // We duplicate it to allow the scroll loop to jump back to 0 seamlessly
   const itemsToRender = [...itemsToUse, ...itemsToUse];
 
+  const interactTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleInteractionStart = () => {
+    setIsInteracting(true);
+    if (interactTimeoutRef.current) {
+      clearTimeout(interactTimeoutRef.current);
+    }
+  };
+
+  const handleInteractionEnd = () => {
+    if (interactTimeoutRef.current) {
+      clearTimeout(interactTimeoutRef.current);
+    }
+    // Wait 2 seconds before resuming auto-scroll to let momentum scroll finish
+    interactTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 2000);
+  };
+
   useEffect(() => {
     let animationFrameId: number;
     let lastTime = performance.now();
@@ -42,9 +61,7 @@ export function HomeGallerySection() {
         // scroll by some amount (e.g. 0.05px per ms)
         scrollRef.current.scrollLeft += deltaTime * 0.05;
         
-        // Loop back logic: if we scrolled past exactly half the scrollWidth, jump to 0
-        // Because the array is exactly duplicated, half the scrollWidth is exactly the end of the first set.
-        // We use scrollWidth / 2 minus a tiny buffer to avoid edge cases.
+        // Loop back logic
         if (scrollRef.current.scrollLeft >= (scrollRef.current.scrollWidth / 2)) {
           scrollRef.current.scrollLeft -= (scrollRef.current.scrollWidth / 2);
         }
@@ -55,6 +72,13 @@ export function HomeGallerySection() {
     animationFrameId = requestAnimationFrame(autoScroll);
     return () => cancelAnimationFrame(animationFrameId);
   }, [isInteracting]);
+
+  // Clean up timeout
+  useEffect(() => {
+    return () => {
+      if (interactTimeoutRef.current) clearTimeout(interactTimeoutRef.current);
+    };
+  }, []);
 
   if (itemsToUse.length === 0) return null;
 
@@ -81,10 +105,11 @@ export function HomeGallerySection() {
 
           <div 
             ref={scrollRef}
-            onMouseEnter={() => setIsInteracting(true)}
-            onMouseLeave={() => setIsInteracting(false)}
-            onTouchStart={() => setIsInteracting(true)}
-            onTouchEnd={() => setIsInteracting(false)}
+            onMouseEnter={handleInteractionStart}
+            onMouseLeave={handleInteractionEnd}
+            onTouchStart={handleInteractionStart}
+            onTouchEnd={handleInteractionEnd}
+            onTouchCancel={handleInteractionEnd}
             className="flex w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
           >
             {itemsToRender.map((image, index) => (

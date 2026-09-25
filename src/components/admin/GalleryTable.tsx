@@ -103,12 +103,23 @@ export function GalleryTable() {
     if (!confirm('Are you sure you want to delete this image?')) return
     
     try {
+      const itemToDelete = images.find(img => img.id === id);
+
       const { error } = await supabase
         .from('gallery')
         .delete()
         .eq('id', id)
         
       if (error) throw error
+
+      if (itemToDelete && itemToDelete.url) {
+        await fetch('/api/imagekit-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: itemToDelete.url })
+        }).catch(err => console.error('Failed to delete from ImageKit:', err));
+      }
+
       setImages(images.filter(img => img.id !== id))
     } catch (error: any) {
       alert('Error deleting image: ' + error.message)

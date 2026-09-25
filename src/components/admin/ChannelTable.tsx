@@ -35,10 +35,19 @@ export function ChannelTable() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this video?')) return
 
+    const videoToDelete = videos.find(v => v.id === id);
+
     const { error } = await supabase.from('channel').delete().eq('id', id)
     if (error) {
       alert('Error deleting video: ' + error.message)
     } else {
+      if (videoToDelete && videoToDelete.video_url) {
+        await fetch('/api/imagekit-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: videoToDelete.video_url })
+        }).catch(err => console.error('Failed to delete from ImageKit:', err));
+      }
       fetchVideos()
     }
   }
