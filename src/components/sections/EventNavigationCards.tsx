@@ -42,11 +42,7 @@ export function EventNavigationCards() {
             >
               <div className="absolute inset-0 bg-black/40 pointer-events-none" />
               <h3 className="relative z-10 text-base sm:text-xl md:text-2xl font-bold font-heading text-white drop-shadow-lg text-center px-2">Host Your Event</h3>
-              <div className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-10">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </div>
+
             </Link>
           </div>
         </div>
