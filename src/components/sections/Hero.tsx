@@ -132,12 +132,12 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
 
         {/* Cinematic gradient overlays */}
         {/* Mobile: Cinematic bottom gradient to provide text readability without muting the top of the photo */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background from-10% via-background/80 via-40% to-transparent to-70% z-10 pointer-events-none md:hidden" />
+        <div className={`absolute inset-0 bg-gradient-to-t from-background from-10% via-background/80 via-40% to-transparent to-70% z-10 pointer-events-none md:hidden transition-opacity duration-700 ${showVideo ? "opacity-70" : "opacity-100"}`} />
         
         {/* Desktop overlays */}
-        <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none" />
-        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none" />
-        <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none" />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-60" : "opacity-100"}`} />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-30" : "opacity-100"}`} />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-0" : "opacity-100"}`} />
       </div>
 
       {/* Mobile Mute/Unmute Button (Floating Top Right) */}
@@ -207,7 +207,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                     <span>{item.venue}</span>
                   </div>
 
-                  <p className="text-white/90 text-[13px] md:text-base max-w-xl leading-snug md:leading-relaxed font-medium line-clamp-3 overflow-hidden drop-shadow-md">
+                  <p className="text-white/90 text-[13px] md:text-base max-w-xl leading-snug md:leading-relaxed font-medium line-clamp-2 md:line-clamp-3 overflow-hidden drop-shadow-md">
                     {item.desc}
                   </p>
                 </div>

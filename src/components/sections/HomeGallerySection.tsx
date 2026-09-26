@@ -108,11 +108,11 @@ export function HomeGallerySection() {
     <section className="py-6 md:py-8 relative overflow-hidden bg-background">
       <Container>
         <div className="flex items-end justify-between mb-4 md:mb-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight tracking-tight max-w-[70%]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold uppercase tracking-wide text-text-primary leading-tight pb-1 max-w-[70%]">
             <span className="md:hidden">Gallery</span>
             <span className="hidden md:inline">Glimpse from our events</span>
           </h2>
-          <Link href="/gallery" className="text-foreground-secondary hover:text-accent font-medium text-xs md:text-sm flex items-center group transition-colors pb-1">
+          <Link href="/gallery" className="text-text-secondary hover:text-accent font-semibold text-xs md:text-sm flex items-center group transition-colors pb-1">
             <span>View all</span>
             <svg className="h-3 w-0 opacity-0 -translate-x-2 group-hover:w-3 md:group-hover:w-4 group-hover:opacity-100 group-hover:translate-x-1 group-hover:ml-1.5 transition-all duration-300 ease-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

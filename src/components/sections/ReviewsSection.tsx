@@ -49,19 +49,19 @@ function TextReviewSlot({
   if (!currentReview) return null;
 
   return (
-    <div className="col-span-1 aspect-[4/5] sm:aspect-square md:aspect-[4/3] min-h-[220px] w-full rounded-2xl bg-surface border border-border p-4 sm:p-5 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface/60 transition-colors duration-500">
-      <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-white/[0.03] group-hover:text-white/[0.05] rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+    <div className="col-span-1 aspect-[4/5] sm:aspect-square md:aspect-[4/3] min-h-[220px] w-full rounded-2xl bg-surface-card border border-border-subtle p-4 sm:p-5 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface-card-elevated transition-colors duration-500 shadow-sm">
+      <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-foreground-secondary/15 group-hover:text-foreground-secondary/25 rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033zm-14.017 0v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033z" />
       </svg>
       <div className={`h-full w-full relative z-10 transition-opacity duration-1000 ease-in-out ${opacity ? 'opacity-100' : 'opacity-0'}`}>
         <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-1 flex flex-col">
           <div className="m-auto w-full py-1 flex flex-col">
-            <p className="text-foreground-secondary text-xs sm:text-sm lg:text-base italic leading-relaxed order-2 md:order-1">
+            <p className="text-text-primary/95 font-medium text-sm sm:text-base lg:text-lg italic leading-relaxed order-2 md:order-1">
               {currentReview.text}
             </p>
             <div className="flex items-center gap-2 order-1 md:order-2 mb-3 md:mb-0 md:mt-4 lg:mt-6">
-              <div className="h-[1px] w-4 bg-accent/50 shrink-0" />
-              <p className="text-foreground text-[10px] sm:text-xs font-bold tracking-wider uppercase truncate">
+              <div className="h-[2px] w-6 bg-accent shrink-0" />
+              <p className="text-text-accent text-[11px] sm:text-xs font-bold tracking-wider uppercase truncate">
                 {currentReview.author}
               </p>
             </div>
@@ -107,17 +107,22 @@ export function ReviewsSection() {
           {/* Top Row: Title & Stats */}
           <div className="flex flex-col gap-2 md:gap-6 col-span-2 md:col-span-2 lg:col-span-1 mb-4 md:mb-0">
             <SectionHeading 
-              title="What our happy jammers say"
+              title={
+                <>
+                  <span className="md:hidden">What our happy<br/>jammers say</span>
+                  <span className="hidden md:inline">What our happy jammers say</span>
+                </>
+              }
               align="left"
             />
             <div className="flex items-center gap-6">
               <div>
-                <p className="text-3xl font-bold text-foreground font-heading">2+</p>
-                <p className="text-xs text-foreground-secondary uppercase tracking-widest mt-1">Events</p>
+                <p className="text-3xl font-bold text-text-primary font-heading">2+</p>
+                <p className="text-xs text-text-secondary uppercase tracking-widest mt-1 font-medium">Events</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-foreground font-heading">100+</p>
-                <p className="text-xs text-foreground-secondary uppercase tracking-widest mt-1">Jammers & counting</p>
+                <p className="text-3xl font-bold text-text-primary font-heading">100+</p>
+                <p className="text-xs text-text-secondary uppercase tracking-widest mt-1 font-medium">Jammers & counting</p>
               </div>
             </div>
           </div>
@@ -150,22 +155,22 @@ export function ReviewsSection() {
           {/* Bottom Row: Call to Action (Share Experience) */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 h-full w-full">
             <ReviewModal>
-              <div className="h-full w-full aspect-auto lg:aspect-[4/3] rounded-2xl bg-surface/40 hover:bg-surface/80 transition-colors duration-500 border border-border p-6 md:p-8 flex flex-col justify-center relative overflow-hidden group cursor-pointer min-h-[200px]">
+              <div className="h-full w-full aspect-auto lg:aspect-[4/3] rounded-2xl bg-surface-card hover:bg-surface-card-elevated transition-colors duration-500 border border-border-subtle p-6 md:p-8 flex flex-col justify-center relative overflow-hidden group cursor-pointer min-h-[200px] shadow-sm">
                 {/* Background Decorative Icon */}
-                <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none">
+                <div className="absolute -right-6 -bottom-6 opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-500 pointer-events-none">
                   <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033zm-14.017 0v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033z" />
                   </svg>
                 </div>
 
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-heading text-foreground mb-2 md:mb-3 relative z-10">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-heading text-text-primary mb-2 md:mb-3 relative z-10">
                   Got a story?
                 </h3>
-                <p className="text-foreground-secondary text-xs md:text-sm leading-relaxed mb-6 md:mb-8 relative z-10">
+                <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-6 md:mb-8 relative z-10 font-medium">
                   We&apos;d love to hear how YogaJam moved you. Share your own experience and join our growing community of happy clients.
                 </p>
 
-                <div className="flex items-center gap-2 md:gap-3 text-accent font-medium text-xs md:text-sm tracking-wide uppercase relative z-10 w-fit border-b border-accent/30 pb-1 group-hover:border-accent transition-colors">
+                <div className="flex items-center gap-2 md:gap-3 text-text-accent font-semibold text-xs md:text-sm tracking-wide uppercase relative z-10 w-fit border-b border-accent/30 pb-1 group-hover:border-accent transition-colors">
                   Share your experience
                   <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

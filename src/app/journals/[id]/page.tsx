@@ -95,7 +95,7 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-foreground leading-tight mb-6">
               {journal.title}
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-text-primary/95 leading-relaxed font-medium">
               {journal.excerpt}
             </p>
           </div>
@@ -169,14 +169,14 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
                     <header className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
-                        <time dateTime={article.date} className="text-sm font-medium text-foreground/70">
+                        <time dateTime={article.date} className="text-sm font-medium text-text-secondary">
                           {new Date(article.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </time>
                       </div>
                       <h3 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-3 leading-tight group-hover:text-accent transition-colors duration-300">
                         {article.title}
                       </h3>
-                      <p className="text-foreground/80 line-clamp-2 text-sm md:text-base leading-relaxed">
+                      <p className="text-text-primary/95 line-clamp-2 text-sm md:text-base leading-relaxed">
                         {article.excerpt}
                       </p>
                     </header>

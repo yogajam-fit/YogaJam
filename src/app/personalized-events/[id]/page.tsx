@@ -21,7 +21,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
   return (
     <main className="min-h-screen bg-background">
       {/* Cinematic Hero */}
-      <section className="relative w-full min-h-[50vh] md:h-[70vh] flex items-end pb-8 md:pb-16 pt-28 md:pt-32">
+      <section className="relative w-full min-h-[60vh] md:min-h-[70vh] flex items-end pb-8 md:pb-8 pt-28 md:pt-32">
         <div className="absolute inset-0 z-0 bg-black">
           <Image
             src={event.image}
@@ -39,7 +39,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
         <Container className="relative z-10 w-full">
           <div className="max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground font-heading mb-4 drop-shadow-lg leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground font-heading mb-4 drop-shadow-lg leading-tight">
               {event.title}
             </h1>
             
@@ -62,7 +62,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
                 </div>
               )}
               {event.location && (
-                <div className="flex items-center gap-2 text-foreground-secondary">
+                <div className="flex items-center gap-2 text-text-secondary">
                   <svg className="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -76,13 +76,13 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
       </section>
 
       {/* Main Content & CTA */}
-      <section className="pt-8 pb-12 md:py-20 relative z-10">
+      <section className="pt-8 pb-12 md:pt-8 md:pb-20 relative z-10">
         <Container>
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
             {/* Description */}
             <div className="w-full lg:w-2/3">
               <SectionHeading title="About this experience" align="left" className="mb-6" />
-              <div className="prose prose-invert prose-lg max-w-none text-foreground-secondary leading-relaxed mb-16">
+              <div className="prose prose-invert prose-lg max-w-none text-text-secondary leading-relaxed mb-16">
                 <div dangerouslySetInnerHTML={{ __html: event.fullDesc }} />
               </div>
 
@@ -95,7 +95,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
                       <svg className="w-5 h-5 text-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6L12 17.2l-6.2 4.5 2.4-7.6L2 9.6h7.6L12 2z" />
                       </svg>
-                      <span className="text-foreground-secondary text-base font-medium">{item}</span>
+                      <span className="text-text-secondary text-base font-medium">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -112,7 +112,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
                       
                       <div className="text-accent-warm text-sm font-semibold tracking-wider uppercase mb-1.5">{step.time}</div>
                       <h4 className="text-lg font-bold text-foreground mb-1">{step.title}</h4>
-                      <p className="text-foreground-secondary text-sm md:text-base">{step.desc}</p>
+                      <p className="text-text-secondary text-sm md:text-base">{step.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -124,7 +124,7 @@ export default async function PersonalizedEventDetailPage({ params }: { params: 
               <div className="lg:sticky lg:top-32 lg:bg-surface/50 lg:backdrop-blur-xl lg:border lg:border-border lg:rounded-3xl lg:p-8 lg:shadow-2xl">
                 <div className="hidden lg:block">
                   <h3 className="text-xl font-bold font-heading mb-2 text-foreground">Inquire Now</h3>
-                  <p className="text-sm text-foreground-secondary mb-6">Our personalized events are custom-tailored to your needs. Reach out to start planning.</p>
+                  <p className="text-sm text-text-secondary mb-6">Our personalized events are custom-tailored to your needs. Reach out to start planning.</p>
                 </div>
                 <div className="flex flex-row-reverse lg:flex-col gap-3 lg:gap-4 items-center lg:items-stretch max-w-lg mx-auto md:ml-auto md:mr-0 lg:mx-0 lg:max-w-none">
                   <div className="w-[60%] lg:w-full">

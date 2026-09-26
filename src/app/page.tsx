@@ -133,16 +133,16 @@ export default async function Home() {
     <main className="flex-1 flex flex-col">
       <JsonLd data={organizationSchema} />
       <Hero items={heroItems} />
-      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <div className="md:hidden w-[90%] mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-accent/80 to-transparent shadow-[0_0_12px_rgba(200,232,107,0.4)]" />
       <EventNavigationCards />
-      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <div className="md:hidden w-[90%] mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-accent/80 to-transparent shadow-[0_0_12px_rgba(200,232,107,0.4)]" />
       <AboutSection />
-      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <div className="md:hidden w-[90%] mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-accent/80 to-transparent shadow-[0_0_12px_rgba(200,232,107,0.4)]" />
 
       <ExperienceSection />
-      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <div className="md:hidden w-[90%] mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-accent/80 to-transparent shadow-[0_0_12px_rgba(200,232,107,0.4)]" />
       <ReviewsSection />
-      <div className="md:hidden w-[85%] mx-auto h-px bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent" />
+      <div className="md:hidden w-[90%] mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-accent/80 to-transparent shadow-[0_0_12px_rgba(200,232,107,0.4)]" />
       <HomeGallerySection />
     </main>
   );

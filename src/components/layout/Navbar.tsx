@@ -50,7 +50,7 @@ export function Navbar() {
       )}
     >
       {/* Mobile: Cinematic top gradient to ensure navbar visibility over bright videos */}
-      <div className="absolute top-0 left-0 w-full h-[140px] bg-gradient-to-b from-background from-10% via-background/80 via-40% to-transparent to-80% -z-10 pointer-events-none md:hidden" />
+      <div className="absolute top-0 left-0 w-full h-[90px] bg-gradient-to-b from-background from-20% via-background/70 via-60% to-transparent -z-10 pointer-events-none md:hidden" />
 
       <Container className="flex items-center justify-between relative z-50">
         {/* Logo */}
@@ -59,7 +59,7 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(false)}
           className="text-xl font-bold tracking-tight text-foreground uppercase flex items-center gap-1 font-heading"
         >
-          <NextImage src="/images/logo-medium.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-8 sm:h-12" unoptimized />
+          <NextImage src="/images/logo-medium.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-10 sm:h-12" unoptimized />
         </Link>
 
         {/* Right side: Nav + CTA */}

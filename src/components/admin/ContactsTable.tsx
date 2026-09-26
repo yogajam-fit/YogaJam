@@ -112,7 +112,7 @@ export function ContactsTable() {
         </div>
 
         {isEditingContact && contact ? (
-          <form onSubmit={handleUpdateContact} className="space-y-4 mb-6 bg-background/50 p-6 rounded-xl border border-border">
+          <form onSubmit={handleUpdateContact} className="space-y-4 mb-6 bg-background/80 p-6 rounded-xl border border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-foreground-secondary text-sm mb-1">General Email</label>
@@ -139,19 +139,19 @@ export function ContactsTable() {
           </form>
         ) : contact ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-background/50 p-4 rounded-xl border border-border">
+            <div className="bg-background/80 p-4 rounded-xl border border-border">
               <p className="text-xs text-foreground-secondary uppercase tracking-wider mb-1">General Email</p>
               <p className="font-medium text-foreground">{contact.email}</p>
             </div>
-            <div className="bg-background/50 p-4 rounded-xl border border-border">
+            <div className="bg-background/80 p-4 rounded-xl border border-border">
               <p className="text-xs text-foreground-secondary uppercase tracking-wider mb-1">Partnerships Email</p>
               <p className="font-medium text-foreground">{contact.partnerships_email}</p>
             </div>
-            <div className="bg-background/50 p-4 rounded-xl border border-border">
+            <div className="bg-background/80 p-4 rounded-xl border border-border">
               <p className="text-xs text-foreground-secondary uppercase tracking-wider mb-1">Phone Number</p>
               <p className="font-medium text-foreground">{contact.phone}</p>
             </div>
-            <div className="bg-background/50 p-4 rounded-xl border border-border">
+            <div className="bg-background/80 p-4 rounded-xl border border-border">
               <p className="text-xs text-foreground-secondary uppercase tracking-wider mb-1">WhatsApp Number</p>
               <p className="font-medium text-foreground">{contact.whatsapp}</p>
             </div>
@@ -174,7 +174,7 @@ export function ContactsTable() {
         </div>
 
         {isAddingSocial && (
-          <form onSubmit={handleAddSocial} className="space-y-4 mb-6 bg-background/50 p-6 rounded-xl border border-border animate-in fade-in slide-in-from-top-4">
+          <form onSubmit={handleAddSocial} className="space-y-4 mb-6 bg-background/80 p-6 rounded-xl border border-border animate-in fade-in slide-in-from-top-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-foreground-secondary text-sm mb-1">Platform</label>
@@ -184,11 +184,12 @@ export function ContactsTable() {
                   <option value="linkedin">LinkedIn</option>
                   <option value="twitter">Twitter</option>
                   <option value="facebook">Facebook</option>
+                  <option value="whatsapp">WhatsApp</option>
                 </select>
               </div>
               <div>
-                <label className="block text-foreground-secondary text-sm mb-1">Profile URL</label>
-                <input required name="url" type="url" placeholder="https://..." className="w-full bg-background border border-border rounded-lg p-2 text-foreground" />
+                <label className="block text-foreground-secondary text-sm mb-1">Profile URL / Number</label>
+                <input required name="url" type="text" placeholder="https://... or Phone Number" className="w-full bg-background border border-border rounded-lg p-2 text-foreground" />
               </div>
             </div>
             <div className="flex justify-end pt-2">

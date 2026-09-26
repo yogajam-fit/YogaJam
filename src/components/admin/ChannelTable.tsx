@@ -82,6 +82,67 @@ export function ChannelTable() {
     }
   }
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    const validFiles = Array.from(files).filter(file => file.type.startsWith('video/'))
+    
+    if (validFiles.length !== files.length) {
+      alert('Some files were ignored because only video files are allowed!')
+    }
+    
+    if (validFiles.length === 0) {
+      e.target.value = ''
+      return
+    }
+
+    setLoadingMessage(`Uploading ${validFiles.length} video(s)...`)
+    let uploadedCount = 0
+    
+    try {
+      for (const file of validFiles) {
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("folder", '/channel')
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        })
+
+        if (!response.ok) {
+          console.error(`Upload failed for ${file.name}`)
+          continue
+        }
+
+        const data = await response.json()
+        
+        const { error: dbError } = await supabase
+          .from('channel')
+          .insert({ video_url: data.url })
+          
+        if (dbError) {
+          console.error(`Database insert failed for ${file.name}`, dbError)
+          continue
+        }
+        
+        uploadedCount++
+      }
+      
+      if (uploadedCount > 0) {
+        await fetchVideos()
+      } else {
+        alert('No videos were successfully uploaded.')
+      }
+    } catch (error: any) {
+      alert(`Error uploading video(s): ` + error.message)
+    } finally {
+      setLoadingMessage(null)
+      e.target.value = ''
+    }
+  }
+
   if (loading) {
     return <Loader />
   }
@@ -89,12 +150,22 @@ export function ChannelTable() {
   return (
     <div className="space-y-6">
       {loadingMessage && <FullscreenLoader message={loadingMessage} />}
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
+        <label className="cursor-pointer bg-surface hover:bg-surface-elevated border border-border px-4 py-2 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
+          Upload Videos
+          <input 
+            type="file" 
+            accept="video/*" 
+            multiple
+            className="hidden" 
+            onChange={handleFileUpload} 
+          />
+        </label>
         <button 
           onClick={() => setIsAdding(!isAdding)}
           className="bg-accent hover:bg-accent-warm px-4 py-2 rounded-lg text-background text-sm font-bold flex items-center transition-colors"
         >
-          {isAdding ? 'Cancel' : '+ Add Channel Video'}
+          {isAdding ? 'Cancel' : '+ Add via URL'}
         </button>
       </div>
 

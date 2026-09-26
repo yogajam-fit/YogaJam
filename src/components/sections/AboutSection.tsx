@@ -10,7 +10,7 @@ export function AboutSection() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col justify-center">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 md:gap-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-12">
           <div className="md:w-1/2 shrink-0">
             <SectionHeading 
               title={<>This isn&apos;t a workout.<br/>This is YogaJam.</>}

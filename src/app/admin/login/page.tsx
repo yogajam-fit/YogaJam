@@ -184,7 +184,7 @@ function LoginForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
+                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-70 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full ease-out" />
                   <span className="relative flex items-center justify-center gap-2 tracking-wide">
@@ -240,7 +240,7 @@ function LoginForm() {
                 <button
                   type="submit"
                   disabled={loading || otpArray.some(val => !val)}
-                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-50 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
+                  className="group relative w-full flex justify-center py-3.5 px-4 border border-border rounded-xl text-sm font-medium text-foreground bg-foreground/ hover:bg-foreground/ hover:border-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#050505] focus:ring-white/50 disabled:opacity-70 disabled:hover:bg-foreground/ disabled:hover:border-border transition-all duration-300 overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full ease-out" />
                   <span className="relative flex items-center justify-center gap-2 tracking-wide">

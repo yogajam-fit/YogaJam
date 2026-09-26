@@ -4,6 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { BaseModal } from "./BaseModal";
 import { Button } from "./Button";
+import { DatePicker } from "./DatePicker";
 import { createClient } from "@/utils/supabase/client";
 
 interface FormData {
@@ -149,8 +150,20 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               name: formData.fullName,
             })
           })
+
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: 'contact@yogajam.fit',
+              subject: 'New Build-Your-Own Event Request',
+              type: 'admin_host_notification',
+              name: formData.fullName,
+              eventTitle: 'Build Your Own Event',
+            })
+          })
         } catch (err) {
-          console.error("Failed to send host confirmation email", err)
+          console.error("Failed to send emails", err)
         }
         
         setStep("success");
@@ -200,7 +213,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
             </div>
             <button 
               onClick={onClose}
-              className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/50 border border-border"
+              className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/80 border border-border"
               aria-label="Close dialog"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -247,7 +260,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   className={`p-4 rounded-xl border text-left transition-all duration-200 ${
                     formData.eventType === type 
                     ? "border-accent bg-accent/10 text-foreground" 
-                    : "border-border bg-background/50 text-foreground-secondary hover:border-border hover:bg-foreground/"
+                    : "border-border bg-background/80 text-foreground-secondary hover:border-border hover:bg-foreground/"
                   }`}
                 >
                   <div className="font-semibold text-sm">{type}</div>
@@ -264,7 +277,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   placeholder="Tell us what you're planning..."
                   value={formData.customEventType}
                   onChange={(e) => handleChange("customEventType", e.target.value)}
-                  className={`w-full bg-background border ${errors.customEventType ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                  className={`w-full bg-background border ${errors.customEventType ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
                 />
                 {errors.customEventType && <p className="text-red-400 text-sm mt-1.5">{errors.customEventType}</p>}
               </div>
@@ -283,7 +296,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                 placeholder="e.g. 25"
                 value={formData.groupSize}
                 onChange={(e) => handleChange("groupSize", e.target.value.replace(/\D/g, ''))}
-                className={`w-full bg-background border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                className={`w-full bg-background border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
               />
               {errors.groupSize && <p className="text-red-400 text-sm">{errors.groupSize}</p>}
             </div>
@@ -291,13 +304,10 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
             {/* Timeline */}
             <div className="space-y-2">
               <label htmlFor="timeline" className="block text-sm font-semibold text-foreground tracking-wide uppercase">3. Preferred Date / Timeline <span className="text-accent">*</span></label>
-              <input
-                id="timeline"
-                type="text"
-                placeholder="e.g. Next Month or 15 Dec 2026"
+              <DatePicker 
                 value={formData.timeline}
-                onChange={(e) => handleChange("timeline", e.target.value)}
-                className={`w-full bg-background border ${errors.timeline ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+                onChange={(val) => handleChange("timeline", val)}
+                error={!!errors.timeline}
               />
               {errors.timeline && <p className="text-red-400 text-sm">{errors.timeline}</p>}
             </div>
@@ -345,7 +355,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               placeholder="e.g. Mumbai, Bengaluru"
               value={formData.cityName}
               onChange={(e) => handleChange("cityName", e.target.value)}
-              className={`w-full bg-background border ${errors.cityName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+              className={`w-full bg-background border ${errors.cityName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
             />
             {errors.cityName && <p className="text-red-400 text-sm">{errors.cityName}</p>}
           </div>
@@ -359,7 +369,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               placeholder="Tell us what you're imagining — the vibe, people, music, movement, food, or anything else that matters."
               value={formData.vision}
               onChange={(e) => handleChange("vision", e.target.value)}
-              className={`w-full bg-background border ${errors.vision ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none`}
+              className={`w-full bg-background border ${errors.vision ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none`}
             />
             {errors.vision && <p className="text-red-400 text-sm">{errors.vision}</p>}
           </div>
@@ -378,7 +388,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               placeholder="Jane Doe"
               value={formData.fullName}
               onChange={(e) => handleChange("fullName", e.target.value)}
-              className={`w-full bg-background border ${errors.fullName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+              className={`w-full bg-background border ${errors.fullName ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
             />
             {errors.fullName && <p className="text-red-400 text-sm">{errors.fullName}</p>}
           </div>
@@ -391,7 +401,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               placeholder="jane@example.com"
               value={formData.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              className={`w-full bg-background border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+              className={`w-full bg-background border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
             />
             {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
           </div>
@@ -406,20 +416,20 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               placeholder="9876543210"
               value={formData.phone}
               onChange={(e) => handleChange("phone", e.target.value.replace(/\D/g, "").slice(0, 10))}
-              className={`w-full bg-background border ${errors.phone ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+              className={`w-full bg-background border ${errors.phone ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
             />
             {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="company" className="block text-sm font-semibold text-foreground tracking-wide uppercase">Company Name <span className="text-foreground-secondary/50 font-normal normal-case">(Optional)</span></label>
+            <label htmlFor="company" className="block text-sm font-semibold text-foreground tracking-wide uppercase">Company Name <span className="text-text-muted-accessible font-normal normal-case">(Optional)</span></label>
             <input
               id="company"
               type="text"
               placeholder="If applicable"
               value={formData.company}
               onChange={(e) => handleChange("company", e.target.value)}
-              className={`w-full bg-background border border-border rounded-xl px-4 py-3.5 text-foreground placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
+              className={`w-full bg-background border border-border rounded-xl px-4 py-3.5 text-foreground placeholder:text-text-muted-accessible focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all`}
             />
           </div>
         </div>

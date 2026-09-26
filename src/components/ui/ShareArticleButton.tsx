@@ -42,7 +42,7 @@ export function ShareArticleButton() {
     <button 
       onClick={handleShare}
       disabled={isSharing}
-      className="flex items-center gap-2 text-accent font-medium hover:text-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      className="flex items-center gap-2 text-accent font-medium hover:text-accent-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
       title="Share this article"
     >
       {copied ? (

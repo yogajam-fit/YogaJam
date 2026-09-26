@@ -113,7 +113,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
                   id="name" 
                   value={formData.name}
                   onChange={(e) => handleChange("name", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                  className={`w-full bg-background/80 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                   placeholder="Your name"
                 />
                 {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
@@ -126,7 +126,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
                   id="email" 
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                  className={`w-full bg-background/80 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                   placeholder="your@email.com"
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}

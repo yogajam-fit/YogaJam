@@ -281,7 +281,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                               id="email" 
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
-                              className={`w-full bg-background/50 border ${error ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                              className={`w-full bg-background/80 border ${error ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                               placeholder="hello@example.com"
                             />
                             {error && <p className="text-red-400 text-xs mt-1">{error}</p>}

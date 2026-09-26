@@ -66,13 +66,13 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full bg-background/50 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
+          "w-full bg-background/80 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
           error ? "border-red-400/50" : "border-border hover:border-border",
           isOpen && "border-accent/50 ring-1 ring-accent/50",
           className
         )}
       >
-        <span className={value ? "text-foreground" : "text-foreground-secondary/70"}>
+        <span className={value ? "text-foreground" : "text-text-muted-accessible"}>
           {value || "Select time"}
         </span>
         <svg className="w-4 h-4 text-foreground-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">

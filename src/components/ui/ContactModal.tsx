@@ -100,7 +100,7 @@ export function ContactIcons() {
               key={action.id} 
               href={action.href} 
               target={"target" in action ? action.target : undefined}
-              className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-background/50 active:scale-95 transition-all hover:bg-foreground/"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-background/80 active:scale-95 transition-all hover:bg-foreground/"
             >
               <div className="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center bg-surface border border-border" style={{ color: action.color }}>
                 {action.icon}

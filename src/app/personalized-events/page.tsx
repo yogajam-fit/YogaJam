@@ -27,7 +27,7 @@ export default function PersonalizedEventsPage() {
               className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
                 activeCategory === cat
                   ? "bg-accent text-background shadow-[0_0_15px_rgba(200,232,107,0.4)]"
-                  : "bg-surface/50 border border-border text-foreground-secondary hover:text-foreground hover:bg-surface"
+                  : "bg-surface/50 border border-border text-text-secondary hover:text-foreground hover:bg-surface"
               }`}
             >
               {cat}
@@ -45,13 +45,13 @@ export default function PersonalizedEventsPage() {
             >
               <div className="flex flex-col items-center justify-center gap-2 md:gap-4 text-center p-4 md:p-6 w-full h-full relative z-10">
                 <div className="w-full flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-1">
-                  <svg className="w-8 h-8 md:w-12 md:h-12 mx-auto text-foreground-secondary group-hover:text-accent transition-colors duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-8 h-8 md:w-12 md:h-12 mx-auto text-text-secondary group-hover:text-accent transition-colors duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
                 <div className="w-full flex flex-col items-center text-center">
                   <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading text-foreground group-hover:text-accent transition-colors duration-500 md:mb-2 w-full text-center leading-tight">Build Your<br className="md:hidden" /> Own</h3>
-                  <p className="hidden md:block text-foreground-secondary text-sm max-w-[220px] mx-auto text-center">Create a fully custom experience from scratch</p>
+                  <p className="hidden md:block text-text-secondary text-sm max-w-[220px] mx-auto text-center">Create a fully custom experience from scratch</p>
                 </div>
               </div>
             </div>

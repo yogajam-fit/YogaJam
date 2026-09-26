@@ -41,7 +41,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
   return (
     <main className="min-h-screen bg-background">
       {/* Cinematic Hero */}
-      <section className="relative w-full min-h-[50vh] md:h-[70vh] flex items-end pb-8 md:pb-16 pt-28 md:pt-32">
+      <section className="relative w-full min-h-[60vh] md:min-h-[70vh] flex items-end pb-8 md:pb-8 pt-28 md:pt-32">
         <div className="absolute inset-0 z-0 bg-black">
           <Image
             src={event.image}
@@ -70,7 +70,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
         <Container className="relative z-10 w-full">
           <div className="max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground font-heading mb-4 drop-shadow-lg leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground font-heading mb-4 drop-shadow-lg leading-tight">
               {event.title}
             </h1>
 
@@ -96,7 +96,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                   <span className="uppercase">{event.time}</span>
                 </div>
               </div>
-              <div className="flex items-start gap-2 text-foreground-secondary">
+              <div className="flex items-start gap-2 text-text-secondary">
                 <svg className="w-5 h-5 opacity-80 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -124,14 +124,14 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
       </section>
 
       {/* Main Content & CTA */}
-      <section className="pt-8 pb-12 md:py-20 relative z-10">
+      <section className="pt-8 pb-12 md:pt-8 md:pb-20 relative z-10">
         <Container>
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
             {/* Description */}
             <div className="w-full lg:w-2/3">
               
               <SectionHeading title="About this experience" align="left" className="mb-6" />
-              <div className="whitespace-pre-wrap font-sans text-foreground-secondary leading-relaxed mb-16 text-lg">
+              <div className="whitespace-pre-wrap font-sans text-text-secondary leading-relaxed mb-16 text-lg">
                 {event.full_desc}
               </div>
 
@@ -145,7 +145,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                         <svg className="w-5 h-5 text-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6L12 17.2l-6.2 4.5 2.4-7.6L2 9.6h7.6L12 2z" />
                         </svg>
-                        <span className="text-foreground-secondary text-base font-medium">{item}</span>
+                        <span className="text-text-secondary text-base font-medium">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -164,7 +164,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                         
                         <div className="text-accent-warm text-sm font-semibold tracking-wider uppercase mb-1.5">{step.time}</div>
                         <h4 className="text-lg font-bold text-foreground mb-1">{step.title}</h4>
-                        <p className="text-foreground-secondary text-sm md:text-base">{step.desc}</p>
+                        <p className="text-text-secondary text-sm md:text-base">{step.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -190,7 +190,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                 <div className="lg:sticky lg:top-32 lg:bg-surface/50 lg:backdrop-blur-xl lg:border lg:border-border lg:rounded-3xl lg:p-8 lg:shadow-2xl">
                   <div className="hidden lg:block">
                     <h3 className="text-xl font-bold font-heading mb-2 text-foreground">Event Completed</h3>
-                    <p className="text-sm text-foreground-secondary mb-6">This event has already happened. Don't miss out on our future sessions!</p>
+                    <p className="text-sm text-text-secondary mb-6">This event has already happened. Don't miss out on our future sessions!</p>
                   </div>
                   <Link href="/events" className="w-full block">
                     <Button size="lg" variant="primary" className="w-full h-14 text-sm sm:text-base font-semibold shadow-[0_0_20px_rgba(200,232,107,0.2)] hover:shadow-[0_0_30px_rgba(200,232,107,0.4)] transition-all">
@@ -206,7 +206,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
                     <h3 className="text-xl font-bold font-heading mb-2 text-foreground">
                       {event?.booking_type === "coming_soon" ? "Opening Soon" : "Reserve your spot"}
                     </h3>
-                    <p className="text-sm text-foreground-secondary mb-6">
+                    <p className="text-sm text-text-secondary mb-6">
                       {event?.booking_type === "coming_soon" 
                         ? "Booking hasn't opened for this event yet. Check back soon for updates." 
                         : "Spots are extremely limited. Secure your ticket now before we sell out."}
@@ -332,6 +332,23 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
       console.error(error);
       alert("Failed to submit request. Please try again or contact us.");
     } else {
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: 'contact@yogajam.fit',
+            subject: 'New Booking Request - ' + event.title,
+            type: 'admin_booking_notification',
+            name: name,
+            eventTitle: event.title,
+            tickets: numTickets.toString(),
+            amount: totalAmount,
+          })
+        })
+      } catch (err) {
+        console.error("Failed to send admin booking notification", err)
+      }
       setIsSubmitted(true);
     }
   };
@@ -384,7 +401,7 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
       >
         {!isSubmitted ? (
           <>
-            <p className="text-sm text-foreground-secondary mb-6 text-center">
+            <p className="text-sm text-text-secondary mb-6 text-center">
               {step === 1 
                 ? "Please enter your details to reserve your spot." 
                 : "Scan the QR code to pay, then upload a screenshot or enter your UTR number below."}
@@ -393,23 +410,23 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
             {step === 1 ? (
               <form onSubmit={handleNextStep} className="flex flex-col gap-4 animate-in fade-in slide-in-from-right-4 duration-300" noValidate>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Full Name</label>
-                  <input type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  <label className="text-xs font-semibold text-text-secondary uppercase">Full Name</label>
+                  <input type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className={`w-full bg-background/80 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
                   {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Email Address</label>
-                  <input type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  <label className="text-xs font-semibold text-text-secondary uppercase">Email Address</label>
+                  <input type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full bg-background/80 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
                   {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Phone Number</label>
-                  <input type="tel" placeholder="9876543210" value={contact} onChange={(e) => setContact(e.target.value.replace(/\D/g, '').slice(0, 10))} className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                  <label className="text-xs font-semibold text-text-secondary uppercase">Phone Number</label>
+                  <input type="tel" placeholder="9876543210" value={contact} onChange={(e) => setContact(e.target.value.replace(/\D/g, '').slice(0, 10))} className={`w-full bg-background/80 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
                   {errors.contact && <p className="text-red-400 text-xs mt-1">{errors.contact}</p>}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-foreground-secondary uppercase">Number of Tickets</label>
-                  <div className={`flex items-center gap-6 w-max bg-background/50 border ${errors.tickets ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-2 transition-all`}>
+                  <label className="text-xs font-semibold text-text-secondary uppercase">Number of Tickets</label>
+                  <div className={`flex items-center gap-6 w-max bg-background/80 border ${errors.tickets ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-2 transition-all`}>
                     <span className="text-xl font-bold text-foreground font-heading">{numTickets}</span>
                     <div className="flex items-center gap-1.5">
                       <button
@@ -440,7 +457,7 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
               <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                 {event?.price && (
                   <div className="text-center mb-6">
-                    <p className="text-sm text-foreground-secondary font-medium mb-1">Total Amount ({numTickets} {numTickets === 1 ? 'ticket' : 'tickets'})</p>
+                    <p className="text-sm text-text-secondary font-medium mb-1">Total Amount ({numTickets} {numTickets === 1 ? 'ticket' : 'tickets'})</p>
                     <p className="text-3xl font-bold text-accent font-heading">
                       ₹{(parseInt(event.price.replace(/\D/g, ''), 10) * numTickets).toLocaleString('en-IN')}
                     </p>
@@ -456,14 +473,14 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
                   <button
                     type="button"
                     onClick={() => setVerifyMethod('screenshot')}
-                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'screenshot' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'screenshot' ? 'bg-accent text-background' : 'text-text-secondary hover:text-foreground'}`}
                   >
                     Screenshot
                   </button>
                   <button
                     type="button"
                     onClick={() => setVerifyMethod('utr')}
-                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'utr' ? 'bg-accent text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-colors ${verifyMethod === 'utr' ? 'bg-accent text-background' : 'text-text-secondary hover:text-foreground'}`}
                   >
                     UTR Number
                   </button>
@@ -472,13 +489,13 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
                 <form onSubmit={handleQRSubmit} className="flex flex-col gap-4" noValidate>
                   {verifyMethod === 'screenshot' ? (
                     <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <label className="text-xs font-semibold text-foreground-secondary uppercase">Upload Screenshot</label>
+                      <label className="text-xs font-semibold text-text-secondary uppercase">Upload Screenshot</label>
                       <input key="file-input" type="file" accept="image/*" onChange={(e) => setScreenshotFile(e.target.files?.[0] || null)} className="text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20 transition-all cursor-pointer" required />
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <label className="text-xs font-semibold text-foreground-secondary uppercase">Enter UTR Number</label>
-                      <input key="utr-input" type="text" placeholder="Enter 12-digit UTR / Transaction ID" value={utrNumber} onChange={(e) => setUtrNumber(e.target.value.replace(/\D/g, '').slice(0, 12))} pattern="\d{12}" title="UTR Number must be exactly 12 digits" className={`w-full bg-background/50 border ${errors.utr ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
+                      <label className="text-xs font-semibold text-text-secondary uppercase">Enter UTR Number</label>
+                      <input key="utr-input" type="text" placeholder="Enter 12-digit UTR / Transaction ID" value={utrNumber} onChange={(e) => setUtrNumber(e.target.value.replace(/\D/g, '').slice(0, 12))} pattern="\d{12}" title="UTR Number must be exactly 12 digits" className={`w-full bg-background/80 border ${errors.utr ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`} />
                       {errors.utr && <p className="text-red-400 text-xs mt-1">{errors.utr}</p>}
                     </div>
                   )}
@@ -505,7 +522,7 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
               Thank <span className="text-accent-warm">You!</span>
             </h3>
             
-            <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed mx-auto">
+            <p className="text-base md:text-lg text-text-secondary max-w-[80%] leading-relaxed mx-auto">
               Your journey begins here. We've received your request and our team will verify your payment and send your ticket shortly to <strong className="text-foreground font-semibold">{email}</strong>.
             </p>
           </div>
@@ -551,10 +568,10 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between h-20 px-6 rounded-2xl border border-border bg-background/50 active:scale-95 transition-all hover:bg-foreground/20 hover:border-accent group/modalbtn"
+              className="flex items-center justify-between h-20 px-6 rounded-2xl border border-border bg-background/80 active:scale-95 transition-all hover:bg-foreground/20 hover:border-accent group/modalbtn"
             >
               <span className="font-heading font-bold text-xl text-foreground group-hover/modalbtn:text-accent transition-colors">{name}</span>
-              <svg className="w-5 h-5 text-foreground-secondary group-hover/modalbtn:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 text-text-secondary group-hover/modalbtn:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </a>

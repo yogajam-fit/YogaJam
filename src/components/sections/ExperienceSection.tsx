@@ -247,11 +247,17 @@ export function ExperienceSection() {
           {/* Right: Section Header */}
           <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
             <SectionHeading 
-              title={<>YogaJam Channel<br/>Move Better. Live More.</>}
+              title={
+                <>
+                  YogaJam Channel<br/>
+                  <span className="md:hidden">Move Better. Live More.</span>
+                  <span className="hidden md:inline">Move Better.<br/>Live More.</span>
+                </>
+              }
               align="left"
               className="!mb-0"
             />
-            <p className="hidden md:block mt-6 text-foreground-secondary text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
+            <p className="hidden md:block mt-6 text-text-secondary text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0 font-medium">
               Discover the benefits of yoga, wellness, and movement through our Jams. Get inspired, learn something new, and explore a lifestyle that brings people together.
             </p>
           </div>

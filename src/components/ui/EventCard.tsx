@@ -54,7 +54,7 @@ export function EventCard({
         
         {/* Badge inside the image */}
         {badgeText && (
-          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-surface/80 backdrop-blur-md border border-border px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] sm:text-[11px] font-semibold tracking-wider uppercase text-accent-warm z-10 transition-opacity duration-300 md:group-hover:opacity-0 flex items-center gap-1.5 md:gap-2 shadow-sm">
+          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-surface-card-elevated/90 backdrop-blur-md border border-border-subtle px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] sm:text-[11px] font-semibold tracking-wider uppercase text-text-accent z-10 transition-opacity duration-300 md:group-hover:opacity-0 flex items-center gap-1.5 md:gap-2 shadow-sm">
             {badgeText}
           </div>
         )}
@@ -66,10 +66,10 @@ export function EventCard({
         <div className="relative w-full mb-1 md:mb-2">
           {/* Default State: Title, Details */}
           <div className="flex flex-col transition-all duration-500 ease-in-out md:group-hover:opacity-0 md:group-hover:-translate-y-4">
-            <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading mb-1 md:mb-2 text-foreground leading-tight drop-shadow-md">{title}</h3>
+            <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading mb-1 md:mb-2 text-text-primary leading-tight drop-shadow-md">{title}</h3>
             {(detail1Text || detail2Text) && (
               <>
-                <div className="flex text-foreground-secondary text-[10px] sm:text-xs md:text-sm drop-shadow-md">
+                <div className="flex text-text-secondary text-[10px] sm:text-xs md:text-sm drop-shadow-md font-medium">
                   <span className="truncate">
                     {detail1Text && detail2Text ? `${detail1Text} • ${detail2Text}` : detail1Text || detail2Text}
                   </span>
@@ -79,12 +79,12 @@ export function EventCard({
           </div>
 
           <div className="absolute top-0 left-0 w-full h-full hidden md:flex items-end opacity-0 translate-y-4 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0 pointer-events-none">
-            <p className="text-foreground-secondary text-sm leading-relaxed whitespace-pre-wrap">
+            <p className="text-text-primary/90 text-sm leading-relaxed whitespace-pre-wrap font-medium">
               {previewDesc}
               {previewHighlight && (
                 <>
                   <br />
-                  <span className="text-accent font-bold mt-1 inline-block">{previewHighlight}</span>
+                  <span className="text-text-accent font-bold mt-1 inline-block">{previewHighlight}</span>
                 </>
               )}
             </p>
@@ -92,7 +92,7 @@ export function EventCard({
         </div>
 
         {/* Minimalist Button Link - Stays visible on desktop */}
-        <div className="w-full hidden lg:flex items-center justify-between text-accent text-xs md:text-sm font-medium border-t border-border/50 md:border-border pt-2 md:pt-4 mt-2 md:group-hover:border-accent/50 transition-colors cursor-pointer relative z-20">
+        <div className="w-full hidden lg:flex items-center justify-between text-text-accent text-xs md:text-sm font-semibold border-t border-border-subtle/50 md:border-border-subtle pt-2 md:pt-4 mt-2 md:group-hover:border-accent/50 transition-colors cursor-pointer relative z-20">
           <span className="tracking-wide">{actionText}</span>
           <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

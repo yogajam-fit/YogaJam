@@ -79,13 +79,13 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full bg-background/50 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
+          "w-full bg-background/80 border rounded-xl px-4 py-3 text-sm flex items-center justify-between cursor-pointer transition-all",
           error ? "border-red-400/50" : "border-border hover:border-border",
           isOpen && "border-accent/50 ring-1 ring-accent/50",
           className
         )}
       >
-        <span className={value ? "text-foreground" : "text-foreground-secondary/70"}>
+        <span className={value ? "text-foreground" : "text-text-muted-accessible"}>
           {displayValue}
         </span>
         <svg className="w-4 h-4 text-foreground-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -113,7 +113,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
           </div>
           
           <div className="grid grid-cols-7 gap-1 mb-2 text-center">
-            {DAYS.map(d => <div key={d} className="text-[10px] uppercase font-bold text-foreground-secondary/70">{d}</div>)}
+            {DAYS.map(d => <div key={d} className="text-[10px] uppercase font-bold text-text-muted-accessible">{d}</div>)}
           </div>
           
           <div className="grid grid-cols-7 gap-1">

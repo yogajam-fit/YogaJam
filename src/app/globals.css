@@ -11,12 +11,27 @@
   --foreground-secondary: #A9B0A8;
   --foreground-muted: #737C74;
 
+  /* Accessible Text Tokens */
+  --text-primary: var(--foreground);
+  --text-secondary: var(--foreground-secondary);
+  /* A brighter muted text that passes at least 4.5:1 against surface */
+  --text-muted-accessible: #8B948C;
+  --text-accent: var(--accent);
+
   --accent: #C8E86B;
   --accent-hover: #D9F58A;
   --accent-dark: #60783A;
   --accent-warm: #D8C7A0;
 
   --border: #29312C;
+  
+  /* Semantic Surface and Border Tokens */
+  --surface-page: var(--background);
+  --surface-card: var(--surface);
+  --surface-card-elevated: var(--surface-elevated);
+  --border-subtle: var(--border);
+  --border-interactive: #4A564F;
+  --focus-ring: var(--accent);
 }
 
 @theme inline {
@@ -29,12 +44,24 @@
   --color-foreground-secondary: var(--foreground-secondary);
   --color-foreground-muted: var(--foreground-muted);
 
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted-accessible: var(--text-muted-accessible);
+  --color-text-accent: var(--text-accent);
+
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-dark: var(--accent-dark);
   --color-accent-warm: var(--accent-warm);
 
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-interactive: var(--border-interactive);
+
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-card-elevated: var(--surface-card-elevated);
+  --color-focus-ring: var(--focus-ring);
 
   --font-sans: var(--font-inter);
   --font-heading: var(--font-manrope);

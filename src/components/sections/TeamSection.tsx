@@ -38,8 +38,8 @@ export function TeamSection() {
               
               {/* Text Underneath */}
               <div className="text-left px-1">
-                <h3 className="text-foreground font-bold text-sm sm:text-base md:text-lg whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-accent transition-colors">{member.name}</h3>
-                <p className="text-foreground-secondary text-xs md:text-sm font-medium mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{member.role}</p>
+                <h3 className="text-text-primary font-bold text-sm sm:text-base md:text-lg whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-accent transition-colors">{member.name}</h3>
+                <p className="text-text-secondary text-xs md:text-sm font-semibold mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{member.role}</p>
               </div>
             </div>
             );

@@ -679,7 +679,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                         type="button" 
                         onClick={() => handleRemovePastVideo(index)}
                         disabled={deletingIndex === index}
-                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg disabled:opacity-50"
+                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg disabled:opacity-70"
                       >✕</button>
                     </div>
                   ))}
@@ -910,7 +910,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
 
           <div className="flex justify-end gap-4 pt-6 border-t border-border">
             <button type="button" onClick={onClose} className="px-6 py-2 rounded-lg text-foreground-secondary hover:text-foreground">Cancel</button>
-            <button type="submit" disabled={isSubmitting || isUploading} className="px-8 py-2.5 rounded-lg bg-accent text-background font-bold hover:bg-accent-warm disabled:opacity-50 transition-colors">
+            <button type="submit" disabled={isSubmitting || isUploading} className="px-8 py-2.5 rounded-lg bg-accent text-background font-bold hover:bg-accent-warm disabled:opacity-70 transition-colors">
               Save Event
             </button>
           </div>

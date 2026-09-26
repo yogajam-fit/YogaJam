@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Verify Authentication (Only admins can send certain emails)
-    if (type !== 'newsletter_subscribe' && type !== 'review_thankyou' && type !== 'host_confirmation') {
+    if (type !== 'newsletter_subscribe' && type !== 'review_thankyou' && type !== 'host_confirmation' && type !== 'admin_booking_notification' && type !== 'admin_host_notification') {
       const supabase = await createClient()
       const { data: { user }, error: authError } = await supabase.auth.getUser()
       
@@ -28,7 +28,27 @@ export async function POST(request: Request) {
     // 3. Generate HTML Content based on type
     let htmlContent = ''
     
-    if (type === 'booking_confirmation') {
+    if (type === 'admin_booking_notification') {
+      htmlContent = `
+        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
+          <h2>New Booking Request</h2>
+          <p><strong>Name:</strong> ${name || 'N/A'}</p>
+          <p><strong>Event:</strong> ${eventTitle || 'N/A'}</p>
+          <p><strong>Tickets:</strong> ${tickets || 'N/A'}</p>
+          <p><strong>Total Amount:</strong> ${amount || 'N/A'}</p>
+          <p>Please check the admin dashboard to verify payment and confirm this booking.</p>
+        </div>
+      `
+    } else if (type === 'admin_host_notification') {
+      htmlContent = `
+        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
+          <h2>New Host/Personalized Event Request</h2>
+          <p><strong>Name:</strong> ${name || 'N/A'}</p>
+          <p><strong>Event Type:</strong> ${eventTitle || 'N/A'}</p>
+          <p>Please check the admin dashboard for full details.</p>
+        </div>
+      `
+    } else if (type === 'booking_confirmation') {
       htmlContent = `
         <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; color: #111513;">
           <p>Hi ${name || 'there'},</p>

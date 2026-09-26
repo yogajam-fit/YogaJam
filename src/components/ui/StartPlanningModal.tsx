@@ -100,8 +100,20 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
               name: formData.name,
             })
           })
+
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: 'contact@yogajam.fit',
+              subject: 'New Host Request - ' + eventTitle,
+              type: 'admin_host_notification',
+              name: formData.name,
+              eventTitle: eventTitle,
+            })
+          })
         } catch (err) {
-          console.error("Failed to send host confirmation email", err)
+          console.error("Failed to send emails", err)
         }
         setIsSubmitted(true);
       }
@@ -181,7 +193,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                     id="name" 
                     value={formData.name}
                     onChange={(e) => handleChange("name", e.target.value)}
-                    className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                    className={`w-full bg-background/80 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                     placeholder="Your name"
                   />
                   {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
@@ -195,7 +207,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                     maxLength={10}
                     value={formData.contact}
                     onChange={(e) => handleChange("contact", e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    className={`w-full bg-background/50 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                    className={`w-full bg-background/80 border ${errors.contact ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                     placeholder="9876543210"
                   />
                   {errors.contact && <p className="text-red-400 text-xs mt-1">{errors.contact}</p>}
@@ -209,7 +221,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                   id="email" 
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                  className={`w-full bg-background/80 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                   placeholder="your@email.com"
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
@@ -222,7 +234,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                   id="city" 
                   value={formData.city}
                   onChange={(e) => handleChange("city", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.city ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                  className={`w-full bg-background/80 border ${errors.city ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                   placeholder="e.g. Bengaluru"
                 />
                 {errors.city && <p className="text-red-400 text-xs mt-1">{errors.city}</p>}
@@ -237,7 +249,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                     inputMode="numeric"
                     value={formData.groupSize}
                     onChange={(e) => handleChange("groupSize", e.target.value.replace(/\D/g, ''))}
-                    className={`w-full bg-background/50 border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                    className={`w-full bg-background/80 border ${errors.groupSize ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                     placeholder="Estimated number of people"
                   />
                   {errors.groupSize && <p className="text-red-400 text-xs mt-1">{errors.groupSize}</p>}

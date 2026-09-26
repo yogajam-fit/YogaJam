@@ -164,7 +164,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
                     id="name" 
                     value={formData.name}
                     onChange={(e) => handleChange("name", e.target.value)}
-                    className={`w-full bg-background/50 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                    className={`w-full bg-background/80 border ${errors.name ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                     placeholder="Your full name"
                   />
                   {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
@@ -176,7 +176,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
                     id="email" 
                     value={formData.email}
                     onChange={(e) => handleChange("email", e.target.value)}
-                    className={`w-full bg-background/50 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                    className={`w-full bg-background/80 border ${errors.email ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                     placeholder="your@email.com"
                   />
                   {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
@@ -190,7 +190,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
                   id="event" 
                   value={formData.event}
                   onChange={(e) => handleChange("event", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.event ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
+                  className={`w-full bg-background/80 border ${errors.event ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all`}
                   placeholder="e.g. Sunset Yoga Retreat"
                 />
                 {errors.event && <p className="text-red-400 text-xs mt-1">{errors.event}</p>}
@@ -226,7 +226,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
                   rows={5}
                   value={formData.review}
                   onChange={(e) => handleChange("review", e.target.value)}
-                  className={`w-full bg-background/50 border ${errors.review ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all resize-none`}
+                  className={`w-full bg-background/80 border ${errors.review ? 'border-red-400/50' : 'border-border'} rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all resize-none`}
                   placeholder="Tell us about your experience..."
                 />
                 {errors.review && <p className="text-red-400 text-xs mt-1">{errors.review}</p>}
