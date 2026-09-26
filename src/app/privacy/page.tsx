@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
             className="mb-12"
           />
 
-          <div className="prose prose-invert md:prose-lg max-w-none text-foreground-secondary leading-relaxed">
+          <div className="prose prose-invert md:prose-lg max-w-none text-text-secondary leading-relaxed">
             <p>Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
             
             <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mt-10 md:mt-12 mb-4 md:mb-6">1. Introduction</h2>

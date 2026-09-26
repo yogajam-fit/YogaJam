@@ -44,7 +44,7 @@ export function AdminSidebar({ userEmail, activeTab, onTabChange }: { userEmail:
                 className={`w-full group flex items-center px-4 py-3.5 text-sm font-medium rounded-xl transition-all duration-300 relative overflow-hidden ${
                   isActive 
                     ? 'text-foreground bg-foreground/ shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] border border-border' 
-                    : 'text-foreground-secondary hover:text-foreground hover:bg-foreground/ border border-transparent'
+                    : 'text-text-secondary hover:text-foreground hover:bg-foreground/ border border-transparent'
                 }`}
               >
                 {isActive && (

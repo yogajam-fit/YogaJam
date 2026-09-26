@@ -139,7 +139,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
               Thank <span className="text-accent-warm">You!</span>
             </h3>
             
-            <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed mb-10">
+            <p className="text-base md:text-lg text-text-secondary max-w-[80%] leading-relaxed mb-10">
               Your feedback means the world to us. We're thrilled you had a great experience and can't wait to host you again!
             </p>
             <button 
@@ -151,14 +151,14 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
           </div>
         ) : (
           <>
-            <p className="text-sm text-foreground-secondary mb-8">
+            <p className="text-sm text-text-secondary mb-8">
               We'd love to hear how YogaJam moved you. Your story helps us grow and inspires others.
             </p>
 
             <form id="reviewForm" onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
-                  <label htmlFor="name" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Name <span className="text-accent">*</span></label>
+                  <label htmlFor="name" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Name <span className="text-accent">*</span></label>
                   <input 
                     type="text" 
                     id="name" 
@@ -170,7 +170,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
                   {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor="email" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Email <span className="text-accent">*</span></label>
+                  <label htmlFor="email" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Email <span className="text-accent">*</span></label>
                   <input 
                     type="email" 
                     id="email" 
@@ -184,7 +184,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="event" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Event Attended <span className="text-accent">*</span></label>
+                <label htmlFor="event" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Event Attended <span className="text-accent">*</span></label>
                 <input 
                   type="text" 
                   id="event" 
@@ -197,7 +197,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Rating <span className="text-accent">*</span></label>
+                <label className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Rating <span className="text-accent">*</span></label>
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -220,7 +220,7 @@ export function ReviewModal({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="review" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Your Review <span className="text-accent">*</span></label>
+                <label htmlFor="review" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Your Review <span className="text-accent">*</span></label>
                 <textarea 
                   id="review" 
                   rows={5}

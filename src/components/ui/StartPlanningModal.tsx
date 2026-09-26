@@ -174,20 +174,20 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
               Thank <span className="text-accent-warm">You!</span>
             </h3>
             
-            <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed">
+            <p className="text-base md:text-lg text-text-secondary max-w-[80%] leading-relaxed">
               Your journey begins here. We've received your request and our team will reach out shortly to start crafting your unforgettable <strong className="text-foreground font-semibold">{eventTitle}</strong>.
             </p>
           </div>
         ) : (
           <>
-            <p className="text-sm text-foreground-secondary mb-6">
+            <p className="text-sm text-text-secondary mb-6">
               Let's craft your perfect {eventTitle}. Fill out the details below and we'll get back to you.
             </p>
 
             <form id="startPlanningForm" onSubmit={handleSubmit} className="space-y-4" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label htmlFor="name" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Name</label>
+                  <label htmlFor="name" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Name</label>
                   <input 
                     type="text" 
                     id="name" 
@@ -199,7 +199,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                   {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor="contact" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Contact Number</label>
+                  <label htmlFor="contact" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Contact Number</label>
                   <input 
                     type="tel" 
                     id="contact" 
@@ -215,7 +215,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="email" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Email</label>
+                <label htmlFor="email" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Email</label>
                 <input 
                   type="email" 
                   id="email" 
@@ -228,7 +228,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="city" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">City</label>
+                <label htmlFor="city" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">City</label>
                 <input 
                   type="text" 
                   id="city" 
@@ -242,7 +242,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label htmlFor="groupSize" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Group Size</label>
+                  <label htmlFor="groupSize" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Group Size</label>
                   <input 
                     type="text" 
                     id="groupSize" 
@@ -256,7 +256,7 @@ export function StartPlanningModal({ children, eventTitle }: { children: React.R
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="date" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Date</label>
+                  <label htmlFor="date" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Date</label>
                   <DatePicker 
                     value={formData.date}
                     onChange={(val) => handleChange("date", val)}

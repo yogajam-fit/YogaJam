@@ -43,7 +43,7 @@ export default async function GalleryPage() {
           )}
         />
         {images.length === 0 && (
-          <div className="py-20 text-center text-foreground-secondary w-full">
+          <div className="py-20 text-center text-text-secondary w-full">
             No images in the gallery yet.
           </div>
         )}

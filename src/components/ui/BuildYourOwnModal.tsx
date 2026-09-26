@@ -196,7 +196,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
               {step === 2 && (
                 <button 
                   onClick={handleBack}
-                  className="p-2 -ml-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/"
+                  className="p-2 -ml-2 text-text-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/"
                   aria-label="Go back to previous step"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -206,14 +206,14 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                 <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground">
                   Build Your Own Event
                 </h2>
-                <p className="text-sm text-foreground-secondary mt-1 tracking-wide uppercase font-semibold">
+                <p className="text-sm text-text-secondary mt-1 tracking-wide uppercase font-semibold">
                   Step {step} of 2
                 </p>
               </div>
             </div>
             <button 
               onClick={onClose}
-              className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/80 border border-border"
+              className="p-2 -mr-2 text-text-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/ bg-background/80 border border-border"
               aria-label="Close dialog"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -260,7 +260,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   className={`p-4 rounded-xl border text-left transition-all duration-200 ${
                     formData.eventType === type 
                     ? "border-accent bg-accent/10 text-foreground" 
-                    : "border-border bg-background/80 text-foreground-secondary hover:border-border hover:bg-foreground/"
+                    : "border-border bg-background/80 text-text-secondary hover:border-border hover:bg-foreground/"
                   }`}
                 >
                   <div className="font-semibold text-sm">{type}</div>
@@ -339,7 +339,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
                   >
                     <span className="text-2xl mb-3">{option.icon}</span>
                     <span className="font-semibold text-foreground text-sm mb-1">{option.title}</span>
-                    <span className="text-xs text-foreground-secondary">{option.desc}</span>
+                    <span className="text-xs text-text-secondary">{option.desc}</span>
                   </button>
                 ))}
               </div>
@@ -378,7 +378,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
 
       {step === 2 && (
         <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-right-4 duration-500">
-          <p className="text-foreground-secondary mb-2">Just a few details so our team can reach out and begin crafting your experience.</p>
+          <p className="text-text-secondary mb-2">Just a few details so our team can reach out and begin crafting your experience.</p>
           
           <div className="space-y-2">
             <label htmlFor="fullName" className="block text-sm font-semibold text-foreground tracking-wide uppercase">Full Name <span className="text-accent">*</span></label>
@@ -441,7 +441,7 @@ function ModalOverlay({ onClose }: { onClose: () => void }) {
             Vision <span className="text-accent-warm">Received!</span>
           </h3>
           
-          <p className="text-base md:text-lg text-foreground-secondary max-w-[80%] leading-relaxed mb-10">
+          <p className="text-base md:text-lg text-text-secondary max-w-[80%] leading-relaxed mb-10">
             Your journey begins here. We're incredibly excited about what you're planning, and our team will reach out shortly to start bringing this experience to life.
           </p>
           <Button size="lg" variant="outline" onClick={onClose} className="w-full sm:w-auto min-w-[200px]">

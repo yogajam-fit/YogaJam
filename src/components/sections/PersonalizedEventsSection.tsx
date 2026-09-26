@@ -22,7 +22,7 @@ export function PersonalizedEventsSection() {
 
           <Link
             href="/personalized-events"
-            className="inline-flex shrink-0 group items-center gap-1.5 md:gap-2 text-foreground-secondary hover:text-accent-warm transition-colors text-sm md:text-base font-medium mb-1 md:mb-0"
+            className="inline-flex shrink-0 group items-center gap-1.5 md:gap-2 text-text-secondary hover:text-accent-warm transition-colors text-sm md:text-base font-medium mb-1 md:mb-0"
           >
             <span>View All</span>
             <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,13 +41,13 @@ export function PersonalizedEventsSection() {
               >
                 <div className="flex flex-col items-center justify-center gap-2 md:gap-4 text-center p-4 md:p-6 w-full h-full relative z-10">
                   <div className="w-full flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-1">
-                    <svg className="w-8 h-8 md:w-12 md:h-12 mx-auto text-foreground-secondary group-hover:text-accent transition-colors duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-8 h-8 md:w-12 md:h-12 mx-auto text-text-secondary group-hover:text-accent transition-colors duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                     </svg>
                   </div>
                   <div className="w-full flex flex-col items-center text-center">
                     <h3 className="text-base sm:text-lg md:text-2xl font-bold font-heading text-foreground group-hover:text-accent transition-colors duration-500 md:mb-2 w-full text-center leading-tight">Build Your<br className="md:hidden" /> Own</h3>
-                    <p className="hidden md:block text-foreground-secondary text-sm max-w-[220px] mx-auto text-center">Create a fully custom experience from scratch</p>
+                    <p className="hidden md:block text-text-secondary text-sm max-w-[220px] mx-auto text-center">Create a fully custom experience from scratch</p>
                   </div>
                 </div>
               </div>

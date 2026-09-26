@@ -70,7 +70,7 @@ function EventsClientContent({ events }: { events: EventRecord[] }) {
               </svg>
             </div>
             <h3 className="text-2xl md:text-3xl font-bold font-heading text-foreground mb-3 tracking-tight">We're brewing something special</h3>
-            <p className="text-foreground-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+            <p className="text-text-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
               Our next set of immersive wellness experiences are currently being curated. Subscribe to our newsletter to be the first to know when tickets drop!
             </p>
             <div className="w-full">
@@ -80,7 +80,7 @@ function EventsClientContent({ events }: { events: EventRecord[] }) {
         ) : filteredUpcoming.length === 0 && filteredPast.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-16 px-6 border border-border rounded-3xl bg-surface/30 backdrop-blur-sm w-full mx-auto shadow-2xl mt-8">
             <h3 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-3 tracking-tight">No events found for {activeCity}</h3>
-            <p className="text-foreground-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+            <p className="text-text-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
               We don't have any events in this location right now. Try selecting another city or subscribe to be notified when we bring an experience near you!
             </p>
             <div className="w-full">
@@ -125,7 +125,7 @@ function EventsClientContent({ events }: { events: EventRecord[] }) {
                   </svg>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold font-heading text-foreground mb-3 tracking-tight">We're brewing something special</h3>
-                <p className="text-foreground-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+                <p className="text-text-secondary mb-8 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
                   Our next set of immersive wellness experiences are currently being curated. Subscribe to our newsletter to be the first to know when tickets drop!
                 </p>
                 <div className="w-full">

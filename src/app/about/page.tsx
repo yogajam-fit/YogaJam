@@ -37,7 +37,7 @@ export default function AboutPage() {
           
           <div className="flex flex-col gap-6">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">Our Story</h2>
-            <div className="prose prose-invert md:prose-lg text-foreground-secondary leading-relaxed">
+            <div className="prose prose-invert md:prose-lg text-text-secondary leading-relaxed">
               <p>
                 What started as a small gathering of friends looking for a different way to unwind on a Friday night has evolved into a nationwide movement. We realized that traditional yoga studios often felt too rigid, while nightlife felt too depleting.
               </p>
@@ -71,7 +71,7 @@ export default function AboutPage() {
             ].map((value, i) => (
               <div key={i} className="p-8 rounded-3xl bg-surface/50 border border-white/5 backdrop-blur-sm hover:bg-surface hover:border-accent/30 transition-all">
                 <h3 className="text-xl font-bold text-white mb-4">{value.title}</h3>
-                <p className="text-foreground-secondary leading-relaxed">{value.desc}</p>
+                <p className="text-text-secondary leading-relaxed">{value.desc}</p>
               </div>
             ))}
           </div>
@@ -82,7 +82,7 @@ export default function AboutPage() {
           
           <div className="flex flex-col p-8 md:p-12 rounded-3xl bg-surface border border-white/5 hover:border-accent/30 transition-colors">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-4">Get in Touch</h2>
-            <p className="text-foreground-secondary mb-8 leading-relaxed max-w-md">
+            <p className="text-text-secondary mb-8 leading-relaxed max-w-md">
               Have a question about our events? Want to know what to bring? Or just want to say hi? We'd love to hear from you.
             </p>
             <div className="flex flex-col gap-4 mt-auto">
@@ -103,7 +103,7 @@ export default function AboutPage() {
 
           <div className="flex flex-col p-8 md:p-12 rounded-3xl bg-surface border border-white/5 hover:border-accent/30 transition-colors">
             <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-4">Partner With Us</h3>
-            <p className="text-foreground-secondary mb-8 leading-relaxed">
+            <p className="text-text-secondary mb-8 leading-relaxed">
               We are always looking to collaborate with brands, venues, and creators that align with our vision of cinematic wellness. 
               Let's create something extraordinary together.
             </p>
@@ -111,7 +111,7 @@ export default function AboutPage() {
               <Link href="/personalized-events" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-accent text-background font-bold text-sm hover:scale-105 transition-transform">
                 Explore Private Events
               </Link>
-              <span className="text-foreground-secondary hidden sm:inline">or</span>
+              <span className="text-text-secondary hidden sm:inline">or</span>
               <a href={`mailto:${contactData.partnershipsEmail}`} className="text-white hover:text-accent font-medium transition-colors underline underline-offset-4 break-all">
                 Email Partnerships
               </a>

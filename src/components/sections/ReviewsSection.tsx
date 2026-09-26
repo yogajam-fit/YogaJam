@@ -50,7 +50,7 @@ function TextReviewSlot({
 
   return (
     <div className="col-span-1 aspect-[4/5] sm:aspect-square md:aspect-[4/3] min-h-[220px] w-full rounded-2xl bg-surface-card border border-border-subtle p-4 sm:p-5 md:p-8 flex flex-col relative overflow-hidden group hover:bg-surface-card-elevated transition-colors duration-500 shadow-sm">
-      <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-foreground-secondary/15 group-hover:text-foreground-secondary/25 rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+      <svg className="absolute -top-2 -left-2 w-16 h-16 sm:w-20 sm:h-20 text-text-secondary/15 group-hover:text-text-secondary/25 rotate-180 transform group-hover:scale-110 transition-all duration-500 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033zm-14.017 0v-7.391c0-5.714 4.025-8.609 9.983-9.609v3.315c-3.13 0-5.11 1.776-5.836 4.391h5.836v9.294h-10.033z" />
       </svg>
       <div className={`h-full w-full relative z-10 transition-opacity duration-1000 ease-in-out ${opacity ? 'opacity-100' : 'opacity-0'}`}>

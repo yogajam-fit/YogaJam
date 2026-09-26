@@ -41,7 +41,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
                   isOpen ? "rotate-45 bg-accent/20" : "rotate-0"
                 )}
               >
-                <svg className={cn("w-5 h-5 transition-colors duration-300", isOpen ? "text-accent" : "text-foreground/60")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className={cn("w-5 h-5 transition-colors duration-300", isOpen ? "text-accent" : "text-text-secondary")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </div>
@@ -51,7 +51,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
               style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
             >
               <div className="overflow-hidden">
-                <div className="p-6 pt-0 text-foreground-secondary leading-relaxed">
+                <div className="p-6 pt-0 text-text-secondary leading-relaxed">
                   {item.answer}
                 </div>
               </div>

@@ -145,7 +145,7 @@ export function EventsTable() {
           <div className="flex p-1 bg-surface border border-border/50 rounded-xl shadow-inner relative">
             <button 
               onClick={() => setFilterType('all')} 
-              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'all' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'all' ? 'text-background' : 'text-text-secondary hover:text-foreground'}`}
             >
               All Events
               {filterType === 'all' && (
@@ -155,7 +155,7 @@ export function EventsTable() {
             
             <button 
               onClick={() => setFilterType('upcoming')} 
-              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'upcoming' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'upcoming' ? 'text-background' : 'text-text-secondary hover:text-foreground'}`}
             >
               Upcoming
               {filterType === 'upcoming' && (
@@ -165,7 +165,7 @@ export function EventsTable() {
             
             <button 
               onClick={() => setFilterType('past')} 
-              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'past' ? 'text-background' : 'text-foreground-secondary hover:text-foreground'}`}
+              className={`relative z-10 px-5 py-2 text-xs font-bold rounded-lg transition-all duration-300 ${filterType === 'past' ? 'text-background' : 'text-text-secondary hover:text-foreground'}`}
             >
               Past
               {filterType === 'past' && (
@@ -185,7 +185,7 @@ export function EventsTable() {
       <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-black/20 text-foreground-secondary uppercase tracking-wider text-[11px] font-bold">
+            <thead className="bg-black/20 text-text-secondary uppercase tracking-wider text-[11px] font-bold">
               <tr>
                 <th className="px-6 py-4">Created At</th>
                 <th className="px-6 py-4">Title</th>
@@ -194,7 +194,7 @@ export function EventsTable() {
                     Date & Time
                     <button 
                       onClick={() => setSortAscending(prev => prev === null ? true : prev === true ? false : null)}
-                      className="text-foreground-secondary hover:text-foreground transition-colors"
+                      className="text-text-secondary hover:text-foreground transition-colors"
                       title="Sort by Date"
                     >
                       <svg className={`w-4 h-4 ${sortAscending === true ? 'text-accent' : ''} ${sortAscending === false ? 'rotate-180 text-accent' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -522,7 +522,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       <div className="bg-[#111] border border-border w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
         <div className="flex justify-between items-center p-6 border-b border-border/50 bg-black/20">
           <h3 className="text-xl font-bold text-foreground">{event ? 'Edit Event' : 'Add New Event'}</h3>
-          <button type="button" onClick={onClose} className="text-foreground-secondary hover:text-foreground">✕</button>
+          <button type="button" onClick={onClose} className="text-text-secondary hover:text-foreground">✕</button>
         </div>
         
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar text-sm">
@@ -531,11 +531,11 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Basic Information</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-foreground-secondary mb-1">Title</label>
+                <label className="block text-text-secondary mb-1">Title</label>
                 <input name="title" defaultValue={event?.title} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Date</label>
+                <label className="block text-text-secondary mb-1">Date</label>
                 <DatePicker 
                   value={eventDate} 
                   onChange={setEventDate} 
@@ -545,7 +545,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Time</label>
+                <label className="block text-text-secondary mb-1">Time</label>
                 <div className="flex items-center gap-2">
                   <TimePicker 
                     value={startTime} 
@@ -563,19 +563,19 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 </div>
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Location</label>
+                <label className="block text-text-secondary mb-1">Location</label>
                 <input name="location" defaultValue={event?.location} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">City</label>
+                <label className="block text-text-secondary mb-1">City</label>
                 <input name="city" defaultValue={event?.city} required className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Price (Optional)</label>
+                <label className="block text-text-secondary mb-1">Price (Optional)</label>
                 <input name="price" defaultValue={event?.price} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Location URL (Optional)</label>
+                <label className="block text-text-secondary mb-1">Location URL (Optional)</label>
                 <input name="location_url" type="url" defaultValue={event?.location_url} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
             </div>
@@ -586,7 +586,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Media & Assets</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-foreground-secondary mb-1">Event Poster Image (Desktop/Default) <span className="text-red-400">*</span></label>
+                <label className="block text-text-secondary mb-1">Event Poster Image (Desktop/Default) <span className="text-red-400">*</span></label>
                 <div className="flex gap-2">
                   <input 
                     value={imageUrl} 
@@ -602,7 +602,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 </div>
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Mobile Event Poster (Optional)</label>
+                <label className="block text-text-secondary mb-1">Mobile Event Poster (Optional)</label>
                 <div className="flex gap-2">
                   <input 
                     value={imageMobileUrl} 
@@ -617,7 +617,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 </div>
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Promo Video (Desktop/Default)</label>
+                <label className="block text-text-secondary mb-1">Promo Video (Desktop/Default)</label>
                 <div className="flex gap-2">
                   <input 
                     value={videoUrl} 
@@ -632,7 +632,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 </div>
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Mobile Promo Video (Optional)</label>
+                <label className="block text-text-secondary mb-1">Mobile Promo Video (Optional)</label>
                 <div className="flex gap-2">
                   <input 
                     value={videoMobileUrl} 
@@ -661,7 +661,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             return (
               <div>
                 <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Past Event Videos</h4>
-                <p className="text-sm text-foreground-secondary mb-4">This event is in the past! You can add gallery videos of this event below.</p>
+                <p className="text-sm text-text-secondary mb-4">This event is in the past! You can add gallery videos of this event below.</p>
                 <div className="space-y-3">
                   {pastVideos.map((vid, index) => (
                     <div key={index} className="flex gap-2 items-center">
@@ -689,11 +689,11 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       Upload Multiple Videos
                       <input type="file" accept="video/*" multiple className="hidden" onChange={handleMultiplePastVideoUpload} disabled={isUploading} />
                     </label>
-                    <span className="text-foreground-secondary text-sm">or</span>
+                    <span className="text-text-secondary text-sm">or</span>
                     <button 
                       type="button" 
                       onClick={() => setPastVideos([...pastVideos, ''])}
-                      className="text-foreground-secondary hover:text-foreground text-sm font-bold flex items-center gap-1 transition-colors"
+                      className="text-text-secondary hover:text-foreground text-sm font-bold flex items-center gap-1 transition-colors"
                     >
                       + Add URL Manually
                     </button>
@@ -708,15 +708,15 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Descriptions</h4>
             <div className="space-y-4">
               <div>
-                <label className="block text-foreground-secondary mb-1">Preview Description</label>
+                <label className="block text-text-secondary mb-1">Preview Description</label>
                 <textarea name="preview_desc" defaultValue={event?.preview_desc} required rows={3} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Preview Highlight</label>
+                <label className="block text-text-secondary mb-1">Preview Highlight</label>
                 <input name="preview_highlight" defaultValue={event?.preview_highlight} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" placeholder="e.g. Early Bird Discounts apply!" />
               </div>
               <div>
-                <label className="block text-foreground-secondary mb-1">Full Description</label>
+                <label className="block text-text-secondary mb-1">Full Description</label>
                 <textarea name="full_desc" defaultValue={event?.full_desc} required rows={6} className="w-full bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" />
               </div>
             </div>
@@ -727,7 +727,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
             <h4 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Booking & Registration</h4>
             <div className="space-y-4">
               <div>
-                <label className="block text-foreground-secondary mb-1">Booking Type</label>
+                <label className="block text-text-secondary mb-1">Booking Type</label>
                 <select 
                   value={bookingType} 
                   onChange={(e) => setBookingType(e.target.value as 'platform' | 'qr' | 'contact' | 'coming_soon')}
@@ -743,7 +743,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
               {bookingType === 'platform' && (
                 <div className="space-y-4 pt-2">
                   <div className="flex items-center justify-between">
-                    <label className="block text-foreground-secondary mb-1">Booking Platforms</label>
+                    <label className="block text-text-secondary mb-1">Booking Platforms</label>
                     <button 
                       type="button" 
                       onClick={() => setPlatforms([...platforms, { name: '', url: '' }])}
@@ -790,7 +790,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
 
               {bookingType === 'qr' && (
                 <div className="pt-2">
-                  <label className="block text-foreground-secondary mb-1">Payment QR Code Image</label>
+                  <label className="block text-text-secondary mb-1">Payment QR Code Image</label>
                   <div className="flex gap-2">
                     <input 
                       value={qrUrl} 
@@ -909,7 +909,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
           </div>
 
           <div className="flex justify-end gap-4 pt-6 border-t border-border">
-            <button type="button" onClick={onClose} className="px-6 py-2 rounded-lg text-foreground-secondary hover:text-foreground">Cancel</button>
+            <button type="button" onClick={onClose} className="px-6 py-2 rounded-lg text-text-secondary hover:text-foreground">Cancel</button>
             <button type="submit" disabled={isSubmitting || isUploading} className="px-8 py-2.5 rounded-lg bg-accent text-background font-bold hover:bg-accent-warm disabled:opacity-70 transition-colors">
               Save Event
             </button>

@@ -169,7 +169,7 @@ export function GalleryTable() {
           </div>
         ))}
         {images.length === 0 && (
-          <div className="col-span-full py-12 text-center text-foreground-secondary bg-surface/30 rounded-xl border border-dashed border-border">
+          <div className="col-span-full py-12 text-center text-text-secondary bg-surface/30 rounded-xl border border-dashed border-border">
             No images in the gallery yet. Click "Add New Image" to upload one.
           </div>
         )}

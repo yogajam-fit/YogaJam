@@ -174,7 +174,7 @@ export function ChannelTable() {
           <h3 className="text-xl font-bold font-heading mb-4">Add a New Video to Channel</h3>
           <form onSubmit={handleAddVideo} className="space-y-4">
             <div>
-              <label className="block text-foreground-secondary text-sm mb-1">Video URL (e.g. ImageKit or Supabase URL) *</label>
+              <label className="block text-text-secondary text-sm mb-1">Video URL (e.g. ImageKit or Supabase URL) *</label>
               <input required name="video_url" type="url" className="w-full bg-background border border-border rounded-lg p-2 text-foreground" placeholder="https://..." />
             </div>
             <button type="submit" className="bg-accent hover:bg-accent-warm px-4 py-2 rounded-lg text-background text-sm font-bold w-full transition-colors">
@@ -186,13 +186,13 @@ export function ChannelTable() {
 
       {videos.length === 0 ? (
         <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl p-12 text-center">
-          <p className="text-foreground-secondary">No videos have been added to the channel yet.</p>
+          <p className="text-text-secondary">No videos have been added to the channel yet.</p>
         </div>
       ) : (
         <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-black/20 text-foreground-secondary uppercase tracking-wider text-[11px] font-bold">
+              <thead className="bg-black/20 text-text-secondary uppercase tracking-wider text-[11px] font-bold">
                 <tr>
                   <th className="px-6 py-4">Video Preview</th>
                   <th className="px-6 py-4 w-full">URL</th>

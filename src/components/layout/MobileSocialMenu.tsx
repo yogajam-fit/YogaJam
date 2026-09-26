@@ -13,7 +13,7 @@ const getSocialColor = (name: string) => {
     case "facebook": return "text-[#1877F2]";
     case "linkedin": return "text-[#0A66C2]";
     case "whatsapp": return "text-[#25D366]";
-    default: return "text-foreground/80";
+    default: return "text-text-primary/95";
   }
 };
 

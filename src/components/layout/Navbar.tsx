@@ -59,7 +59,7 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(false)}
           className="text-xl font-bold tracking-tight text-foreground uppercase flex items-center gap-1 font-heading"
         >
-          <NextImage src="/images/logo-medium.svg" alt={siteConfig.name} width={180} height={60} className="w-auto h-10 sm:h-12" unoptimized />
+          <NextImage src="/images/logo-medium.svg" alt={siteConfig.name} width={200} height={68} className="w-auto h-12 sm:h-14" unoptimized />
         </Link>
 
         {/* Right side: Nav + CTA */}
@@ -75,7 +75,7 @@ export function Navbar() {
                   href={item.href}
                   className={cn(
                     "text-sm font-medium transition-colors hover:text-foreground relative group py-1",
-                    isActive ? "text-foreground" : "text-foreground-secondary"
+                    isActive ? "text-foreground" : "text-text-secondary"
                   )}
                 >
                   {item.name}

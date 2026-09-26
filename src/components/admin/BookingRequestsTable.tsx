@@ -118,7 +118,7 @@ export function BookingRequestsTable() {
       <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden">
       <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full text-left text-sm text-gray-300">
-          <thead className="bg-foreground/ border-b border-border text-foreground-secondary">
+          <thead className="bg-foreground/ border-b border-border text-text-secondary">
             <tr>
               <th className="px-6 py-4 font-semibold">Date</th>
               <th className="px-6 py-4 font-semibold">Event</th>
@@ -148,8 +148,8 @@ export function BookingRequestsTable() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="font-medium text-foreground">{req.name}</div>
-                    <div className="text-xs text-foreground-secondary">{req.email}</div>
-                    <div className="text-xs text-foreground-secondary">{req.phone}</div>
+                    <div className="text-xs text-text-secondary">{req.email}</div>
+                    <div className="text-xs text-text-secondary">{req.phone}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-foreground">{req.tickets} ticket(s)</div>
@@ -160,7 +160,7 @@ export function BookingRequestsTable() {
                       {req.verify_method}
                     </div>
                     {req.utr_number && (
-                      <div className="text-xs text-foreground-secondary mt-1 font-mono">UTR: {req.utr_number}</div>
+                      <div className="text-xs text-text-secondary mt-1 font-mono">UTR: {req.utr_number}</div>
                     )}
                     {req.screenshot_url && (
                       <button 

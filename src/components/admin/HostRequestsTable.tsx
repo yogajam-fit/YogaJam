@@ -78,7 +78,7 @@ export function HostRequestsTable() {
   if (requests.length === 0) {
     return (
       <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl p-12 text-center">
-        <p className="text-foreground-secondary">No host requests have been submitted yet.</p>
+        <p className="text-text-secondary">No host requests have been submitted yet.</p>
       </div>
     )
   }
@@ -87,7 +87,7 @@ export function HostRequestsTable() {
     <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-2xl">
       <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="bg-black/20 text-foreground-secondary uppercase tracking-wider text-[11px] font-bold">
+          <thead className="bg-black/20 text-text-secondary uppercase tracking-wider text-[11px] font-bold">
             <tr>
               <th className="px-6 py-4">Submitted</th>
               <th className="px-6 py-4">Guest</th>
@@ -101,7 +101,7 @@ export function HostRequestsTable() {
           <tbody className="divide-y divide-white/5">
             {requests.map((request) => (
               <tr key={request.id} className="hover:bg-surface transition-colors group">
-                <td className="px-6 py-4 align-top text-foreground-secondary">
+                <td className="px-6 py-4 align-top text-text-secondary">
                   <div className="flex flex-col">
                     <span>{new Date(request.created_at).toLocaleDateString()}</span>
                     <span className="text-xs text-gray-500">{new Date(request.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
@@ -119,7 +119,7 @@ export function HostRequestsTable() {
                     {request.type === 'start_planning' ? 'Event Booking' : 'Build Your Own'}
                   </span>
                   {request.event_title && (
-                    <p className="text-xs text-foreground-secondary mt-2 truncate max-w-[150px]" title={request.event_title}>
+                    <p className="text-xs text-text-secondary mt-2 truncate max-w-[150px]" title={request.event_title}>
                       For: {request.event_title}
                     </p>
                   )}

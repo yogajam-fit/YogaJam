@@ -118,7 +118,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                 <span className={`w-2.5 h-2.5 rounded-full ${hasEvents ? 'bg-accent animate-pulse' : 'bg-foreground-secondary'}`} />
                 {loadingEvents ? 'Loading Events...' : (hasEvents ? `${cityEvents.length} Active Events` : 'Coming Soon')}
               </div>
-              <div className="flex items-center gap-2 text-foreground-secondary">
+              <div className="flex items-center gap-2 text-text-secondary">
                 <svg className="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -141,7 +141,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
               {/* About the City */}
               <div>
                 <SectionHeading title={`The Vibe in ${city.name}`} align="left" className="mb-6" />
-                <div className="prose prose-invert prose-lg max-w-none text-foreground-secondary leading-relaxed">
+                <div className="prose prose-invert prose-lg max-w-none text-text-secondary leading-relaxed">
                   <div dangerouslySetInnerHTML={{ __html: city.fullDesc }} />
                 </div>
               </div>
@@ -170,7 +170,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                         </svg>
                         <h3 className="text-lg font-bold text-foreground">{type.name}</h3>
                       </div>
-                      <p className="text-foreground-secondary text-sm leading-relaxed">
+                      <p className="text-text-secondary text-sm leading-relaxed">
                         {type.description}
                       </p>
                     </div>
@@ -181,7 +181,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
               {/* Who Can Join */}
               <div className="pt-8 border-t border-border">
                 <SectionHeading title={`Who can join YogaJam in ${city.name}?`} align="left" className="mb-6" />
-                <div className="prose prose-invert prose-lg max-w-none text-foreground-secondary leading-relaxed">
+                <div className="prose prose-invert prose-lg max-w-none text-text-secondary leading-relaxed">
                   <p>
                     Whether you are stepping onto the mat for the very first time or you are an advanced practitioner looking to deepen your flow, YogaJam is built for everyone. Our sessions in {city.name} are expertly curated to offer modifications and advancements, ensuring every individual finds their rhythm.
                   </p>
@@ -200,7 +200,7 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                       Private Experiences
                     </div>
                     <SectionHeading title={`Host your special occasion in ${city.name}`} align="left" className="mb-6" />
-                    <p className="text-foreground-secondary max-w-2xl leading-relaxed">
+                    <p className="text-text-secondary max-w-2xl leading-relaxed">
                       Looking to elevate your next gathering? From exclusive birthday jams and private rooftop flows to immersive corporate wellness retreats, we design bespoke YogaJam experiences tailored entirely to your aesthetic and energy.
                     </p>
                     <Link href="/personalized-events" className="mt-4 inline-flex items-center justify-center h-12 px-6 rounded-xl bg-accent text-background font-bold text-sm transition-all shadow-[0_0_20px_rgba(200,232,107,0.2)] hover:shadow-[0_0_30px_rgba(200,232,107,0.4)] hover:scale-105">
@@ -253,11 +253,11 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                     
                     <div className="relative z-10">
                       <div className="mb-8">
-                        <div className="inline-block px-3 py-1 rounded-full bg-foreground/ border border-border text-foreground-secondary text-xs font-semibold tracking-widest uppercase mb-4">
+                        <div className="inline-block px-3 py-1 rounded-full bg-foreground/ border border-border text-text-secondary text-xs font-semibold tracking-widest uppercase mb-4">
                           Coming Soon
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold font-heading mb-2 text-foreground">We&apos;re expanding.</h3>
-                        <p className="text-sm md:text-base text-foreground-secondary leading-relaxed">
+                        <p className="text-sm md:text-base text-text-secondary leading-relaxed">
                           Tickets aren&apos;t live yet for {city.name}. Drop your email below to get early access when we launch.
                         </p>
                       </div>
@@ -270,12 +270,12 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
                             </svg>
                           </div>
                           <h4 className="text-xl font-bold text-foreground mb-2">You&apos;re on the list!</h4>
-                          <p className="text-sm text-foreground-secondary">Keep an eye on your inbox.</p>
+                          <p className="text-sm text-text-secondary">Keep an eye on your inbox.</p>
                         </div>
                       ) : (
                         <form onSubmit={handleWaitlistSubmit} className="flex flex-col gap-4" noValidate>
                           <div className="flex flex-col gap-2">
-                            <label htmlFor="email" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Email Address</label>
+                            <label htmlFor="email" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Email Address</label>
                             <input 
                               type="email" 
                               id="email" 

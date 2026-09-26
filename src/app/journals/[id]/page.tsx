@@ -113,7 +113,7 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
             </div>
             <div>
               <div className="font-medium text-foreground text-lg">YogaJam Editorial</div>
-              <div className="text-sm text-foreground-secondary">{readTimeMinutes} min read</div>
+              <div className="text-sm text-text-secondary">{readTimeMinutes} min read</div>
             </div>
           </div>
           <ShareArticleButton />
@@ -125,10 +125,10 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
                      prose-headings:font-heading prose-headings:font-bold prose-headings:text-foreground
                      prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6
                      prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-4
-                     prose-p:text-foreground-secondary prose-p:leading-relaxed prose-p:mb-8
+                     prose-p:text-text-secondary prose-p:leading-relaxed prose-p:mb-8
                      prose-a:text-accent prose-a:no-underline hover:prose-a:underline
                      prose-blockquote:border-l-accent prose-blockquote:bg-surface/50 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-2xl prose-blockquote:text-foreground prose-blockquote:font-medium prose-blockquote:not-italic prose-blockquote:my-10
-                     prose-li:text-foreground-secondary prose-li:my-2
+                     prose-li:text-text-secondary prose-li:my-2
                      prose-ul:my-8 prose-ol:my-8
                      prose-strong:text-foreground"
           dangerouslySetInnerHTML={{ __html: journal.content }}
@@ -140,7 +140,7 @@ export default async function JournalReadingPage({ params }: JournalPageProps) {
         <Container>
           <div className="flex flex-row justify-between items-end mb-6 gap-4">
             <SectionHeading title="Read Next" align="left" />
-            <Link href="/journals" className="inline-flex group items-center gap-1.5 md:gap-2 text-foreground-secondary hover:text-accent-warm transition-colors text-sm md:text-base font-medium pb-1">
+            <Link href="/journals" className="inline-flex group items-center gap-1.5 md:gap-2 text-text-secondary hover:text-accent-warm transition-colors text-sm md:text-base font-medium pb-1">
               <span>View all</span>
               <svg className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

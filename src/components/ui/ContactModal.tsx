@@ -61,7 +61,7 @@ export function ContactIcons() {
       >
         {/* Default: text label */}
       <div
-        className="absolute inset-0 flex items-center justify-center text-foreground-secondary text-sm md:text-base font-medium px-2 text-center"
+        className="absolute inset-0 flex items-center justify-center text-text-secondary text-sm md:text-base font-medium px-2 text-center"
         style={{
           opacity: isHovered ? 0 : 1,
           transform: isHovered ? "translateY(-8px)" : "translateY(0)",
@@ -107,7 +107,7 @@ export function ContactIcons() {
               </div>
               <div className="flex flex-col">
                 <span className="text-base font-semibold text-foreground tracking-wide">{action.label}</span>
-                <span className="text-xs text-foreground-secondary mt-0.5">
+                <span className="text-xs text-text-secondary mt-0.5">
                   {action.id === 'phone' ? contactData.phone : action.id === 'whatsapp' ? 'Chat on WhatsApp' : contactData.email}
                 </span>
               </div>

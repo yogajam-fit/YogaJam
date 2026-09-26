@@ -23,7 +23,7 @@ export default function HelpPage() {
             {/* General Inquiries */}
             <div className="p-8 rounded-3xl bg-surface border border-border hover:border-accent/30 transition-colors">
               <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-4">General Inquiries</h2>
-              <p className="text-foreground-secondary mb-6 leading-relaxed">
+              <p className="text-text-secondary mb-6 leading-relaxed">
                 For general questions, feedback, or media inquiries, drop us an email. Our team typically responds within 24 hours.
               </p>
               <div className="flex items-center gap-3">
@@ -41,7 +41,7 @@ export default function HelpPage() {
             {/* Instant Support */}
             <div className="p-8 rounded-3xl bg-surface border border-border hover:border-accent/30 transition-colors">
               <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-4">Instant Support</h2>
-              <p className="text-foreground-secondary mb-6 leading-relaxed">
+              <p className="text-text-secondary mb-6 leading-relaxed">
                 Need urgent help with a booking or finding an event location? Reach out to us directly on WhatsApp.
               </p>
               <div className="flex items-center gap-3">
@@ -59,7 +59,7 @@ export default function HelpPage() {
             {/* Partnerships */}
             <div className="p-8 rounded-3xl bg-surface border border-border hover:border-accent/30 transition-colors md:col-span-2">
               <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground mb-4">Host an Event / Partnerships</h2>
-              <p className="text-foreground-secondary mb-6 leading-relaxed max-w-2xl">
+              <p className="text-text-secondary mb-6 leading-relaxed max-w-2xl">
                 Interested in hosting a private YogaJam experience or looking to partner with us for a brand activation? 
                 Check out our Private Events page or contact our partnerships team.
               </p>
@@ -67,7 +67,7 @@ export default function HelpPage() {
                 <a href="/personalized-events" className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-accent text-background font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(200,232,107,0.2)]">
                   Explore Private Events
                 </a>
-                <span className="text-foreground-secondary">or</span>
+                <span className="text-text-secondary">or</span>
                 <a href={`mailto:${contactData.partnershipsEmail}`} className="text-foreground hover:text-accent font-medium transition-colors underline underline-offset-4 break-all">
                   {contactData.partnershipsEmail}
                 </a>

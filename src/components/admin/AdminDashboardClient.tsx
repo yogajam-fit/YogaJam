@@ -86,7 +86,7 @@ export function AdminDashboardClient({
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out space-y-10">
                 <div>
                   <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight">Dashboard Overview</h1>
-                  <p className="mt-2 text-base text-foreground-secondary max-w-2xl">
+                  <p className="mt-2 text-base text-text-secondary max-w-2xl">
                     Welcome to your control panel. Monitor engagement, manage upcoming events, and review guest bookings all in one place.
                   </p>
                 </div>
@@ -97,7 +97,7 @@ export function AdminDashboardClient({
                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-50 transition-opacity">
                       <svg className="w-12 h-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     </div>
-                    <p className="text-sm font-bold text-foreground-secondary uppercase tracking-widest mb-2 relative z-10">Booking Requests</p>
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-2 relative z-10">Booking Requests</p>
                     <div className="flex items-baseline gap-3 relative z-10">
                       <p className="text-5xl font-black text-foreground">{dashboardStats.totalBookings || 0}</p>
                       <span className="text-sm text-accent font-medium bg-accent/10 px-2 py-0.5 rounded-md">{dashboardStats.pendingBookings || 0} pending</span>
@@ -109,7 +109,7 @@ export function AdminDashboardClient({
                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-50 transition-opacity">
                       <svg className="w-12 h-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     </div>
-                    <p className="text-sm font-bold text-foreground-secondary uppercase tracking-widest mb-2 relative z-10">Host Requests</p>
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-2 relative z-10">Host Requests</p>
                     <div className="flex items-baseline gap-3 relative z-10">
                       <p className="text-5xl font-black text-foreground">{dashboardStats.totalHostRequests || 0}</p>
                       <span className="text-sm text-accent font-medium bg-accent/10 px-2 py-0.5 rounded-md">{dashboardStats.pendingHostRequests || 0} pending</span>
@@ -123,7 +123,7 @@ export function AdminDashboardClient({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
                     </div>
-                    <p className="text-sm font-bold text-foreground-secondary uppercase tracking-widest mb-2 relative z-10">Total Subscribers</p>
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-2 relative z-10">Total Subscribers</p>
                     <div className="flex items-baseline gap-3 relative z-10">
                       <p className="text-5xl font-black text-foreground">{dashboardStats.totalSubscribers || 0}</p>
                       <span className="text-sm text-accent font-medium bg-accent/10 px-2 py-0.5 rounded-md">All time</span>
@@ -137,7 +137,7 @@ export function AdminDashboardClient({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                       </svg>
                     </div>
-                    <p className="text-sm font-bold text-foreground-secondary uppercase tracking-widest mb-2 relative z-10">Total Reviews</p>
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-2 relative z-10">Total Reviews</p>
                     <div className="flex items-baseline gap-3 relative z-10">
                       <p className="text-5xl font-black text-foreground">{dashboardStats.totalReviews || 0}</p>
                       <span className="text-sm text-accent font-medium bg-accent/10 px-2 py-0.5 rounded-md">All time</span>
@@ -152,7 +152,7 @@ export function AdminDashboardClient({
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-300">
-                      <thead className="bg-foreground/ border-b border-border text-foreground-secondary">
+                      <thead className="bg-foreground/ border-b border-border text-text-secondary">
                         <tr>
                           <th className="px-6 py-4 font-semibold">Event Title</th>
                           <th className="px-6 py-4 font-semibold">Date</th>
@@ -165,7 +165,7 @@ export function AdminDashboardClient({
                             <td className="px-6 py-4">
                               <span className="font-semibold text-foreground">{event.title}</span>
                             </td>
-                            <td className="px-6 py-4 text-foreground-secondary">
+                            <td className="px-6 py-4 text-text-secondary">
                               {event.date}
                             </td>
                             <td className="px-6 py-4 text-right">
@@ -194,7 +194,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Events Management</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Create, edit, and publish your events. These changes will reflect immediately on the public site.
                     </p>
                   </div>
@@ -208,7 +208,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight">Booking Requests</h1>
-                    <p className="mt-2 text-base text-foreground-secondary max-w-2xl">
+                    <p className="mt-2 text-base text-text-secondary max-w-2xl">
                       Review and manage manual booking requests submitted by users for your events. Verify payments using the provided UTR numbers or screenshots.
                     </p>
                   </div>
@@ -222,7 +222,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Host Requests</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Manage personalized event requests from users. Update statuses as you review them.
                     </p>
                   </div>
@@ -236,7 +236,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Reviews Moderation</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Manage community reviews. Approve genuine feedback to display on the site or reject spam.
                     </p>
                   </div>
@@ -250,7 +250,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Gallery Management</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Upload and manage images for the public gallery page.
                     </p>
                   </div>
@@ -264,7 +264,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">YogaJam Channel Management</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Add and manage videos displayed in the YogaJam Channel section on the homepage.
                     </p>
                   </div>
@@ -278,7 +278,7 @@ export function AdminDashboardClient({
                 <div className="mb-10 flex justify-between items-end">
                   <div>
                     <h1 className="text-3xl font-extrabold text-foreground font-manrope tracking-tight mb-2">Contacts & Socials</h1>
-                    <p className="text-foreground-secondary max-w-2xl">
+                    <p className="text-text-secondary max-w-2xl">
                       Manage emails, phone numbers, and social media links that appear across the website.
                     </p>
                   </div>

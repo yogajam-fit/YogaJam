@@ -67,7 +67,7 @@ export function BaseModal({
             </h2>
             <button 
               onClick={onClose}
-              className="p-2 -mr-2 text-foreground-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/5 bg-background/80 border border-border"
+              className="p-2 -mr-2 text-text-secondary hover:text-foreground transition-colors rounded-full hover:bg-foreground/5 bg-background/80 border border-border"
               aria-label="Close dialog"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

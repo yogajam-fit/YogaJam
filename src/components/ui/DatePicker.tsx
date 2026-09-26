@@ -88,7 +88,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
         <span className={value ? "text-foreground" : "text-text-muted-accessible"}>
           {displayValue}
         </span>
-        <svg className="w-4 h-4 text-foreground-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       </div>
@@ -101,13 +101,13 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
             : "top-full mt-2 slide-in-from-top-2"
         )}>
           <div className="flex items-center justify-between mb-4">
-            <button onClick={handlePrev} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
+            <button onClick={handlePrev} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-text-secondary hover:text-foreground">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
             </button>
             <div className="text-sm font-semibold text-foreground tracking-wide">
               {MONTHS[month]} {year}
             </div>
-            <button onClick={handleNext} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-foreground-secondary hover:text-foreground">
+            <button onClick={handleNext} className="p-1.5 bg-foreground/ hover:bg-foreground/ rounded-lg transition-colors text-text-secondary hover:text-foreground">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -141,7 +141,7 @@ export function DatePicker({ value, onChange, className, error, popDirection = '
                     isSelected 
                       ? "bg-accent text-background font-bold shadow-[0_0_10px_rgba(200,232,107,0.3)]" 
                       : isPast
-                        ? "text-foreground-secondary/30 cursor-not-allowed"
+                        ? "text-text-secondary/30 cursor-not-allowed"
                         : "text-foreground hover:bg-foreground/10 hover:text-accent-warm"
                   )}
                 >

@@ -75,7 +75,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
         <span className={value ? "text-foreground" : "text-text-muted-accessible"}>
           {value || "Select time"}
         </span>
-        <svg className="w-4 h-4 text-foreground-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
@@ -97,7 +97,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
                   onClick={() => setHour(h)}
                   className={cn(
                     "h-8 flex items-center justify-center snap-center cursor-pointer transition-all duration-200 text-sm font-medium rounded-lg",
-                    hour === h ? "bg-accent/20 text-accent font-bold" : "text-foreground-secondary hover:text-foreground"
+                    hour === h ? "bg-accent/20 text-accent font-bold" : "text-text-secondary hover:text-foreground"
                   )}
                 >
                   {h}
@@ -106,7 +106,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
               <div className="h-[40%]" />
             </div>
             
-            <div className="text-foreground-secondary font-bold">:</div>
+            <div className="text-text-secondary font-bold">:</div>
             
             {/* Minutes */}
             <div className="flex-1 h-full overflow-y-auto snap-y snap-mandatory px-1 text-center relative scroll-smooth mask-image-fade [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -117,7 +117,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
                   onClick={() => setMinute(m)}
                   className={cn(
                     "h-8 flex items-center justify-center snap-center cursor-pointer transition-all duration-200 text-sm font-medium rounded-lg",
-                    minute === m ? "bg-accent/20 text-accent font-bold" : "text-foreground-secondary hover:text-foreground"
+                    minute === m ? "bg-accent/20 text-accent font-bold" : "text-text-secondary hover:text-foreground"
                   )}
                 >
                   {m}
@@ -136,7 +136,7 @@ export function TimePicker({ value, onChange, className, error, popDirection = '
                   onClick={() => setAmpm(a)}
                   className={cn(
                     "h-10 flex items-center justify-center cursor-pointer transition-all duration-200 text-xs font-bold rounded-lg",
-                    ampm === a ? "bg-accent text-background shadow-[0_0_10px_rgba(200,232,107,0.3)]" : "bg-foreground/5 text-foreground-secondary hover:bg-foreground/10 hover:text-foreground"
+                    ampm === a ? "bg-accent text-background shadow-[0_0_10px_rgba(200,232,107,0.3)]" : "bg-foreground/5 text-text-secondary hover:bg-foreground/10 hover:text-foreground"
                   )}
                 >
                   {a}

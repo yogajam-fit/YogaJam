@@ -127,16 +127,16 @@ export function ReviewsTable() {
           <form onSubmit={handleAddReview} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-foreground-secondary text-sm mb-1">Author Name *</label>
+                <label className="block text-text-secondary text-sm mb-1">Author Name *</label>
                 <input required name="name" type="text" className="w-full bg-background border border-border rounded-lg p-2 text-foreground" placeholder="John Doe" />
               </div>
               <div>
-                <label className="block text-foreground-secondary text-sm mb-1">Rating (1-5)</label>
+                <label className="block text-text-secondary text-sm mb-1">Rating (1-5)</label>
                 <input required name="rating" type="number" min="1" max="5" defaultValue="5" className="w-full bg-background border border-border rounded-lg p-2 text-foreground" />
               </div>
             </div>
             <div>
-              <label className="block text-foreground-secondary text-sm mb-1">Review Text *</label>
+              <label className="block text-text-secondary text-sm mb-1">Review Text *</label>
               <textarea required name="review" rows={3} className="w-full bg-background border border-border rounded-lg p-2 text-foreground" placeholder="It was amazing..." />
             </div>
             <button type="submit" className="bg-accent hover:bg-accent-warm px-4 py-2 rounded-lg text-background text-sm font-bold w-full transition-colors">
@@ -148,13 +148,13 @@ export function ReviewsTable() {
 
       {reviews.length === 0 ? (
         <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl p-12 text-center">
-          <p className="text-foreground-secondary">No reviews have been submitted yet.</p>
+          <p className="text-text-secondary">No reviews have been submitted yet.</p>
         </div>
       ) : (
         <div className="bg-surface backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
         <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="bg-black/20 text-foreground-secondary uppercase tracking-wider text-[11px] font-bold">
+          <thead className="bg-black/20 text-text-secondary uppercase tracking-wider text-[11px] font-bold">
             <tr>
               <th className="px-6 py-4">Guest</th>
               <th className="px-6 py-4">Event</th>
@@ -171,7 +171,7 @@ export function ReviewsTable() {
                   <p className="font-medium text-foreground">{review.name}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{review.email}</p>
                 </td>
-                <td className="px-6 py-4 text-foreground-secondary">{review.event}</td>
+                <td className="px-6 py-4 text-text-secondary">{review.event}</td>
                 <td className="px-6 py-4">{renderStars(review.rating)}</td>
                 <td className="px-6 py-4">
                   <p className="text-gray-300 whitespace-normal line-clamp-2 max-w-sm">

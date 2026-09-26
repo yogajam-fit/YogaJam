@@ -95,19 +95,19 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
               Can't wait to see you in <span className="text-accent-warm">{cityName}</span>
             </h3>
             
-            <p className="text-base text-foreground-secondary leading-relaxed">
+            <p className="text-base text-text-secondary leading-relaxed">
               We'll notify you the moment YogaJam tickets go live in your city. Get ready to move.
             </p>
           </div>
         ) : (
           <>
-            <p className="text-sm text-foreground-secondary mb-6">
+            <p className="text-sm text-text-secondary mb-6">
               Be the first to know when YogaJam launches in <strong>{cityName}</strong>.
             </p>
 
             <form id="waitlistForm" onSubmit={handleSubmit} className="space-y-4" noValidate>
               <div className="space-y-1.5">
-                <label htmlFor="name" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Name</label>
+                <label htmlFor="name" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Name</label>
                 <input 
                   type="text" 
                   id="name" 
@@ -120,7 +120,7 @@ export function WaitlistModal({ children, cityName }: { children: React.ReactNod
               </div>
               
               <div className="space-y-1.5">
-                <label htmlFor="email" className="text-xs font-semibold tracking-wide text-foreground-secondary uppercase">Email</label>
+                <label htmlFor="email" className="text-xs font-semibold tracking-wide text-text-secondary uppercase">Email</label>
                 <input 
                   type="email" 
                   id="email" 

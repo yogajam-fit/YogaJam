@@ -15,7 +15,7 @@ const getSocialColor = (name: string) => {
     case "facebook": return "text-[#1877F2]";
     case "linkedin": return "text-[#0A66C2]";
     case "whatsapp": return "text-[#25D366]";
-    default: return "text-foreground/80";
+    default: return "text-text-primary/95";
   }
 };
 
@@ -107,7 +107,7 @@ export function Footer() {
             <Link href="/" className="inline-block mb-4">
               <span className="font-heading font-bold tracking-tight text-3xl text-foreground">YogaJam<span className="text-accent text-5xl leading-[0]">.</span></span>
             </Link>
-            <p className="text-foreground-secondary text-sm leading-relaxed max-w-xs mb-8">
+            <p className="text-text-secondary text-sm leading-relaxed max-w-xs mb-8">
               We blend high-energy movement, deep house beats, and an electric community to create wellness experiences you actually want to show up for.
             </p>
             {/* Social Links (Desktop/Tablet Only in Footer) */}
@@ -141,7 +141,7 @@ export function Footer() {
                 { name: 'About us', href: '/about' }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-foreground-secondary hover:text-accent transition-colors text-sm whitespace-nowrap">
+                  <Link href={link.href} className="text-text-secondary hover:text-accent transition-colors text-sm whitespace-nowrap">
                     {link.name}
                   </Link>
                 </li>
@@ -160,7 +160,7 @@ export function Footer() {
                 { name: 'Privacy policy', href: '/privacy' }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-foreground-secondary hover:text-accent transition-colors text-sm whitespace-nowrap">
+                  <Link href={link.href} className="text-text-secondary hover:text-accent transition-colors text-sm whitespace-nowrap">
                     {link.name}
                   </Link>
                 </li>
@@ -171,7 +171,7 @@ export function Footer() {
           {/* Minimal Newsletter */}
           <div className="col-span-2 lg:col-span-4 flex flex-col">
             <h4 className="text-foreground font-semibold text-base mb-6 font-heading">Subscribe to newsletter</h4>
-            <p className="text-foreground-secondary text-sm mb-6 leading-relaxed">
+            <p className="text-text-secondary text-sm mb-6 leading-relaxed">
               Get exclusive access to underground events and early retreat drops.
             </p>
             {status === 'success' ? (
@@ -219,7 +219,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-border/50 pt-8">
-          <p className="text-foreground-secondary text-xs font-medium">
+          <p className="text-text-secondary text-xs font-medium">
             © {new Date().getFullYear()} YogaJam.fit. All rights reserved.
           </p>
         </div>
