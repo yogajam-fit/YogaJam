@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${manrope.variable} antialiased scroll-smooth`}
+      className={`${inter.variable} ${manrope.variable} antialiased`}
     >
       <body className="min-h-screen flex flex-col overscroll-none">
         <ClientLayoutWrapper>
