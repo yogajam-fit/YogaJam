@@ -114,6 +114,12 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
         {/* Video Player */}
         {showVideo && ("video" in activeItem || "video_mobile" in activeItem) && (
           <video
+            key={activeIndex}
+            ref={(el) => {
+              if (el && el.paused) {
+                el.play().catch(() => {});
+              }
+            }}
             autoPlay
             muted={isMuted}
             playsInline
@@ -132,12 +138,12 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
 
         {/* Cinematic gradient overlays */}
         {/* Mobile: Cinematic bottom gradient to provide text readability without muting the top of the photo */}
-        <div className={`absolute inset-0 bg-gradient-to-t from-background from-10% via-background/80 via-40% to-transparent to-70% z-10 pointer-events-none md:hidden transition-opacity duration-700 ${showVideo ? "opacity-70" : "opacity-100"}`} />
+        <div className={`absolute inset-0 bg-gradient-to-t from-background from-10% via-background/80 via-40% to-transparent to-70% z-10 pointer-events-none md:hidden transition-opacity duration-1000 ease-in-out ${showVideo ? "opacity-70" : "opacity-100"}`} />
         
         {/* Desktop overlays */}
-        <div className={`hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-60" : "opacity-100"}`} />
-        <div className={`hidden md:block absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-30" : "opacity-100"}`} />
-        <div className={`hidden md:block absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none transition-opacity duration-700 ${showVideo ? "opacity-0" : "opacity-100"}`} />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-r from-background via-background/90 via-30% to-transparent to-60% z-10 pointer-events-none transition-opacity duration-1000 ease-in-out ${showVideo ? "opacity-60" : "opacity-100"}`} />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-t from-background via-background/0 via-50% to-transparent z-10 pointer-events-none transition-opacity duration-1000 ease-in-out ${showVideo ? "opacity-30" : "opacity-100"}`} />
+        <div className={`hidden md:block absolute inset-0 bg-gradient-to-b from-background/80 via-background/0 via-20% to-transparent z-10 pointer-events-none transition-opacity duration-1000 ease-in-out ${showVideo ? "opacity-0" : "opacity-100"}`} />
       </div>
 
       {/* Mobile Mute/Unmute Button (Floating Top Right) */}
