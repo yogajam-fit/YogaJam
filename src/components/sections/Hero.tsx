@@ -117,7 +117,14 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
             key={activeIndex}
             ref={(el) => {
               if (el && el.paused) {
-                el.play().catch(() => {});
+                const playPromise = el.play();
+                if (playPromise !== undefined) {
+                  playPromise.catch((error) => {
+                    if (error.name === 'NotAllowedError') {
+                      setIsMuted(true);
+                    }
+                  });
+                }
               }
             }}
             autoPlay
