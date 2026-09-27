@@ -309,23 +309,25 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [pastVideos, setPastVideos] = useState<string[]>(event?.past_videos || [])
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<string | null>(null)
-  const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
+  const [deletingIndices, setDeletingIndices] = useState<Set<number>>(new Set())
 
   const loadingMessage = isSubmitting 
     ? "Saving your event..." 
     : isUploading 
       ? (uploadProgress || "Uploading your media...") 
-      : deletingIndex !== null 
-        ? "Removing video..." 
-        : null;
+      : null;
   
   const handleRemovePastVideo = async (index: number) => {
+    if (deletingIndices.has(index)) return; // Prevent overlapping delete on same item
     const urlToRemove = pastVideos[index];
     if (urlToRemove && urlToRemove.trim() !== '') {
       const confirmed = confirm("Are you sure you want to delete this video? This will permanently remove it from your cloud storage immediately.");
       if (!confirmed) return;
       
-      setDeletingIndex(index);
+      // Mark as in-flight and optimistically remove from UI
+      setDeletingIndices(prev => new Set(prev).add(index));
+      setPastVideos(prev => prev.filter((_, i) => i !== index));
+
       try {
         if (urlToRemove.includes('cloudinary.com')) {
           await fetch('/api/cloudinary-delete', {
@@ -343,10 +345,12 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       } catch (err) {
         console.error("Failed to delete video from cloud:", err);
       } finally {
-        setDeletingIndex(null);
+        setDeletingIndices(prev => { const s = new Set(prev); s.delete(index); return s; });
       }
+    } else {
+      // Empty URL row — just remove it
+      setPastVideos(prev => prev.filter((_, i) => i !== index));
     }
-    setPastVideos(pastVideos.filter((_, i) => i !== index));
   }
   
   // Split time into start and end for picker
@@ -726,8 +730,8 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       <button 
                         type="button" 
                         onClick={() => handleRemovePastVideo(index)}
-                        disabled={deletingIndex === index}
-                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg disabled:opacity-70"
+                        disabled={deletingIndices.has(index)}
+                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                       >✕</button>
                     </div>
                   ))}
