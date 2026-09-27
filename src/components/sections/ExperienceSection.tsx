@@ -76,6 +76,8 @@ export function ExperienceSection() {
 
   // Play current video, pause others
   useEffect(() => {
+    let playTimeout: NodeJS.Timeout;
+
     videoRefs.current.forEach((video, idx) => {
       if (!video) return;
       
@@ -86,16 +88,24 @@ export function ExperienceSection() {
           if (video.currentTime >= 4.9 && video.paused) {
             video.currentTime = 0;
           }
-          video.play().catch(e => console.log("Playback prevented:", e));
+          playTimeout = setTimeout(() => {
+            video.play().catch(e => console.log("Playback prevented:", e));
+          }, 400);
         } else {
           video.pause();
         }
       } else {
         video.pause();
-        // Reset inactive videos to 5s so they show the correct cover snapshot
-        video.currentTime = 5;
+        // Reset inactive videos to 5s so they show the correct cover snapshot (only if they lack a real poster)
+        if (!experiences[idx]?.thumbnailSrc && video.duration >= 5) {
+          video.currentTime = 5;
+        }
       }
     });
+
+    return () => {
+      if (playTimeout) clearTimeout(playTimeout);
+    };
   }, [currentIndex, isInView]);
 
   const nextExperience = () => {
@@ -191,7 +201,7 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload={exp.thumbnailSrc ? "none" : "metadata"}
+                      preload={diff === 0 || diff === 1 ? "auto" : (exp.thumbnailSrc ? "none" : "metadata")}
                       poster={exp.thumbnailSrc}
                       onLoadedMetadata={(e) => {
                         // Fallback for non-Cloudinary videos
