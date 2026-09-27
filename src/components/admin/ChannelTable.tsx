@@ -52,11 +52,11 @@ export function ChannelTable() {
         alert('Error deleting video: ' + error.message)
       } else {
         if (videoToDelete?.video_url) {
-          fetch('/api/imagekit-delete', {
+          fetch('/api/cloudinary-delete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: videoToDelete.video_url })
-          }).catch(err => console.error('Failed to delete from ImageKit:', err));
+          }).catch(err => console.error('Failed to delete from Cloudinary:', err));
         }
       }
     } catch (error: any) {
@@ -114,27 +114,21 @@ export function ChannelTable() {
         i++;
         setLoadingMessage(`Uploading video ${i} of ${validFiles.length}...`);
 
-        // Fetch a fresh token per file — ImageKit tokens are single-use
-        const authRes = await fetch("/api/imagekit-auth");
+        // Fetch a fresh signature per file
+        const authRes = await fetch("/api/cloudinary-sign?folder=yogajam/channel");
         if (!authRes.ok) {
-          throw new Error("Failed to get ImageKit upload authentication");
+          throw new Error("Failed to get Cloudinary upload authentication");
         }
         const authParams = await authRes.json();
         
-        // Sanitize filename to prevent ImageKit API crashes
-        const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-        
         const formData = new FormData()
         formData.append("file", file)
-        formData.append("fileName", safeFileName)
-        formData.append("folder", '/channel')
-        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!)
+        formData.append("api_key", authParams.api_key)
+        formData.append("timestamp", authParams.timestamp.toString())
         formData.append("signature", authParams.signature)
-        formData.append("expire", authParams.expire.toString())
-        formData.append("token", authParams.token)
-        formData.append("useUniqueFileName", "true")
+        formData.append("folder", authParams.folder)
 
-        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${authParams.cloud_name}/video/upload`, {
           method: "POST",
           body: formData,
         })
@@ -155,7 +149,7 @@ export function ChannelTable() {
         
         const { error: dbError } = await supabase
           .from('channel')
-          .insert({ video_url: data.url })
+          .insert({ video_url: data.secure_url })
           
         if (dbError) {
           const errMsg = `Database insert failed for ${file.name}: ${dbError.message}`;
@@ -211,7 +205,7 @@ export function ChannelTable() {
           <h3 className="text-xl font-bold font-heading mb-4">Add a New Video to Channel</h3>
           <form onSubmit={handleAddVideo} className="space-y-4">
             <div>
-              <label className="block text-text-secondary text-sm mb-1">Video URL (e.g. ImageKit or Supabase URL) *</label>
+              <label className="block text-text-secondary text-sm mb-1">Video URL (e.g. Cloudinary or Supabase URL) *</label>
               <input required name="video_url" type="url" className="w-full bg-background border border-border rounded-lg p-2 text-foreground" placeholder="https://..." />
             </div>
             <button type="submit" className="bg-accent hover:bg-accent-warm px-4 py-2 rounded-lg text-background text-sm font-bold w-full transition-colors">

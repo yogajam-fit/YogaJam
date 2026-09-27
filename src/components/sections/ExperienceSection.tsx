@@ -5,6 +5,21 @@ import { useState, useRef, useEffect } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { createClient } from "@/utils/supabase/client";
 
+// Generate a Cloudinary video thumbnail URL
+const getCloudinaryThumbnail = (videoUrl: string, seekSeconds = 5): string | undefined => {
+  if (!videoUrl.includes('res.cloudinary.com')) return undefined;
+  
+  const uploadIndex = videoUrl.indexOf('upload/');
+  if (uploadIndex === -1) return undefined;
+  
+  const baseUrl = videoUrl.substring(0, uploadIndex + 7);
+  const restUrl = videoUrl.substring(uploadIndex + 7);
+  const jpgUrl = restUrl.replace(/\.[^/.]+$/, ".jpg");
+  
+  // Add transformation: seek to 5s, width 800px, auto quality
+  return `${baseUrl}so_${seekSeconds},w_800,q_auto/${jpgUrl}`;
+};
+
 export function ExperienceSection() {
   const [experiences, setExperiences] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +38,7 @@ export function ExperienceSection() {
         setExperiences(data.map(item => ({
           id: item.id,
           videoSrc: item.video_url,
+          thumbnailSrc: getCloudinaryThumbnail(item.video_url, 5),
         })));
       }
       setIsLoading(false);
@@ -175,11 +191,14 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload="metadata"
+                      preload={exp.thumbnailSrc ? "none" : "metadata"}
+                      poster={exp.thumbnailSrc}
                       onLoadedMetadata={(e) => {
-                        // Seek to 5s so the browser renders that frame as a thumbnail
-                        const vid = e.currentTarget;
-                        if (vid.duration >= 5) vid.currentTime = 5;
+                        // Fallback for non-Cloudinary videos
+                        if (!exp.thumbnailSrc) {
+                          const vid = e.currentTarget;
+                          if (vid.duration >= 5) vid.currentTime = 5;
+                        }
                       }}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
