@@ -95,11 +95,13 @@ function CityDetailClient({ params }: { params: Promise<{ id: string }> }) {
       {/* Cinematic Hero */}
       <section className="relative w-full min-h-[50vh] md:h-[60vh] flex items-end pb-8 md:pb-16 pt-28 md:pt-32">
         <div className="absolute inset-0 z-0 bg-black">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={city.image}
             alt={city.name}
-            className="w-full h-full object-cover opacity-60"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 100vw"
+            className="object-cover opacity-60"
           />
           {/* Gradients for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />

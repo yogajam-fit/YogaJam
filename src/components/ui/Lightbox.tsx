@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 export interface LightboxImage {
   id: string | number;
@@ -85,8 +86,7 @@ export function Lightbox({ images, initialIndex, onClose }: LightboxProps) {
       {/* Top Header */}
       <div className="absolute top-0 left-0 right-0 p-4 md:p-6 flex justify-between items-center z-[10000]">
         <div className="flex items-center gap-4 text-white">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logo-medium.svg" alt="YogaJam" className="w-auto h-12 sm:h-14 object-contain" />
+          <Image src="/images/logo-medium.svg" alt="YogaJam" width={200} height={68} className="w-auto h-12 sm:h-14 object-contain" unoptimized />
         </div>
         <button 
           onClick={onClose}
@@ -116,12 +116,13 @@ export function Lightbox({ images, initialIndex, onClose }: LightboxProps) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
+        <Image 
           key={selectedIndex}
           src={images[selectedIndex].src}
           alt={images[selectedIndex].alt}
-          className="max-w-full max-h-full object-contain select-none shadow-2xl animate-in fade-in zoom-in-95 duration-300"
+          width={1200}
+          height={800}
+          className="max-w-full max-h-full w-auto h-auto object-contain select-none shadow-2xl animate-in fade-in zoom-in-95 duration-300"
         />
       </div>
 
@@ -152,8 +153,7 @@ export function Lightbox({ images, initialIndex, onClose }: LightboxProps) {
                   : 'border-transparent opacity-40 hover:opacity-100'
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+              <Image src={img.src} alt={img.alt} width={80} height={56} className="w-full h-full object-cover" />
               {i !== selectedIndex && <div className="absolute inset-0 bg-black/30 transition-opacity hover:opacity-0" />}
             </button>
           ))}

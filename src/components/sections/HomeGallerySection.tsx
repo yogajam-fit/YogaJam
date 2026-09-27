@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 
 import { Container } from "@/components/ui/Container";
 import Link from "next/link";
+import Image from "next/image";
 import { Lightbox } from "@/components/ui/Lightbox";
 
 export function HomeGallerySection() {
@@ -149,10 +150,11 @@ export function HomeGallerySection() {
                 onClick={() => setSelectedIndex(index % itemsToUse.length)}
                 className="relative shrink-0 h-[200px] sm:h-[280px] md:h-[350px] rounded-lg md:rounded-xl overflow-hidden group/image cursor-pointer border border-border/50 bg-surface/50"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
+                <Image 
                   src={image.src.includes('ik.imagekit.io') ? (image.src.includes('?') ? `${image.src}&tr=w-600` : `${image.src}?tr=w-600`) : image.src}
                   alt={image.alt}
+                  width={600}
+                  height={400}
                   loading="lazy"
                   className="h-full w-auto object-cover transition-transform duration-700 ease-out group-hover/image:scale-105"
                 />

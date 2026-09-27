@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
+import Image from "next/image";
 import { MasonryGrid } from "@/components/ui/MasonryGrid";
 import { Lightbox } from "@/components/ui/Lightbox";
 
@@ -30,10 +31,11 @@ export function GalleryClient({ images }: { images: ImageItem[] }) {
             onClick={() => openLightbox(index)}
             className="relative group overflow-hidden bg-surface/50 rounded-lg md:rounded-xl border border-border/50 cursor-pointer"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
+            <Image 
               src={image.src} 
               alt={image.alt}
+              width={600}
+              height={400}
               loading="lazy"
               className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
