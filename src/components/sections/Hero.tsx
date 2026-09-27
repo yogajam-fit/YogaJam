@@ -84,7 +84,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                     src={item.image}
                     alt={item.title}
                     fill
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                     priority={idx === 0}
                     className={`hidden md:block object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
                   />
@@ -92,7 +92,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                     src={item.image_mobile}
                     alt={item.title}
                     fill
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                     priority={idx === 0}
                     className={`md:hidden object-cover object-center transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
                   />
@@ -102,7 +102,7 @@ export function Hero({ items = previewItems }: { items?: any[] }) {
                   src={item.image}
                   alt={item.title}
                   fill
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                   priority={idx === 0}
                   className={`object-cover object-center md:object-right transition-opacity duration-1000 ease-in-out ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
                 />
