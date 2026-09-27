@@ -296,7 +296,18 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
         })
 
         if (!response.ok) {
-          throw new Error("Upload failed")
+          if (response.status === 413) {
+            throw new Error("File is too large. Server limits restrict uploads to ~4.5MB.");
+          } else if (response.status === 500) {
+            throw new Error("Server error. The file may exceed memory limits.");
+          } else {
+            let errStr = "Upload failed";
+            try {
+              const errData = await response.json();
+              errStr = errData.error || errStr;
+            } catch {}
+            throw new Error(errStr);
+          }
         }
 
         const data = await response.json()

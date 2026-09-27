@@ -67,8 +67,20 @@ export function GalleryTable() {
         })
 
         if (!response.ok) {
-          console.error(`Upload failed for ${file.name}`)
-          continue
+          let errorMsg = `Upload failed for ${file.name}`;
+          if (response.status === 413) {
+            errorMsg = `File "${file.name}" is too large. Cloud serverless limits restrict uploads to ~4.5MB.`;
+          } else if (response.status === 500) {
+            errorMsg = `Server error uploading "${file.name}". The file may exceed memory limits (4.5MB max).`;
+          } else {
+            try {
+              const errData = await response.json();
+              errorMsg = errData.error || errorMsg;
+            } catch {}
+          }
+          alert(errorMsg);
+          console.error(errorMsg);
+          continue;
         }
 
         const data = await response.json()
@@ -79,8 +91,10 @@ export function GalleryTable() {
           .insert({ url: data.url })
           
         if (dbError) {
-          console.error(`Database insert failed for ${file.name}`, dbError)
-          continue
+          const errMsg = `Database insert failed for ${file.name}: ${dbError.message}`;
+          console.error(errMsg, dbError);
+          alert(errMsg);
+          continue;
         }
         
         uploadedCount++
