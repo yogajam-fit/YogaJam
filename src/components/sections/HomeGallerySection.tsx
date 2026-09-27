@@ -151,12 +151,13 @@ export function HomeGallerySection() {
                 className="relative shrink-0 h-[200px] sm:h-[280px] md:h-[350px] rounded-lg md:rounded-xl overflow-hidden group/image cursor-pointer border border-border/50 bg-surface/50"
               >
                 <Image 
-                  src={image.src.includes('ik.imagekit.io') ? (image.src.includes('?') ? `${image.src}&tr=w-600` : `${image.src}?tr=w-600`) : image.src}
+                  src={image.src.includes('ik.imagekit.io') ? (image.src.includes('?') ? `${image.src}&tr=w-400` : `${image.src}?tr=w-400`) : image.src}
                   alt={image.alt}
-                  width={600}
-                  height={800}
+                  width={400}
+                  height={600}
                   loading="lazy"
-                  sizes="(max-width: 768px) 250px, (max-width: 1200px) 400px, 600px"
+                  quality={70}
+                  sizes="(max-width: 768px) 160px, (max-width: 1200px) 300px, 400px"
                   style={{ width: 'auto', height: '100%' }}
                   className="object-cover transition-transform duration-700 ease-out group-hover/image:scale-105"
                 />
