@@ -16,6 +16,7 @@ export function ChannelTable() {
   const [loading, setLoading] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set())
   const supabase = createClient()
 
   useEffect(() => {
@@ -35,9 +36,11 @@ export function ChannelTable() {
   }
 
   const handleDelete = async (id: string) => {
+    if (deletingIds.has(id)) return; // Prevent overlapping delete on same item
     if (!confirm('Are you sure you want to delete this video?')) return
 
-    // Optimistic update — remove from UI instantly
+    // Mark as in-flight and optimistically remove from UI
+    setDeletingIds(prev => new Set(prev).add(id));
     const videoToDelete = videos.find(v => v.id === id);
     setVideos(prev => prev.filter(v => v.id !== id));
 
@@ -59,6 +62,8 @@ export function ChannelTable() {
     } catch (error: any) {
       if (videoToDelete) setVideos(prev => [videoToDelete, ...prev]);
       alert('Error deleting video: ' + error.message)
+    } finally {
+      setDeletingIds(prev => { const s = new Set(prev); s.delete(id); return s; });
     }
   }
 
@@ -252,7 +257,8 @@ export function ChannelTable() {
                     <td className="px-6 py-4 text-right">
                       <button 
                         onClick={() => handleDelete(video.id)}
-                        className="text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors opacity-50 group-hover:opacity-100"
+                        disabled={deletingIds.has(video.id)}
+                        className="text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors opacity-50 group-hover:opacity-100 disabled:cursor-not-allowed"
                         title="Delete"
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

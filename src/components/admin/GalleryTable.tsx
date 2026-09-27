@@ -17,6 +17,7 @@ export function GalleryTable() {
   const [images, setImages] = useState<GalleryRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     fetchImages()
@@ -130,9 +131,11 @@ export function GalleryTable() {
   }
 
   const handleDelete = async (id: string) => {
+    if (deletingIds.has(id)) return; // Prevent overlapping delete on same item
     if (!confirm('Are you sure you want to delete this image?')) return
     
-    // Optimistic update — remove from UI instantly
+    // Mark as in-flight and optimistically remove from UI
+    setDeletingIds(prev => new Set(prev).add(id));
     const itemToDelete = images.find(img => img.id === id);
     setImages(prev => prev.filter(img => img.id !== id));
     
@@ -155,6 +158,8 @@ export function GalleryTable() {
       // Rollback on failure
       if (itemToDelete) setImages(prev => [itemToDelete, ...prev]);
       alert('Error deleting image: ' + error.message)
+    } finally {
+      setDeletingIds(prev => { const s = new Set(prev); s.delete(id); return s; });
     }
   }
 
@@ -189,7 +194,8 @@ export function GalleryTable() {
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <button 
                 onClick={() => handleDelete(img.id)}
-                className="bg-red-500/20 hover:bg-red-500/40 text-red-500 border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                disabled={deletingIds.has(img.id)}
+                className="bg-red-500/20 hover:bg-red-500/40 text-red-500 border border-red-500/50 px-4 py-2 rounded-lg text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Delete
               </button>
