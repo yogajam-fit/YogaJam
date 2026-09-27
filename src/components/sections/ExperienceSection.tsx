@@ -22,7 +22,7 @@ export function ExperienceSection() {
       if (data && data.length > 0) {
         setExperiences(data.map(item => ({
           id: item.id,
-          videoSrc: item.video_url
+          videoSrc: item.video_url,
         })));
       }
       setIsLoading(false);
@@ -175,11 +175,16 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload={diff === 0 && isInView ? "metadata" : "none"}
+                      preload="metadata"
+                      onLoadedMetadata={(e) => {
+                        // Seek to 5s so the browser renders that frame as a thumbnail
+                        const vid = e.currentTarget;
+                        if (vid.duration >= 5) vid.currentTime = 5;
+                      }}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
                     >
-                      <source src={`${exp.videoSrc}#t=5.0`} type="video/mp4" />
+                      <source src={exp.videoSrc} type="video/mp4" />
                     </video>
 
                     {/* Mute Toggle (Only on Active Video) */}
