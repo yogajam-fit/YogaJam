@@ -31,7 +31,7 @@ export function TeamSection() {
                   className={`transition-all duration-500 ${
                     isSvg 
                       ? 'object-contain p-8 md:p-10 opacity-50 invert hover:opacity-70 group-hover:scale-105' 
-                      : 'object-cover filter md:grayscale opacity-90 md:group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105'
+                      : 'object-cover group-hover:scale-105'
                   }`}
                 />
               </div>

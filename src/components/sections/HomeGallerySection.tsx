@@ -6,10 +6,12 @@ import { createClient } from "@/utils/supabase/client";
 
 import { Container } from "@/components/ui/Container";
 import Link from "next/link";
+import { Lightbox } from "@/components/ui/Lightbox";
 
 export function HomeGallerySection() {
   const [dbImages, setDbImages] = useState<{id: string, src: string, alt: string}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const exactScrollLeftRef = React.useRef<number>(0);
   const [isInteracting, setIsInteracting] = useState(false);
@@ -139,12 +141,13 @@ export function HomeGallerySection() {
             onTouchEnd={handleInteractionEnd}
             onTouchCancel={handleInteractionEnd}
             onScroll={handleScroll}
-            className="flex w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
+            className="flex w-full gap-1.5 md:gap-2 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
           >
             {itemsToRender.map((image, index) => (
               <div 
                 key={`${image.id}-${index}`} 
-                className="relative shrink-0 h-[200px] sm:h-[280px] md:h-[350px] mx-2 md:mx-3 rounded-lg md:rounded-xl overflow-hidden group/image cursor-pointer border border-border/50 bg-surface/50"
+                onClick={() => setSelectedIndex(index % itemsToUse.length)}
+                className="relative shrink-0 h-[200px] sm:h-[280px] md:h-[350px] rounded-lg md:rounded-xl overflow-hidden group/image cursor-pointer border border-border/50 bg-surface/50"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
@@ -160,6 +163,14 @@ export function HomeGallerySection() {
           </div>
         </div>
       </Container>
+      
+      {selectedIndex !== null && (
+        <Lightbox 
+          images={itemsToUse} 
+          initialIndex={selectedIndex} 
+          onClose={() => setSelectedIndex(null)} 
+        />
+      )}
     </section>
   );
 }

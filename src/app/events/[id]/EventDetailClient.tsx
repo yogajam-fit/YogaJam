@@ -53,7 +53,7 @@ export function EventDetailClient({ event }: { event: EventRecord }) {
           />
           {event.video && showVideo && (
             <video 
-              src={`${getOriginalVideoUrl(event.video)}#t=0.001`} 
+              src={getOriginalVideoUrl(event.video)} 
               autoPlay 
               muted 
               loop 
@@ -607,6 +607,40 @@ function VideoWithLoader({ src }: { src: string }) {
   const [isMuted, setIsMuted] = React.useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
+  // Cloudinary natively generates thumbnails for free — no auth needed!
+  // .../upload/v123/file.mp4 → .../upload/so_5/v123/file.jpg
+  const posterUrl = React.useMemo(() => {
+    if (!src || !src.includes('cloudinary.com')) return '';
+    return src.replace('/upload/', '/upload/so_5/').replace(/\.(mp4|mov|webm)(\?.*)?$/i, '.jpg');
+  }, [src]);
+
+
+  // When navigating client-side (e.g. events list → detail page), the browser
+  // may have already loaded the video metadata BEFORE React attaches the
+  // onLoadedMetadata/onCanPlay handlers. We check readyState on mount to catch
+  // this case and immediately clear the loader.
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    // readyState >= 1 means HAVE_METADATA — enough to show the cover frame
+    if (video.readyState >= 1) {
+      setIsLoading(false);
+      return;
+    }
+    // Fallback: poll every 200ms for up to 3 seconds in case events still miss
+    const interval = setInterval(() => {
+      if (video.readyState >= 1) {
+        setIsLoading(false);
+        clearInterval(interval);
+      }
+    }, 200);
+    const timeout = setTimeout(() => clearInterval(interval), 3000);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [src]);
+
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (videoRef.current) {
@@ -618,6 +652,13 @@ function VideoWithLoader({ src }: { src: string }) {
             vid.pause();
           }
         });
+        
+        // If using Cloudinary poster: video src is plain, starts at 0 naturally.
+        // If using #t=5.0 fallback (non-Cloudinary): reset only if still at cover position.
+        if (!posterUrl && videoRef.current.currentTime >= 4.9) {
+          videoRef.current.currentTime = 0;
+        }
+        setIsLoading(false);
         videoRef.current.play();
       }
     }
@@ -655,12 +696,18 @@ function VideoWithLoader({ src }: { src: string }) {
       )}
       <video 
         ref={videoRef}
-        src={`${src}#t=0.001`} 
+        src={posterUrl ? src : `${src}#t=5.0`}
+        poster={posterUrl || undefined}
         playsInline
         preload="metadata"
         muted={isMuted}
+        onLoadedMetadata={() => setIsLoading(false)}
         onLoadedData={() => setIsLoading(false)}
-        onPlay={() => setIsPlaying(true)}
+        onCanPlay={() => setIsLoading(false)}
+        onPlay={() => {
+          setIsPlaying(true);
+          setIsLoading(false);
+        }}
         onPause={() => setIsPlaying(false)}
         onEnded={() => setIsPlaying(false)}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`} 

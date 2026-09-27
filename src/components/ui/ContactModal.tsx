@@ -29,7 +29,7 @@ export function ContactIcons() {
     {
       id: "whatsapp",
       label: "Message",
-      href: `https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}`,
+      href: `https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hi YogaJam, I would like to know more!")}`,
       target: "_blank",
       color: "#25D366",
       icon: (

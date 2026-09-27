@@ -55,7 +55,7 @@ function TextReviewSlot({
       </svg>
       <div className={`h-full w-full relative z-10 transition-opacity duration-1000 ease-in-out ${opacity ? 'opacity-100' : 'opacity-0'}`}>
         <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pr-1 flex flex-col">
-          <div className="m-auto w-full py-1 flex flex-col">
+          <div className="w-full py-1 flex flex-col pt-8 sm:pt-10">
             <p className="text-text-primary/95 font-medium text-sm sm:text-base lg:text-lg italic leading-relaxed order-2 md:order-1">
               {currentReview.text}
             </p>

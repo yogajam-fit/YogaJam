@@ -7,13 +7,16 @@ export function MasonryGrid({ items, renderItem }: { items: any[], renderItem: (
   const renderCols = (cols: number) => {
     const colClass = cols === 2 ? 'grid-cols-2' : cols === 3 ? 'grid-cols-3' : 'grid-cols-4';
     return (
-      <div className={`grid ${colClass} gap-3 md:gap-4`}>
+      <div className={`grid ${colClass} gap-1.5 md:gap-2`}>
         {Array.from({ length: cols }).map((_, colIndex) => (
-          <div key={colIndex} className="flex flex-col gap-3 md:gap-4">
-            {items.filter((_, i) => i % cols === colIndex).map((item, originalIndex) => (
-              <React.Fragment key={item.id || originalIndex}>
-                {renderItem(item, originalIndex)}
-              </React.Fragment>
+          <div key={colIndex} className="flex flex-col gap-1.5 md:gap-2">
+            {items
+              .map((item, index) => ({ item, originalIndex: index }))
+              .filter((_, i) => i % cols === colIndex)
+              .map(({ item, originalIndex }) => (
+                <React.Fragment key={item.id || originalIndex}>
+                  {renderItem(item, originalIndex)}
+                </React.Fragment>
             ))}
           </div>
         ))}

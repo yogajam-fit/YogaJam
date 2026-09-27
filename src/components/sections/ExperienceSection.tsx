@@ -67,14 +67,17 @@ export function ExperienceSection() {
       // not just scrolling in and out of view.
       if (idx === currentIndex) {
         if (isInView) {
+          if (video.currentTime >= 4.9 && video.paused) {
+            video.currentTime = 0;
+          }
           video.play().catch(e => console.log("Playback prevented:", e));
         } else {
           video.pause();
         }
       } else {
         video.pause();
-        // reset inactive videos so they start from beginning next time
-        video.currentTime = 0;
+        // Reset inactive videos to 5s so they show the correct cover snapshot
+        video.currentTime = 5;
       }
     });
   }, [currentIndex, isInView]);
@@ -176,7 +179,7 @@ export function ExperienceSection() {
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
                     >
-                      <source src={`${exp.videoSrc}#t=0.001`} type="video/mp4" />
+                      <source src={`${exp.videoSrc}#t=5.0`} type="video/mp4" />
                     </video>
 
                     {/* Mute Toggle (Only on Active Video) */}
