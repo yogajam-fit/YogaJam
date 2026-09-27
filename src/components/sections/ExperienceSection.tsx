@@ -175,7 +175,7 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload={diff === 0 ? "auto" : "metadata"}
+                      preload={diff === 0 && isInView ? "metadata" : "none"}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
                     >

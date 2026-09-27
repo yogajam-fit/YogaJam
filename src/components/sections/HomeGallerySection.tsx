@@ -154,9 +154,11 @@ export function HomeGallerySection() {
                   src={image.src.includes('ik.imagekit.io') ? (image.src.includes('?') ? `${image.src}&tr=w-600` : `${image.src}?tr=w-600`) : image.src}
                   alt={image.alt}
                   width={600}
-                  height={400}
+                  height={800}
                   loading="lazy"
-                  className="h-full w-auto object-cover transition-transform duration-700 ease-out group-hover/image:scale-105"
+                  sizes="(max-width: 768px) 250px, (max-width: 1200px) 400px, 600px"
+                  style={{ width: 'auto', height: '100%' }}
+                  className="object-cover transition-transform duration-700 ease-out group-hover/image:scale-105"
                 />
                 {/* Subtle hover overlay */}
                 <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition-colors duration-500 pointer-events-none" />
