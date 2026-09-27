@@ -7,13 +7,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const folder = searchParams.get("folder") || "yogajam/events/past_videos";
     const timestamp = Math.round(new Date().getTime() / 1000);
     const signature = cloudinary.utils.api_sign_request(
       {
         timestamp: timestamp,
-        folder: "yogajam/events/past_videos",
+        folder: folder,
       },
       process.env.CLOUDINARY_API_SECRET!
     );
@@ -23,7 +25,7 @@ export async function GET() {
       timestamp,
       api_key: process.env.CLOUDINARY_API_KEY,
       cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-      folder: "yogajam/events/past_videos"
+      folder: folder
     });
   } catch (error: any) {
     console.error("Cloudinary sign error:", error);

@@ -26,7 +26,7 @@ export function ChannelTable() {
     const { data } = await supabase
       .from('channel')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
     
     if (data) {
       setVideos(data)
@@ -37,25 +37,28 @@ export function ChannelTable() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this video?')) return
 
-    setLoadingMessage("Removing video from channel...")
-    try {
-      const videoToDelete = videos.find(v => v.id === id);
+    // Optimistic update — remove from UI instantly
+    const videoToDelete = videos.find(v => v.id === id);
+    setVideos(prev => prev.filter(v => v.id !== id));
 
+    try {
       const { error } = await supabase.from('channel').delete().eq('id', id)
       if (error) {
+        // Rollback on failure
+        if (videoToDelete) setVideos(prev => [videoToDelete, ...prev]);
         alert('Error deleting video: ' + error.message)
       } else {
-        if (videoToDelete && videoToDelete.video_url) {
-          await fetch('/api/imagekit-delete', {
+        if (videoToDelete?.video_url) {
+          fetch('/api/imagekit-delete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: videoToDelete.video_url })
           }).catch(err => console.error('Failed to delete from ImageKit:', err));
         }
-        fetchVideos()
       }
-    } finally {
-      setLoadingMessage(null)
+    } catch (error: any) {
+      if (videoToDelete) setVideos(prev => [videoToDelete, ...prev]);
+      alert('Error deleting video: ' + error.message)
     }
   }
 
@@ -101,28 +104,43 @@ export function ChannelTable() {
     let uploadedCount = 0
     
     try {
+      let i = 0;
       for (const file of validFiles) {
+        i++;
+        setLoadingMessage(`Uploading video ${i} of ${validFiles.length}...`);
+
+        // Fetch a fresh token per file — ImageKit tokens are single-use
+        const authRes = await fetch("/api/imagekit-auth");
+        if (!authRes.ok) {
+          throw new Error("Failed to get ImageKit upload authentication");
+        }
+        const authParams = await authRes.json();
+        
+        // Sanitize filename to prevent ImageKit API crashes
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        
         const formData = new FormData()
         formData.append("file", file)
+        formData.append("fileName", safeFileName)
         formData.append("folder", '/channel')
+        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!)
+        formData.append("signature", authParams.signature)
+        formData.append("expire", authParams.expire.toString())
+        formData.append("token", authParams.token)
+        formData.append("useUniqueFileName", "true")
 
-        const response = await fetch("/api/upload", {
+        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
           method: "POST",
           body: formData,
         })
 
         if (!response.ok) {
           let errorMsg = `Upload failed for ${file.name}`;
-          if (response.status === 413) {
-            errorMsg = `File "${file.name}" is too large. Cloud serverless limits restrict uploads to ~4.5MB. Please compress or upload directly to ImageKit.`;
-          } else if (response.status === 500) {
-            errorMsg = `Server error uploading "${file.name}". The file may exceed memory limits (4.5MB max).`;
-          } else {
-            try {
-              const errData = await response.json();
-              errorMsg = errData.error || errorMsg;
-            } catch {}
-          }
+          try {
+            const errData = await response.json();
+            if (errData.message) errorMsg = `${errorMsg}: ${errData.message}`;
+          } catch {}
+          
           alert(errorMsg);
           console.error(errorMsg);
           continue;

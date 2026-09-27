@@ -56,28 +56,43 @@ export function GalleryTable() {
     let uploadedCount = 0
     
     try {
+      let i = 0;
       for (const file of validFiles) {
+        i++;
+        setLoadingMessage(`Uploading image ${i} of ${validFiles.length}...`);
+
+        // Fetch a fresh token per file — ImageKit tokens are single-use
+        const authRes = await fetch("/api/imagekit-auth");
+        if (!authRes.ok) {
+          throw new Error("Failed to get ImageKit upload authentication");
+        }
+        const authParams = await authRes.json();
+        
+        // Sanitize filename to prevent ImageKit API crashes
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        
         const formData = new FormData()
         formData.append("file", file)
+        formData.append("fileName", safeFileName)
         formData.append("folder", '/gallery')
+        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!)
+        formData.append("signature", authParams.signature)
+        formData.append("expire", authParams.expire.toString())
+        formData.append("token", authParams.token)
+        formData.append("useUniqueFileName", "true")
 
-        const response = await fetch("/api/upload", {
+        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
           method: "POST",
           body: formData,
         })
 
         if (!response.ok) {
           let errorMsg = `Upload failed for ${file.name}`;
-          if (response.status === 413) {
-            errorMsg = `File "${file.name}" is too large. Cloud serverless limits restrict uploads to ~4.5MB.`;
-          } else if (response.status === 500) {
-            errorMsg = `Server error uploading "${file.name}". The file may exceed memory limits (4.5MB max).`;
-          } else {
-            try {
-              const errData = await response.json();
-              errorMsg = errData.error || errorMsg;
-            } catch {}
-          }
+          try {
+            const errData = await response.json();
+            if (errData.message) errorMsg = `${errorMsg}: ${errData.message}`;
+          } catch {}
+          
           alert(errorMsg);
           console.error(errorMsg);
           continue;
@@ -117,10 +132,11 @@ export function GalleryTable() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this image?')) return
     
-    setLoadingMessage("Removing image from gallery...")
+    // Optimistic update — remove from UI instantly
+    const itemToDelete = images.find(img => img.id === id);
+    setImages(prev => prev.filter(img => img.id !== id));
+    
     try {
-      const itemToDelete = images.find(img => img.id === id);
-
       const { error } = await supabase
         .from('gallery')
         .delete()
@@ -128,19 +144,17 @@ export function GalleryTable() {
         
       if (error) throw error
 
-      if (itemToDelete && itemToDelete.url) {
-        await fetch('/api/imagekit-delete', {
+      if (itemToDelete?.url) {
+        fetch('/api/imagekit-delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: itemToDelete.url })
         }).catch(err => console.error('Failed to delete from ImageKit:', err));
       }
-
-      setImages(images.filter(img => img.id !== id))
     } catch (error: any) {
+      // Rollback on failure
+      if (itemToDelete) setImages(prev => [itemToDelete, ...prev]);
       alert('Error deleting image: ' + error.message)
-    } finally {
-      setLoadingMessage(null);
     }
   }
 

@@ -18,12 +18,15 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
+    // Sanitize filename to prevent API crashes with special characters
+    const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    
     // Convert Node Buffer to an ImageKit Uploadable File object
-    const ikFile = await toFile(buffer, file.name);
+    const ikFile = await toFile(buffer, safeFileName);
 
     const result = await imagekit.files.upload({
       file: ikFile,
-      fileName: file.name,
+      fileName: safeFileName,
       folder: folder,
     });
 

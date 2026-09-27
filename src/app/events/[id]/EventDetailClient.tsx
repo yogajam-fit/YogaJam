@@ -286,28 +286,36 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
     
     if (verifyMethod === 'screenshot' && screenshotFile) {
       try {
+        const authRes = await fetch("/api/imagekit-auth");
+        if (!authRes.ok) {
+          throw new Error("Failed to get ImageKit upload authentication");
+        }
+        const authParams = await authRes.json();
+
+        const safeFileName = screenshotFile.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        
         const formData = new FormData()
         formData.append("file", screenshotFile)
+        formData.append("fileName", safeFileName)
         formData.append("folder", "/events/screenshots")
+        formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!)
+        formData.append("signature", authParams.signature)
+        formData.append("expire", authParams.expire.toString())
+        formData.append("token", authParams.token)
+        formData.append("useUniqueFileName", "true")
 
-        const response = await fetch("/api/upload", {
+        const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
           method: "POST",
           body: formData,
         })
 
         if (!response.ok) {
-          if (response.status === 413) {
-            throw new Error("File is too large. Server limits restrict uploads to ~4.5MB.");
-          } else if (response.status === 500) {
-            throw new Error("Server error. The file may exceed memory limits.");
-          } else {
-            let errStr = "Upload failed";
-            try {
-              const errData = await response.json();
-              errStr = errData.error || errStr;
-            } catch {}
-            throw new Error(errStr);
-          }
+          let errStr = "Upload failed";
+          try {
+            const errData = await response.json();
+            errStr = errData.message || errStr;
+          } catch {}
+          throw new Error(errStr);
         }
 
         const data = await response.json()

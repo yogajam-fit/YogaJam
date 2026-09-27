@@ -308,12 +308,13 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
   const [qrUrl, setQrUrl] = useState(event?.qr_code || '')
   const [pastVideos, setPastVideos] = useState<string[]>(event?.past_videos || [])
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null)
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
 
   const loadingMessage = isSubmitting 
     ? "Saving your event..." 
     : isUploading 
-      ? "Uploading your media..." 
+      ? (uploadProgress || "Uploading your media...") 
       : deletingIndex !== null 
         ? "Removing video..." 
         : null;
@@ -360,48 +361,70 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
 
   const supabase = createClient()
   
+  const handleRemoveMedia = async (url: string, setter: (v: string) => void) => {
+    if (!confirm('Remove this media? It will be deleted from the cloud.')) return;
+    setter('');
+    if (url) {
+      await fetch('/api/imagekit-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      }).catch(err => console.error('Failed to delete from ImageKit:', err));
+    }
+  }
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'image_mobile' | 'video' | 'video_mobile' | 'qr') => {
     const file = e.target.files?.[0]
     if (!file) return
     
     setIsUploading(true)
     try {
+      // Fetch a fresh token — ImageKit tokens are single-use
+      const authRes = await fetch("/api/imagekit-auth");
+      if (!authRes.ok) {
+        throw new Error("Failed to get ImageKit upload authentication");
+      }
+      const authParams = await authRes.json();
+
+      const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      
       const formData = new FormData()
       formData.append("file", file)
+      formData.append("fileName", safeFileName)
       
       let folderPath = '/events/images'
       if (type.startsWith('video')) folderPath = '/events/videos'
       if (type === 'qr') folderPath = '/qrs' // Segregate QR codes entirely
       
       formData.append("folder", folderPath)
+      formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!)
+      formData.append("signature", authParams.signature)
+      formData.append("expire", authParams.expire.toString())
+      formData.append("token", authParams.token)
+      formData.append("useUniqueFileName", "true")
 
-      const response = await fetch("/api/upload", {
+      const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
         method: "POST",
         body: formData,
       })
 
       if (!response.ok) {
-        if (response.status === 413) {
-          throw new Error("File is too large. Cloud serverless limits restrict uploads to ~4.5MB.");
-        } else if (response.status === 500) {
-          throw new Error("Server error. The file may exceed memory limits (4.5MB max).");
-        } else {
-          let errStr = "Upload failed";
-          try {
-            const errData = await response.json();
-            errStr = errData.error || errStr;
-          } catch {}
-          throw new Error(errStr);
-        }
+        let errStr = "Upload failed";
+        try {
+          const errData = await response.json();
+          errStr = errData.message || errStr;
+        } catch {}
+        throw new Error(errStr);
       }
 
       const data = await response.json()
+      const url = data.url
       
-      if (type === 'image') setImageUrl(data.url)
-      if (type === 'image_mobile') setImageMobileUrl(data.url)
-      if (type === 'video') setVideoUrl(data.url)
-      if (type === 'video_mobile') setVideoMobileUrl(data.url)
-      if (type === 'qr') setQrUrl(data.url)
+      if (type === 'image') setImageUrl(url)
+      if (type === 'image_mobile') setImageMobileUrl(url)
+      if (type === 'video') setVideoUrl(url)
+      if (type === 'video_mobile') setVideoMobileUrl(url)
+      if (type === 'qr') setQrUrl(url)
     } catch (error: any) {
       alert(`Error uploading ${type}: ` + error.message)
     } finally {
@@ -418,7 +441,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
     
     try {
       // Get authentication parameters from our new endpoint
-      const authRes = await fetch("/api/cloudinary-sign");
+      const authRes = await fetch("/api/cloudinary-sign?folder=yogajam/events/past_videos");
       if (!authRes.ok) {
         const err = await authRes.json().catch(() => ({}));
         throw new Error(err.error || "Failed to authenticate upload");
@@ -426,6 +449,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       const authParams = await authRes.json();
 
       for (let i = 0; i < files.length; i++) {
+        setUploadProgress(`Uploading video ${i + 1} of ${files.length}...`)
         const file = files[i]
         const formData = new FormData()
         formData.append("file", file)
@@ -457,6 +481,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
       alert(`Error uploading videos: ` + error.message)
     } finally {
       setIsUploading(false)
+      setUploadProgress(null)
       e.target.value = ''
     }
   }
@@ -606,6 +631,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     required 
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
+                  {imageUrl && (
+                    <button type="button" onClick={() => handleRemoveMedia(imageUrl, setImageUrl)} title="Remove image" className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">✕</button>
+                  )}
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     Upload
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image')} disabled={isUploading} />
@@ -621,6 +649,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     placeholder="https://..." 
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
+                  {imageMobileUrl && (
+                    <button type="button" onClick={() => handleRemoveMedia(imageMobileUrl, setImageMobileUrl)} title="Remove image" className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">✕</button>
+                  )}
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     Upload
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'image_mobile')} disabled={isUploading} />
@@ -636,6 +667,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     placeholder="https://..." 
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
+                  {videoUrl && (
+                    <button type="button" onClick={() => handleRemoveMedia(videoUrl, setVideoUrl)} title="Remove video" className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">✕</button>
+                  )}
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     Upload
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video')} disabled={isUploading} />
@@ -651,6 +685,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                     placeholder="https://..." 
                     className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                   />
+                  {videoMobileUrl && (
+                    <button type="button" onClick={() => handleRemoveMedia(videoMobileUrl, setVideoMobileUrl)} title="Remove video" className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">✕</button>
+                  )}
                   <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                     Upload
                     <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video_mobile')} disabled={isUploading} />
@@ -809,6 +846,9 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                       placeholder="https://..." 
                       className="flex-1 bg-foreground/ border border-border rounded-lg p-2.5 text-foreground" 
                     />
+                    {qrUrl && (
+                      <button type="button" onClick={() => handleRemoveMedia(qrUrl, setQrUrl)} title="Remove QR code" className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">✕</button>
+                    )}
                     <label className="cursor-pointer bg-foreground/ hover:bg-foreground/ px-4 py-2.5 rounded-lg text-foreground text-sm font-bold flex items-center transition-colors">
                       Upload
                       {/* Using any cast on type parameter since handleFileUpload type is constrained to 'image' | 'video', but in JS it's fine or I will pass 'qr' as any */}
