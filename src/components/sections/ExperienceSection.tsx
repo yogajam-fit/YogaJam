@@ -81,7 +81,7 @@ export function ExperienceSection() {
 
   // Robust play helper — waits for canplay if video isn't ready yet (critical for iOS Safari)
   const playVideo = (video: HTMLVideoElement, idx: number) => {
-    // Always ensure muted is set as a real DOM attribute (iOS Safari requirement for autoplay)
+    // Always ensure muted is set as a real DOM attribute first (iOS Safari requirement for autoplay)
     video.muted = true;
     video.setAttribute('muted', '');
     video.playsInline = true;
@@ -90,9 +90,14 @@ export function ExperienceSection() {
       if (video.currentTime >= video.duration - 0.1 && video.duration > 0) {
         video.currentTime = 0;
       }
-      video.play().catch(err => {
-        console.log(`Play failed for video ${idx}:`, err);
-      });
+      video.play()
+        .then(() => {
+          // After play succeeds, apply the user's mute preference
+          video.muted = isMuted;
+        })
+        .catch(err => {
+          console.log(`Play failed for video ${idx}:`, err);
+        });
     };
 
     if (video.readyState >= 3) {
