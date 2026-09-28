@@ -51,9 +51,14 @@ export function ExperienceSection() {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const minSwipeDistance = 50;
 
-  // Toggle mute
+  // Toggle mute — directly manipulates the DOM since the video `muted` attr is hardcoded for iOS Safari autoplay
   const toggleMute = () => {
-    setIsMuted(!isMuted);
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    const currentVideo = videoRefs.current[currentIndex];
+    if (currentVideo) {
+      currentVideo.muted = newMuted;
+    }
   };
 
   // Intersection Observer for viewport playback
@@ -74,6 +79,39 @@ export function ExperienceSection() {
     };
   }, []);
 
+  // Robust play helper — waits for canplay if video isn't ready yet (critical for iOS Safari)
+  const playVideo = (video: HTMLVideoElement, idx: number) => {
+    // Always ensure muted is set as a real DOM attribute (iOS Safari requirement for autoplay)
+    video.muted = true;
+    video.setAttribute('muted', '');
+    video.playsInline = true;
+
+    const doPlay = () => {
+      if (video.currentTime >= video.duration - 0.1 && video.duration > 0) {
+        video.currentTime = 0;
+      }
+      video.play().catch(err => {
+        console.log(`Play failed for video ${idx}:`, err);
+      });
+    };
+
+    if (video.readyState >= 3) {
+      // HAVE_FUTURE_DATA or better — safe to play immediately
+      doPlay();
+    } else {
+      // Not ready yet — wait for canplay, then play
+      const onCanPlay = () => {
+        video.removeEventListener('canplay', onCanPlay);
+        doPlay();
+      };
+      video.addEventListener('canplay', onCanPlay);
+      // Trigger load if browser hasn't started fetching
+      if (video.readyState === 0) {
+        video.load();
+      }
+    }
+  };
+
   // Play current video, pause others
   useEffect(() => {
     let playTimeout: NodeJS.Timeout;
@@ -81,38 +119,20 @@ export function ExperienceSection() {
     videoRefs.current.forEach((video, idx) => {
       if (!video) return;
       
-      // We only want to force currentTime = 0 if we're actually changing videos,
-      // not just scrolling in and out of view.
       if (idx === currentIndex) {
         if (isInView) {
           if (video.currentTime >= 4.9 && video.paused) {
             video.currentTime = 0;
           }
-          
-          const attemptPlay = async (retries = 3) => {
-            if (idx !== currentIndex || !isInView) return; // Stale attempt
-            try {
-              if (video.readyState === 0) {
-                video.load();
-              }
-              await video.play();
-            } catch (err) {
-              console.log(`Playback prevented for video ${idx}, retrying...`, err);
-              if (retries > 0) {
-                setTimeout(() => attemptPlay(retries - 1), 500);
-              }
-            }
-          };
-
           playTimeout = setTimeout(() => {
-            attemptPlay();
+            playVideo(video, idx);
           }, 400);
         } else {
           video.pause();
         }
       } else {
         video.pause();
-        // Reset inactive videos to 5s so they show the correct cover snapshot (only if they lack a real poster)
+        // Reset inactive videos to 5s so they show the correct cover snapshot
         if (!experiences[idx]?.thumbnailSrc && video.duration >= 5) {
           video.currentTime = 5;
         }
@@ -215,7 +235,7 @@ export function ExperienceSection() {
                   >
                     <video
                       ref={(el) => { videoRefs.current[idx] = el; }}
-                      muted={diff !== 0 || isMuted}
+                      muted // always muted as HTML attribute for iOS Safari autoplay
                       playsInline
                       preload="auto"
                       poster={exp.thumbnailSrc}
@@ -228,6 +248,7 @@ export function ExperienceSection() {
                       }}
                       onEnded={nextExperience}
                       className="absolute inset-0 w-full h-full object-cover"
+                      style={{ WebkitPlaysinline: true } as React.CSSProperties}
                     >
                       <source src={exp.videoSrc} type="video/mp4" />
                     </video>
