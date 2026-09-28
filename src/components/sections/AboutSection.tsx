@@ -14,7 +14,7 @@ export function AboutSection() {
           <div className="md:w-1/2 shrink-0">
             <SectionHeading 
               title={<>This isn&apos;t a workout.<br/>This is YogaJam.</>}
-              subtitle={<span className="hidden md:inline">We blend high-energy movement, deep house beats, and an electric community to create wellness experiences you actually want to show up for.</span>}
+              subtitle={<span className="hidden md:inline">We bring together movement, music, people, and a little magic to create experiences you actually want to show up for.</span>}
               align="left"
             />
           </div>
@@ -22,7 +22,7 @@ export function AboutSection() {
           <div className="md:w-1/2 flex justify-center md:justify-end">
             <div className="relative w-full max-w-[400px] h-[300px] sm:h-[400px] lg:h-[450px]">
               <Image 
-                src="/images/What_Are_We.png"
+                src="/images/what_we_are_v2.png"
                 alt="What are we"
                 fill
                 sizes="(max-width: 768px) 100vw, 400px"

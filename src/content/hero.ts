@@ -3,8 +3,8 @@ export const heroEvergreenData = [
   {
     id: "evt-0",
     title: "What We Are?", subtitle: "",
-    duration: "YOGA × MUSIC", level: "All levels", venue: "In your city",
-    desc: "Experience YogaJam Club Nights in Indiranagar, Bengaluru - a unique fusion of yoga, movement, music, and nightlife. Move to energetic beats, connect with the community, and experience an immersive wellness event designed for all levels.",
+    duration: "YOGA × MUSIC × COMMUNITY", level: "All levels", venue: "In your city",
+    desc: "YogaJam brings together yoga, movement, music, atmosphere, and community to create experiences that feel less like a celebration. From Bollywood beats to soulful bhajans and from personal events to corporate events, every YogaJam has its own vibe. Come as you are. Move your way. Find your Jam.",
     image: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Desktop_01.png",
     image_mobile: "https://ik.imagekit.io/yogajam/events/Hero%20section/Hero_Mobile_01.png",
     video: "https://ik.imagekit.io/yogajam/events/Hero%20section/Videos/what_we_are_01.mp4",

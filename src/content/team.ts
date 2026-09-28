@@ -27,12 +27,12 @@ export const teamMembersData = [
     id: 5,
     name: "Achla",
     role: "Media Lead",
-    image: "/images/team/achla.jpeg"
+    image: "/images/team/achla_new.jpeg"
   },
   {
     id: 6,
     name: "Ghanshyam",
     role: "Tech Lead",
-    image: "/images/team/ghanshyam.png"
+    image: "/images/team/ghanshyam_new.png"
   }
 ];
