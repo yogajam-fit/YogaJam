@@ -88,8 +88,24 @@ export function ExperienceSection() {
           if (video.currentTime >= 4.9 && video.paused) {
             video.currentTime = 0;
           }
+          
+          const attemptPlay = async (retries = 3) => {
+            if (idx !== currentIndex || !isInView) return; // Stale attempt
+            try {
+              if (video.readyState === 0) {
+                video.load();
+              }
+              await video.play();
+            } catch (err) {
+              console.log(`Playback prevented for video ${idx}, retrying...`, err);
+              if (retries > 0) {
+                setTimeout(() => attemptPlay(retries - 1), 500);
+              }
+            }
+          };
+
           playTimeout = setTimeout(() => {
-            video.play().catch(e => console.log("Playback prevented:", e));
+            attemptPlay();
           }, 400);
         } else {
           video.pause();
@@ -201,7 +217,7 @@ export function ExperienceSection() {
                       ref={(el) => { videoRefs.current[idx] = el; }}
                       muted={diff !== 0 || isMuted}
                       playsInline
-                      preload={diff === 0 || diff === 1 ? "auto" : (exp.thumbnailSrc ? "none" : "metadata")}
+                      preload="auto"
                       poster={exp.thumbnailSrc}
                       onLoadedMetadata={(e) => {
                         // Fallback for non-Cloudinary videos
