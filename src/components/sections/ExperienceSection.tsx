@@ -67,7 +67,7 @@ export function ExperienceSection() {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.6 } // Trigger only when at least 60% of the section is visible to prevent Safari auto-scroll
+      { threshold: 0.15 } // Low threshold so it fires on mobile where the section is taller than the viewport
     );
     
     if (sectionRef.current) {
