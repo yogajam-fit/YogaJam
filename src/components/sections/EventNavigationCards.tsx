@@ -15,7 +15,7 @@ export function EventNavigationCards() {
           <Link 
             href="/events?tab=upcoming" 
             className="group relative overflow-hidden flex flex-col justify-center items-center h-28 md:h-40 rounded-2xl border border-border hover:scale-[1.03] transition-transform duration-300 bg-cover bg-center"
-            style={{ backgroundImage: `url('https://ik.imagekit.io/yogajam/Buttons/5.png')` }}
+            style={{ backgroundImage: `url('/images/buttons/upcoming.png')` }}
           >
             <div className="absolute inset-0 bg-black/40 pointer-events-none" />
             <h3 className="relative z-10 text-base sm:text-xl md:text-2xl font-bold font-heading text-white drop-shadow-lg text-center px-2">Upcoming Events</h3>
@@ -26,7 +26,7 @@ export function EventNavigationCards() {
           <Link 
             href="/events?tab=past" 
             className="group relative overflow-hidden flex flex-col justify-center items-center h-28 md:h-40 rounded-2xl border border-border hover:scale-[1.03] transition-transform duration-300 bg-cover bg-center"
-            style={{ backgroundImage: `url('https://ik.imagekit.io/yogajam/Buttons/4.png')` }}
+            style={{ backgroundImage: `url('/images/buttons/past.png')` }}
           >
             <div className="absolute inset-0 bg-black/40 pointer-events-none" />
             <h3 className="relative z-10 text-base sm:text-xl md:text-2xl font-bold font-heading text-white drop-shadow-lg text-center px-2">Past Events</h3>
@@ -38,7 +38,7 @@ export function EventNavigationCards() {
             <Link 
               href="/personalized-events" 
               className="w-[85%] sm:w-[60%] md:w-full group relative overflow-hidden flex flex-col justify-center items-center h-28 md:h-40 rounded-2xl border border-border hover:scale-[1.03] transition-transform duration-300 bg-cover bg-center"
-              style={{ backgroundImage: `url('https://ik.imagekit.io/yogajam/Buttons/3.png')` }}
+              style={{ backgroundImage: `url('/images/buttons/host_your_event.png')` }}
             >
               <div className="absolute inset-0 bg-black/40 pointer-events-none" />
               <h3 className="relative z-10 text-base sm:text-xl md:text-2xl font-bold font-heading text-white drop-shadow-lg text-center px-2">Host Your Event</h3>
