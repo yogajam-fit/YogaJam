@@ -787,7 +787,7 @@ function EventModal({ event, onClose, onSave }: { event: EventRecord | null, onC
                 >
                   <option value="platform">External Platform (BookMyShow, District)</option>
                   <option value="qr">Manual QR Code Upload</option>
-                  <option value="contact">Email Contact Only</option>
+                  <option value="contact">Contact Booking</option>
                   <option value="coming_soon">Coming Soon</option>
                 </select>
               </div>
