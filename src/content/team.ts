@@ -34,5 +34,11 @@ export const teamMembersData = [
     name: "Ghanshyam",
     role: "Tech Lead",
     image: "/images/team/ghanshyam_new.png"
+  },
+  {
+    id: 7,
+    name: "Rhea",
+    role: "Advisor",
+    image: "/images/team/Rhea.jpeg"
   }
 ];
