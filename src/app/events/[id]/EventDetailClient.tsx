@@ -399,6 +399,28 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
   const buttonText = event?.price ? `Book Now • ${formatPrice(event.price)}` : "Book Now";
 
   if (bookingType === "contact") {
+    const whatsappMessage = `Hey YogaJam, I would like to book a spot for this event:
+
+• Event: ${event?.title}
+• Date: ${event?.date || "TBD"}
+
+Please let me know how to proceed with the booking!`;
+
+    const emailSubject = `Booking Request: ${event?.title}`;
+    const emailBody = `Hey YogaJam,
+
+I would like to book a spot for this event:
+
+• Event: ${event?.title}
+• Date: ${event?.date || "TBD"}
+
+My Details:
+• Name: 
+• Phone: 
+• Number of Spots: 
+
+Please confirm availability and booking details. Thank you!`;
+
     return (
       <>
         <Button 
@@ -427,7 +449,7 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
 
             {/* WhatsApp */}
             <a
-              href={`https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}`}
+              href={`https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-background/80 active:scale-95 transition-all hover:bg-foreground/10 hover:border-[#25D366]/50 group"
@@ -445,7 +467,7 @@ function BookingButton({ event, mounted }: { event: EventRecord, mounted: boolea
 
             {/* Email */}
             <a
-              href={`mailto:${contactData.email}`}
+              href={`mailto:${contactData.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}
               className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-background/80 active:scale-95 transition-all hover:bg-foreground/10 hover:border-blue-400/50 group"
             >
               <div className="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:scale-110 transition-transform">
