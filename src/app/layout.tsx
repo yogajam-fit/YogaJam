@@ -60,7 +60,7 @@ export const viewport: Viewport = {
 };
 
 import { ClientLayoutWrapper } from "@/components/layout/ClientLayoutWrapper";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function RootLayout({
   children,
