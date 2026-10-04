@@ -60,6 +60,7 @@ export const viewport: Viewport = {
 };
 
 import { ClientLayoutWrapper } from "@/components/layout/ClientLayoutWrapper";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
@@ -75,6 +76,7 @@ export default function RootLayout({
         <ClientLayoutWrapper>
           {children}
         </ClientLayoutWrapper>
+        <Analytics />
       </body>
     </html>
   );
