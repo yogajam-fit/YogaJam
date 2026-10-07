@@ -69,7 +69,6 @@ export default async function Home() {
     .filter(evt => !isNaN(evt.parsedDate) && evt.parsedDate >= nowTime)
     .sort((a, b) => a.parsedDate - b.parsedDate);
   
-  const upcomingEventItem = upcomingEvents.length > 0 ? formatEventToHeroItem(upcomingEvents[0], false) : heroEvergreenData[1]; // "Next Stop" fallback
 
   // 3. Prepare random journal/PE for 8th slot
   const randomPEs = [...personalizedEventsData].sort(() => 0.5 - Math.random()).map(item => {
@@ -105,10 +104,13 @@ export default async function Home() {
 
   const random8thCard = Math.random() > 0.5 ? randomPEs[0] : randomJournals[0];
 
+  const firstCard = upcomingEvents.length > 0 ? formatEventToHeroItem(upcomingEvents[0], false) : mostRecentPastEvent;
+  const secondCard = upcomingEvents.length > 0 ? mostRecentPastEvent : heroEvergreenData[1];
+
   // 4. Construct the exact 8 cards as requested:
   const heroItems = [
-    mostRecentPastEvent,                    // 1st
-    upcomingEventItem,                      // 2nd
+    firstCard,                              // 1st
+    secondCard,                             // 2nd
     heroEvergreenData[4],                   // 3rd: Testimonial
     heroEvergreenData[0],                   // 4th: What We Are
     heroEvergreenData[2],                   // 5th: Plan Your Event
