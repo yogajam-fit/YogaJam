@@ -7,15 +7,15 @@ export const teamMembersData = [
   },
   {
     id: 2,
-    name: "Pragya",
-    role: "Advisor",
-    image: "/images/team/pragya.jpeg"
+    name: "Vijay",
+    role: "Co-founder",
+    image: "/images/team/vijay.jpeg"
   },
   {
     id: 3,
-    name: "Vijay",
-    role: "Core Team",
-    image: "/images/team/vijay.jpeg"
+    name: "Pragya",
+    role: "Advisor",
+    image: "/images/team/pragya.jpeg"
   },
   {
     id: 4,
